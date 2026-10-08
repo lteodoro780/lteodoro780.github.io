@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://lteodoro780.github.io/sitemap.xml

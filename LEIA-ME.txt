@@ -1,0 +1,23 @@
+L0·NOC — Luis O. Florencio | Portfólio definitivo v2
+
+Esta versão foi criada SOBRE o ZIP definitivo enviado, preservando o React compilado,
+o desktop com janelas interativas, os movimentos da topologia e a estética do site.
+
+Corrigido:
+- Foto real adicionada à janela Sobre;
+- Quatro projetos com capas e links, preservando a interface existente;
+- Topologia em camadas centralizada na tela principal;
+- Links inexistentes de demonstração ocultados;
+- Imagens otimizadas em WebP.
+
+Uso / GitHub Pages
+1. Extraia o conteúdo deste ZIP na raiz do repositório lteodoro780.github.io.
+2. Settings > Pages > Deploy from a branch > main / (root).
+3. Abra https://lteodoro780.github.io/ depois do deploy.
+
+Importante:
+- As capas dos projetos são ilustrações conceituais, não capturas reais nem prova de funcionalidades implementadas.
+- Dados de telemetria, latência, SLA e incidentes são demonstrações visuais.
+- Os links do GitHub estão disponíveis para os projetos que possuem repositórios públicos.
+- A área de ticket utiliza mailto:, sem backend de armazenamento.
+- A foto e dados pessoais foram incluídos a pedido do titular.
