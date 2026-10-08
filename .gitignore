@@ -1,0 +1,23 @@
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+credentials*.json
+tokens.json
+secrets.json
+
+# Temporary and local files
+.DS_Store
+Thumbs.db
+*.log
+*.bak
+*.tmp
+*.swp
+.vscode/
+.idea/
+node_modules/
