@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
+import { mkdirSync } from 'node:fs';
 
 const BASE = 'http://127.0.0.1:8765';
 const browser = await chromium.launch({headless: true});
+mkdirSync('test-artifacts', {recursive:true});
 const results = [];
 const failures = [];
 const widths = [
@@ -32,9 +34,12 @@ try {
       try {
         await openPage(page,'/','L0·NOC');
         await page.locator('nav.recruiter-links a[href="./projetos.html"]').waitFor();
+        await page.locator('[data-testid="boot-screen"]').waitFor({state:'hidden',timeout:20000});
+        await page.screenshot({path:'test-artifacts/home-'+device.label+'.png',fullPage:true});
         assert.equal(await page.locator('nav.recruiter-links a').count(),3);
         await page.locator('nav.recruiter-links a[href="./projetos.html"]').click();
         assert.ok(page.url().endsWith('/projetos.html'));
+        await page.screenshot({path:'test-artifacts/projects-'+device.label+'.png',fullPage:true});
         await mobileOverflow(page);
         for(const [slug,label] of [
           ['sistema-de-selos','Sistema'],
@@ -42,9 +47,11 @@ try {
           ['sentinela-ai','Sentinela'],
         ]){
           await openPage(page,'/casos/'+slug+'.html',label);
+          await page.screenshot({path:'test-artifacts/case-'+slug+'-'+device.label+'.png',fullPage:true});
           await mobileOverflow(page);
         }
         await openPage(page,'/curriculo.html','Luis O. Florencio');
+        await page.screenshot({path:'test-artifacts/resume-'+device.label+'.png',fullPage:true});
         assert.ok(await page.locator('button[onclick="window.print()"]').count()===1);
         assert.equal(await page.locator('a[href^="mailto:"]').count()>=1,true);
         await mobileOverflow(page);
