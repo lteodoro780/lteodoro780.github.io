@@ -1,0 +1,73 @@
+name: L0 NOC V3 - React com fotos (validacao, sem deploy)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - v3-react-fotos-integracao-20261014
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/react-v3-build.yml'
+  pull_request:
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/react-v3-build.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  react-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: yarn
+          cache-dependency-path: frontend/yarn.lock
+      - name: Instalar Yarn 1
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.22 --activate
+      - name: Validar paginas estaticas
+        run: python3 scripts/validate-static.py
+      - name: Instalar dependencias
+        run: yarn install --frozen-lockfile --non-interactive
+      - name: Compilar
+        env:
+          CI: 'true'
+        run: yarn build
+      - name: Validar build
+        run: node scripts/validate-build.mjs
+      - name: Instalar Playwright de teste
+        run: npm install --prefix "$GITHUB_WORKSPACE/.qa" --no-save --no-package-lock playwright@1.55.0
+      - name: Instalar Chromium
+        run: "$GITHUB_WORKSPACE/.qa/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Servir site
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory build > /tmp/l0noc-react.log 2>&1 &
+          echo $! > /tmp/l0noc-react.pid
+      - name: Testar escritorio e celular
+        run: NODE_PATH="$GITHUB_WORKSPACE/.qa/node_modules" node tests/react-build-smoke.cjs
+      - name: Salvar capturas de tela
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: l0noc-v3-fotos-screenshots
+          path: frontend/artifacts/
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Salvar build sem publicar
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: l0noc-v3-react-build-nao-publicado
+          path: frontend/build/
+          retention-days: 7
