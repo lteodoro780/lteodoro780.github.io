@@ -59,6 +59,10 @@ with ZipFile(archive) as z:
             ]:
                 if re.search(pattern, content):
                     raise SystemExit(f'Possivel segredo em {name}: {label}')
+            # Normalizar CRLF para LF antes do git add.
+            content = content.replace(b'\r\n', b'\n')
+        elif destination.suffix.lower() == '.svg':
+            content = content.replace(b'\r\n', b'\n')
         destination.write_bytes(content)
         files += 1
 print(f'{files} arquivos do frontend extraidos em {worktree / "frontend"}')
