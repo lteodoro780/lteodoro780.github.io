@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0a0d14">
+<meta name="description" content="Projetos de Luis O. Florencio: Sistema de Selos, Sala Vanguardeira e Sentinela AI, com estudos de caso e documentação técnica verificável.">
+<title>Projetos técnicos | L0·NOC</title><link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root{color-scheme:dark;--bg:#0a0d14;--panel:#111622;--line:#263244;--muted:#a6b4c7;--text:#f1f5f9;--green:#10b981;--mint:#6ee7b7}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);background:var(--bg);font:15px/1.8 "JetBrains Mono",monospace;overflow-wrap:anywhere}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.15;background-image:linear-gradient(#284156 1px,transparent 1px),linear-gradient(90deg,#284156 1px,transparent 1px);background-size:48px 48px}
+    a{color:var(--mint);text-decoration-thickness:1px;text-underline-offset:3px}a:hover{color:white}a:focus-visible{outline:2px solid var(--green);outline-offset:4px}
+    .skip{position:absolute;top:-100px;left:1rem;background:white;color:#111;padding:.7rem;z-index:99}.skip:focus{top:1rem}
+    .wrap{position:relative;max-width:1120px;padding:0 26px;margin:0 auto}
+    header{border-bottom:1px solid var(--line);background:rgba(10,13,20,.93)}
+    header .wrap{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .brand{font-weight:600;color:var(--mint);text-decoration:none;white-space:nowrap}
+    .back{color:var(--text);font-size:12px;text-decoration:none;border:1px solid var(--line);padding:8px 12px}
+    .eyebrow,.overline{font-size:11px;color:var(--mint);text-transform:uppercase;letter-spacing:.15em}
+    .hero{padding:58px 0 42px}.hero-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:36px;align-items:center}
+    h1,h2,h3,.value{font-family:"Barlow Condensed",sans-serif;line-height:1.04;text-transform:uppercase;letter-spacing:.01em}
+    h1{font-size:clamp(48px,7vw,90px);margin:14px 0 20px}h2{font-size:clamp(30px,4vw,48px);margin:0 0 16px}h3{font-size:26px;margin:0 0 12px}
+    p{margin:0 0 16px}strong{color:white} .lead{font-size:16px;color:#d3dce8;max-width:760px}
+    .hero-art{border:1px solid var(--line);background:var(--panel);padding:8px}.hero-art img{width:100%;display:block;object-fit:cover;aspect-ratio:4/3}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px}.button{display:inline-flex;align-items:center;justify-content:center;text-align:center;padding:11px 15px;border:1px solid var(--line);color:var(--text);text-decoration:none;font-size:12px;font-weight:600;line-height:1.5}.button:hover{border-color:var(--green);color:var(--mint)}.button.primary{background:var(--green);border-color:var(--green);color:#08120f}.button.primary:hover{background:var(--mint);color:#08120f}
+    .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0 10px}
+    .metric{background:rgba(17,22,34,.94);border:1px solid var(--line);padding:19px}.value{font-size:48px;font-weight:700}.metric p{margin:0;color:var(--muted);font-size:12px}
+    .caption{font-size:12px;color:var(--muted)} section{padding:38px 0;border-bottom:1px solid var(--line)}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:22px}.card{background:var(--panel);border:1px solid var(--line);padding:24px}
+    .card p:last-child{margin-bottom:0}ul{padding-left:21px;margin:8px 0 0}li{margin-bottom:10px}li::marker{color:var(--green)}
+    .architecture{border:1px solid var(--line);padding:22px;background:#080b10;margin-top:18px;overflow:auto;white-space:pre;color:#b9f4d9;font:13px/1.65 "JetBrains Mono",monospace}
+    .tag-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.tag{border:1px solid #31495b;color:#cbd5e1;font-size:11px;padding:6px 9px}
+    .shot{margin:16px 0 0;border:1px solid var(--line);background:var(--panel);padding:10px}.shot img{display:block;width:100%;height:auto}.shot figcaption{color:var(--muted);font-size:12px;padding:10px 5px 4px}
+    .warning{border-left:3px solid var(--green);background:rgba(17,22,34,.9);padding:20px 24px}
+    .footer{padding:36px 0 52px;color:var(--muted);font-size:12px}.footer a{white-space:normal}
+    @media(max-width:760px){header .wrap{padding:12px 18px}.wrap{padding:0 18px}.hero{padding:36px 0 24px}.hero-grid,.two{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.metric:last-child{grid-column:1/-1}.value{font-size:39px}.hero-art{max-width:520px}section{padding:30px 0}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+<style>.projects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:15px 0 25px}.project{border:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column}.project img{display:block;width:100%;height:180px;object-fit:cover}.project-body{padding:20px;display:flex;flex-direction:column;flex:1}.project-body p{font-size:13px;color:#cad4e0}.project-body .actions{margin-top:auto;padding-top:14px}.project-body h2{font-size:29px}.project-body .overline{font-size:10px}.project .button{font-size:11px} @media(max-width:900px){.projects{grid-template-columns:1fr}.project{display:grid;grid-template-columns:minmax(0,230px) 1fr}.project img{height:100%;min-height:210px}}@media(max-width:560px){.project{display:flex}.project img{height:170px}} </style>
+</head>
+<body><a class="skip" href="#conteudo">Ir para projetos</a>
+<header><div class="wrap"><a class="brand" href="./index.html">L0·NOC / PROJETOS</a><a class="back" href="./index.html">← PORTFÓLIO</a></div></header>
+<main class="wrap" id="conteudo"><div class="hero"><div class="eyebrow">PROJETOS / EVIDÊNCIAS TÉCNICAS</div><h1>Trabalho<br>documentado<span style="color:var(--green)">.</span></h1>
+<p class="lead">Estudos de caso com problema, tecnologias, participação e evidências públicas. As imagens de capa são conceituais; os resultados documentados e os limites dos projetos estão em cada página.</p></div>
+<div class="projects">
+<article class="project"><img src="./img/selos.webp" alt="Capa conceitual do Sistema de Selos" loading="lazy"><div class="project-body"><span class="overline">PYTHON / DJANGO</span><h2>Sistema de Selos</h2><p>Aplicação para cadastros e identificação veicular com QR Code, ocorrências e revisão LPR. Versão pública sanitizada com testes documentados.</p><div class="actions"><a class="button primary" href="./casos/sistema-de-selos.html">Estudo de caso →</a><a class="button" href="https://github.com/lteodoro780/sistema-selos-veiculares" target="_blank" rel="noopener noreferrer">Código ↗</a></div></div></article>
+<article class="project"><img src="./img/vanguardeira.webp" alt="Capa conceitual da Sala Vanguardeira" loading="lazy"><div class="project-body"><span class="overline">LINUX / ARM</span><h2>Sala Vanguardeira</h2><p>Participação no reaproveitamento de mais de 60 TV Boxes ARM como estações Linux para atividades educacionais e de laboratório.</p><div class="actions"><a class="button primary" href="./casos/sala-vanguardeira.html">Estudo de caso →</a><a class="button" href="https://github.com/lteodoro780/vanguardeira-project" target="_blank" rel="noopener noreferrer">Documentação ↗</a></div></div></article>
+<article class="project"><img src="./img/sentinela.webp" alt="Capa conceitual do Sentinela AI" loading="lazy"><div class="project-body"><span class="overline">DOCKER / IA LOCAL</span><h2>Sentinela AI</h2><p>Stack auto-hospedado com Ollama e Open WebUI. Scripts de operação e integrações em desenvolvimento, com status informado no estudo de caso.</p><div class="actions"><a class="button primary" href="./casos/sentinela-ai.html">Estudo de caso →</a><a class="button" href="https://github.com/lteodoro780/SENTINELA-AI" target="_blank" rel="noopener noreferrer">Código ↗</a></div></div></article>
+</div>
+<section><div class="overline">EM EVOLUÇÃO</div><h2>Mapa CFTV</h2><p>Projeto de organização e visualização de infraestrutura de câmeras. Ainda não há um estudo de caso público com evidências suficientes para divulgação. Não são publicados endereços, topologia interna nem dados de equipamentos.</p></section>
+<div class="actions"><a class="button primary" href="./curriculo.html">Currículo para impressão →</a><a class="button" href="mailto:lteodoro780@gmail.com?subject=Contato%20via%20portfolio">Entrar em contato ↗</a></div>
+</main><footer class="footer"><div class="wrap">L0·NOC · Projetos e evidências técnicas — <a href="./index.html">Voltar ao portfólio</a></div></footer>
+</body></html>
