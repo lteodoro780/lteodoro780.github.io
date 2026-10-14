@@ -1,7 +1,6 @@
-name: L0 NOC V3 - React com fotos (validacao, sem deploy)
+name: React V3 - validacao sem publicacao
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - v3-react-fotos-integracao-20261014
@@ -11,83 +10,53 @@ on:
   pull_request:
     paths:
       - 'frontend/**'
-      - '.github/workflows/react-v3-build.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  react-smoke:
+  validar-react:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
-    defaults:
-      run:
-        working-directory: frontend
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Detectar codigo-fonte
-        id: fonte
-        working-directory: .
-        run: |
-          if [ -f frontend/package.json ] && [ -f frontend/yarn.lock ]; then
-            echo 'presente=true' >> "$GITHUB_OUTPUT"
-          else
-            echo 'presente=false' >> "$GITHUB_OUTPUT"
-            echo 'Aguardando importacao do pacote React a partir do Bazzite.'
-          fi
-      - name: Preparar Node.js
-        if: steps.fonte.outputs.presente == 'true'
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: yarn
-          cache-dependency-path: frontend/yarn.lock
-      - name: Instalar Yarn 1
-        if: steps.fonte.outputs.presente == 'true'
+      - name: Build e smoke tests (somente se frontend presente)
         run: |
+          set -euo pipefail
+          if [ ! -f frontend/package.json ] || [ ! -f frontend/yarn.lock ]; then
+            echo "Aguardando envio de frontend/ pelo Bazzite. Nada publicado."
+            exit 0
+          fi
+          cd frontend
           corepack enable
           corepack prepare yarn@1.22.22 --activate
-      - name: Validar paginas estaticas
-        if: steps.fonte.outputs.presente == 'true'
-        run: python3 scripts/validate-static.py
-      - name: Instalar dependencias
-        if: steps.fonte.outputs.presente == 'true'
-        run: yarn install --frozen-lockfile --non-interactive
-      - name: Compilar
-        if: steps.fonte.outputs.presente == 'true'
-        env:
-          CI: 'true'
-        run: yarn build
-      - name: Validar build
-        if: steps.fonte.outputs.presente == 'true'
-        run: node scripts/validate-build.mjs
-      - name: Instalar Playwright de teste
-        if: steps.fonte.outputs.presente == 'true'
-        run: npm install --prefix "$GITHUB_WORKSPACE/.qa" --no-save --no-package-lock playwright@1.55.0
-      - name: Instalar Chromium
-        if: steps.fonte.outputs.presente == 'true'
-        run: "$GITHUB_WORKSPACE/.qa/node_modules/.bin/playwright" install --with-deps chromium
-      - name: Servir site
-        if: steps.fonte.outputs.presente == 'true'
-        run: |
+          python3 scripts/validate-static.py
+          yarn install --frozen-lockfile --non-interactive
+          CI=true yarn build
+          node scripts/validate-build.mjs
+          npm install --prefix ../.qa --no-save --no-package-lock playwright@1.55.0
+          ../.qa/node_modules/.bin/playwright install --with-deps chromium
           python3 -m http.server 8765 --bind 127.0.0.1 --directory build > /tmp/l0noc-react.log 2>&1 &
-          echo $! > /tmp/l0noc-react.pid
-      - name: Testar escritorio e celular
-        if: steps.fonte.outputs.presente == 'true'
-        run: NODE_PATH="$GITHUB_WORKSPACE/.qa/node_modules" node tests/react-build-smoke.cjs
-      - name: Salvar capturas de tela
-        if: always() && steps.fonte.outputs.presente == 'true'
+          NODE_PATH="$GITHUB_WORKSPACE/.qa/node_modules" node tests/react-build-smoke.cjs
+      - name: Capturas de tela
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: l0noc-v3-fotos-screenshots
           path: frontend/artifacts/
           if-no-files-found: ignore
           retention-days: 7
-      - name: Salvar build sem publicar
-        if: success() && steps.fonte.outputs.presente == 'true'
+      - name: Build sem publicar
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: l0noc-v3-react-build-nao-publicado
           path: frontend/build/
+          if-no-files-found: ignore
           retention-days: 7
