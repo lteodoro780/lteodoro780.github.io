@@ -134,6 +134,14 @@
   .recruiter-links a {flex:1;padding:7px 5px;font-size:10px;}
   [data-testid="desktop-icons"] {padding-top: 15px;}
   [data-testid="desktop-icon-incidente"] {display:none;}
+  /* Nome inteiro visível no celular, sem sobrepor os atalhos profissionais. */
+  [data-testid="wallpaper-name"] {
+    font-size: clamp(42px, 13.6vw, 100px) !important;
+    line-height: .94 !important;
+    letter-spacing: -.035em !important;
+  }
+  [data-testid="wallpaper"] > div:last-child { bottom: 102px !important; }
+
 }
 @media(prefers-reduced-motion:reduce) {
   .recruiter-links a {transition:none;}
