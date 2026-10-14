@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0d14">
+  <meta name="description" content="Estudo de caso do Sistema de Selos Veiculares: Django, QR Code, autenticação, revisão LPR e validação de uma demonstração pública sanitizada.">
+  <title>Sistema de Selos | Estudo de caso · L0·NOC</title>
+  <meta property="og:title" content="Sistema de Selos Veiculares | Estudo de caso">
+  <meta property="og:description" content="Da necessidade operacional à aplicação Django: arquitetura, decisões técnicas, validação e limites da versão pública.">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{color-scheme:dark;--bg:#0a0d14;--panel:#111622;--line:#263244;--muted:#a6b4c7;--text:#f1f5f9;--green:#10b981;--mint:#6ee7b7}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);background:var(--bg);font:15px/1.8 "JetBrains Mono",monospace;overflow-wrap:anywhere}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.15;background-image:linear-gradient(#284156 1px,transparent 1px),linear-gradient(90deg,#284156 1px,transparent 1px);background-size:48px 48px}
+    a{color:var(--mint);text-decoration-thickness:1px;text-underline-offset:3px}a:hover{color:white}a:focus-visible{outline:2px solid var(--green);outline-offset:4px}
+    .skip{position:absolute;top:-100px;left:1rem;background:white;color:#111;padding:.7rem;z-index:99}.skip:focus{top:1rem}
+    .wrap{position:relative;max-width:1120px;padding:0 26px;margin:0 auto}
+    header{border-bottom:1px solid var(--line);background:rgba(10,13,20,.93)}
+    header .wrap{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .brand{font-weight:600;color:var(--mint);text-decoration:none;white-space:nowrap}
+    .back{color:var(--text);font-size:12px;text-decoration:none;border:1px solid var(--line);padding:8px 12px}
+    .eyebrow,.overline{font-size:11px;color:var(--mint);text-transform:uppercase;letter-spacing:.15em}
+    .hero{padding:58px 0 42px}.hero-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:36px;align-items:center}
+    h1,h2,h3,.value{font-family:"Barlow Condensed",sans-serif;line-height:1.04;text-transform:uppercase;letter-spacing:.01em}
+    h1{font-size:clamp(48px,7vw,90px);margin:14px 0 20px}h2{font-size:clamp(30px,4vw,48px);margin:0 0 16px}h3{font-size:26px;margin:0 0 12px}
+    p{margin:0 0 16px}strong{color:white} .lead{font-size:16px;color:#d3dce8;max-width:760px}
+    .hero-art{border:1px solid var(--line);background:var(--panel);padding:8px}.hero-art img{width:100%;display:block;object-fit:cover;aspect-ratio:4/3}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px}.button{display:inline-flex;align-items:center;justify-content:center;text-align:center;padding:11px 15px;border:1px solid var(--line);color:var(--text);text-decoration:none;font-size:12px;font-weight:600;line-height:1.5}.button:hover{border-color:var(--green);color:var(--mint)}.button.primary{background:var(--green);border-color:var(--green);color:#08120f}.button.primary:hover{background:var(--mint);color:#08120f}
+    .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0 10px}
+    .metric{background:rgba(17,22,34,.94);border:1px solid var(--line);padding:19px}.value{font-size:48px;font-weight:700}.metric p{margin:0;color:var(--muted);font-size:12px}
+    .caption{font-size:12px;color:var(--muted)} section{padding:38px 0;border-bottom:1px solid var(--line)}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:22px}.card{background:var(--panel);border:1px solid var(--line);padding:24px}
+    .card p:last-child{margin-bottom:0}ul{padding-left:21px;margin:8px 0 0}li{margin-bottom:10px}li::marker{color:var(--green)}
+    .architecture{border:1px solid var(--line);padding:22px;background:#080b10;margin-top:18px;overflow:auto;white-space:pre;color:#b9f4d9;font:13px/1.65 "JetBrains Mono",monospace}
+    .tag-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.tag{border:1px solid #31495b;color:#cbd5e1;font-size:11px;padding:6px 9px}
+    .shot{margin:16px 0 0;border:1px solid var(--line);background:var(--panel);padding:10px}.shot img{display:block;width:100%;height:auto}.shot figcaption{color:var(--muted);font-size:12px;padding:10px 5px 4px}
+    .warning{border-left:3px solid var(--green);background:rgba(17,22,34,.9);padding:20px 24px}
+    .footer{padding:36px 0 52px;color:var(--muted);font-size:12px}.footer a{white-space:normal}
+    @media(max-width:760px){header .wrap{padding:12px 18px}.wrap{padding:0 18px}.hero{padding:36px 0 24px}.hero-grid,.two{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.metric:last-child{grid-column:1/-1}.value{font-size:39px}.hero-art{max-width:520px}section{padding:30px 0}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+  <header><div class="wrap"><a class="brand" href="../index.html" aria-label="Voltar ao portfólio L0 NOC">L0·NOC / CASE STUDIES</a><a class="back" href="../index.html">← VOLTAR AO PORTFÓLIO</a></div></header>
+  <main id="conteudo" class="wrap">
+    <div class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">PROJETO 02 / DESENVOLVIMENTO + INFRAESTRUTURA</div>
+          <h1>Sistema<br>de Selos<br>Veiculares<span style="color:var(--green)">.</span></h1>
+          <p class="lead">Aplicação em Python e Django para organizar cadastros, veículos, emissão de selos com QR Code e consultas operacionais, com módulos de ocorrências e revisão de leituras de placas.</p>
+          <p class="caption">Este estudo de caso descreve a versão pública sanitizada. Não expõe dados institucionais, credenciais nem infraestrutura interna.</p>
+          <div class="actions">
+            <a class="button primary" href="https://github.com/lteodoro780/sistema-selos-veiculares" target="_blank" rel="noopener noreferrer">VER REPOSITÓRIO ↗</a>
+            <a class="button" href="#evidencias">VER EVIDÊNCIAS ↓</a>
+          </div>
+        </div>
+        <figure class="hero-art"><img src="../img/selos.webp" alt="Arte conceitual do Sistema de Selos Veiculares"></figure>
+      </div>
+    </div>
+    <div class="metrics" aria-label="Validação documentada">
+      <div class="metric"><div class="value">93</div><p>testes automatizados aprovados na validação documentada</p></div>
+      <div class="metric"><div class="value">11</div><p>rotas verificadas no navegador Chromium</p></div>
+      <div class="metric"><div class="value">6</div><p>capturas de tela revisadas com dados fictícios</p></div>
+    </div>
+    <p class="caption">Fonte: <a href="https://github.com/lteodoro780/sistema-selos-veiculares/blob/main/docs/VALIDACAO.md" target="_blank" rel="noopener noreferrer">relatório de validação da versão pública</a>. Esses números não representam métricas da operação institucional.</p>
+    <section aria-labelledby="desafio">
+      <div class="overline">01 / CONTEXTO</div>
+      <h2 id="desafio">O problema</h2>
+      <p>Rotinas de identificação veicular envolvem cadastros, vínculos entre pessoas e veículos, validade de selos, consultas e registro de ocorrências. Quando essas informações não estão integradas, a conferência operacional se torna mais trabalhosa e sujeita a inconsistências.</p>
+      <p>A proposta foi consolidar o fluxo em uma aplicação web, preservando histórico, regras de validação e controle de acesso. O problema e a solução são descritos aqui de forma genérica para proteger o contexto original.</p>
+    </section>
+    <section aria-labelledby="participacao">
+      <div class="overline">02 / RESPONSABILIDADES</div>
+      <h2 id="participacao">Minha contribuição</h2>
+      <div class="two">
+        <div class="card"><h3>Desenvolvimento</h3><p>Trabalho na evolução de funcionalidades em Python e Django, incluindo fluxos de cadastro, consulta, emissão de selos, relatórios e componentes de apoio à identificação de veículos.</p></div>
+        <div class="card"><h3>Operação e implantação</h3><p>Atuação na preparação e migração do sistema para Linux, na configuração de serviços de aplicação e coleta, e na verificação de funcionamento e persistência de dados.</p></div>
+      </div>
+      <p class="caption" style="margin-top:14px">A demonstração pública é um projeto sanitizado e independente; seus testes documentados não certificam o ambiente original nem uma implantação de produção.</p>
+    </section>
+    <section aria-labelledby="solucao">
+      <div class="overline">03 / SOLUÇÃO</div>
+      <h2 id="solucao">Como funciona</h2>
+      <div class="two">
+        <div>
+          <ul>
+            <li>Gestão de pessoas, veículos e vínculos de propriedade.</li>
+            <li>Importação de dados com prévia e validações.</li>
+            <li>Geração de selo em PDF e QR Code para consulta autenticada.</li>
+            <li>Controle de validade e situação dos registros.</li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li>Histórico de ocorrências e movimentações.</li>
+            <li>Revisão manual de leituras LPR e regras de correção.</li>
+            <li>Perfis de acesso e proteção de documentos e mídia.</li>
+            <li>Adaptador opcional Hikvision ISAPI, desativado na demonstração.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="architecture" role="img" aria-label="Arquitetura simplificada: operador autenticado acessa Django; Django usa módulos de pessoas, veículos, selos, operações e LPR; dados permanecem em SQLite e mídia privada.">NAVEGADOR / OPERADOR AUTENTICADO
+             │
+             ▼
+      DJANGO + TEMPLATES
+             │
+   ┌─────────┼───────────────────┐
+   ▼         ▼                   ▼
+PESSOAS   VEÍCULOS          SELOS / QR
+   │         │                   │
+   └─────────┼───────────────────┘
+             ▼
+   OPERAÇÕES / RELATÓRIOS / LPR
+             │
+             ▼
+     SQLITE + MÍDIA PRIVADA
+
+LPR: ADAPTADOR OPCIONAL / OPT-IN</div>
+      <div class="tag-list" aria-label="Tecnologias"><span class="tag">Python 3.12+</span><span class="tag">Django 5.2</span><span class="tag">SQLite</span><span class="tag">HTML / CSS / JavaScript</span><span class="tag">QR Code</span><span class="tag">PDF</span><span class="tag">Waitress</span><span class="tag">WhiteNoise</span><span class="tag">GitHub Actions</span></div>
+    </section>
+    <section aria-labelledby="decisoes">
+      <div class="overline">04 / ENGENHARIA</div>
+      <h2 id="decisoes">Decisões técnicas</h2>
+      <div class="two">
+        <div class="card"><h3>QR não é permissão</h3><p>O QR Code identifica a consulta, mas não libera os dados automaticamente. A visualização exige sessão autenticada e respeita perfis de operador.</p></div>
+        <div class="card"><h3>Leitura ambígua pede revisão</h3><p>O módulo LPR preserva a leitura original. Quando há mais de um veículo possível, o sistema direciona à revisão em vez de escolher arbitrariamente.</p></div>
+        <div class="card"><h3>Dados fora do Git</h3><p>Banco, mídia, anexos, backups e variáveis privadas não fazem parte da versão pública. Os exemplos e as imagens de demonstração usam dados sintéticos.</p></div>
+        <div class="card"><h3>Validação reproduzível</h3><p>A edição pública inclui verificações Django, checagem de migrações e testes automatizados no fluxo de CI, além de roteiro para execução local.</p></div>
+      </div>
+    </section>
+    <section id="evidencias" aria-labelledby="evidencias-titulo">
+      <div class="overline">05 / EVIDÊNCIAS</div>
+      <h2 id="evidencias-titulo">O que é verificável</h2>
+      <p>O repositório fornece código, instruções de execução, testes, capturas com registros artificiais e um documento com o escopo da validação.</p>
+      <figure class="shot">
+        <img src="https://raw.githubusercontent.com/lteodoro780/sistema-selos-veiculares/main/docs/screenshots/painel.png" loading="lazy" alt="Captura real da demonstração local: painel de veículos com registros fictícios">
+        <figcaption>Painel da versão pública, executada localmente com dados de demonstração. <a href="https://github.com/lteodoro780/sistema-selos-veiculares/blob/main/docs/screenshots/painel.png" target="_blank" rel="noopener noreferrer">Ver arquivo original ↗</a></figcaption>
+      </figure>
+      <div class="actions">
+        <a class="button" href="https://github.com/lteodoro780/sistema-selos-veiculares/blob/main/docs/VALIDACAO.md" target="_blank" rel="noopener noreferrer">RELATÓRIO DE VALIDAÇÃO ↗</a>
+        <a class="button" href="https://github.com/lteodoro780/sistema-selos-veiculares/blob/main/docs/SANITIZACAO.md" target="_blank" rel="noopener noreferrer">SANITIZAÇÃO ↗</a>
+        <a class="button" href="https://github.com/lteodoro780/sistema-selos-veiculares/blob/main/docs/LPR.md" target="_blank" rel="noopener noreferrer">DOCUMENTAÇÃO LPR ↗</a>
+      </div>
+    </section>
+    <section aria-labelledby="limites">
+      <div class="overline">06 / TRANSPARÊNCIA</div>
+      <h2 id="limites">Limites e próximos passos</h2>
+      <div class="warning">
+        <p><strong>O que foi validado:</strong> a versão pública em Windows, com Python 3.12, Django 5.2 e Chromium; verificação de rotas, testes automatizados e geração de PDFs.</p>
+        <p><strong>O que não foi validado nessa edição pública:</strong> câmera Hikvision física, leitor de câmera de celular em aparelho real, systemd na instalação Linux nativa e impressão em equipamento físico.</p>
+        <p style="margin-bottom:0"><strong>Por que isso importa:</strong> a demonstração não deve ser confundida com uma certificação de produção. Não apresento ganhos de tempo, redução de custo ou escala de utilização sem métricas públicas verificáveis.</p>
+      </div>
+    </section>
+    <section aria-labelledby="conclusao">
+      <div class="overline">07 / CONCLUSÃO</div>
+      <h2 id="conclusao">O que o projeto demonstra</h2>
+      <p>Este trabalho combina modelagem de fluxos operacionais, desenvolvimento web, controle de acesso, tratamento de dados, integrações opcionais e preocupações de implantação. O diferencial não é apenas gerar um QR Code: é estruturar um processo consultável, auditável e reproduzível em uma demonstração pública que respeita a privacidade dos dados.</p>
+      <div class="actions"><a class="button primary" href="https://github.com/lteodoro780/sistema-selos-veiculares" target="_blank" rel="noopener noreferrer">EXPLORAR CÓDIGO E DOCUMENTAÇÃO ↗</a><a class="button" href="../index.html">RETORNAR AO L0·NOC ↗</a></div>
+    </section>
+  </main>
+  <footer class="footer"><div class="wrap">L0·NOC · Portfólio profissional · Estudo de caso baseado em <a href="https://github.com/lteodoro780/sistema-selos-veiculares">repositório público sanitizado</a>.</div></footer>
+</body>
+</html>
