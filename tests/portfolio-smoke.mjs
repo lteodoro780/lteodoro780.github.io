@@ -19,7 +19,16 @@ async function run(name, task) {
 async function openPage(page, path, includes) {
   const response = await page.goto(BASE + path, {waitUntil:'domcontentloaded', timeout:25000});
   assert.equal(response?.status(), 200, 'HTTP 200 esperado: '+path);
-  await page.waitForFunction(expected => document.body?.innerText.includes(expected), includes, {timeout:15000});
+  try {
+    if (path === '/') {
+      await page.locator('nav.recruiter-links a').first().waitFor({state:'visible',timeout:15000});
+    } else {
+      await page.waitForFunction(expected => document.body?.innerText.includes(expected), includes, {timeout:15000});
+    }
+  } catch (err) {
+    const body=(await page.locator('body').innerText().catch(()=>'' )).slice(0,350);
+    throw new Error('Falha em '+path+' [esperado: '+includes+'] '+err.message+' | texto: '+body);
+  }
 }
 async function mobileOverflow(page) {
   const dim=await page.evaluate(() => ({w:innerWidth,doc:document.documentElement.scrollWidth}));
@@ -76,7 +85,7 @@ try {
       const evidence=page.locator('[data-testid="app-metricas"]');
       await evidence.waitFor({state:'visible',timeout:12000});
       assert.ok((await evidence.innerText()).includes('Não utilizo percentuais subjetivos'));
-      assert.ok((await evidence.locator('article')).count()>=6);
+      assert.ok((await evidence.locator('article').count())>=6);
     } finally{await page.close();}
   });
 } finally {await browser.close();}
