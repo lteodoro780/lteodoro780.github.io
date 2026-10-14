@@ -48,6 +48,10 @@ try {
         assert.equal(await page.locator('nav.recruiter-links a').count(),3);
         await page.locator('nav.recruiter-links a[href="./projetos.html"]').click();
         assert.ok(page.url().endsWith('/projetos.html'));
+        for (const img of await page.locator('.project img').all()) {
+          await img.scrollIntoViewIfNeeded();
+          await img.evaluate(el => el.decode());
+        }
         await page.screenshot({path:'test-artifacts/projects-'+device.label+'.png',fullPage:true});
         await mobileOverflow(page);
         for(const [slug,label] of [
