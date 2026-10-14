@@ -29,7 +29,7 @@
     h1,h2,h3,.value{font-family:"Barlow Condensed",sans-serif;line-height:1.04;text-transform:uppercase;letter-spacing:.01em}
     h1{font-size:clamp(48px,7vw,90px);margin:14px 0 20px}h2{font-size:clamp(30px,4vw,48px);margin:0 0 16px}h3{font-size:26px;margin:0 0 12px}
     p{margin:0 0 16px}strong{color:white} .lead{font-size:16px;color:#d3dce8;max-width:760px}
-    .hero-art{border:1px solid var(--line);background:var(--panel);padding:8px}.hero-art img{width:100%;display:block;object-fit:cover;aspect-ratio:4/3}
+    .hero-art{border:1px solid var(--line);background:var(--panel);padding:8px}.hero-art img{width:100%;height:auto;max-height:390px;display:block;object-fit:cover;aspect-ratio:4/3} .hero h1{font-size:clamp(42px,5.8vw,78px);overflow-wrap:normal;word-break:normal}
     .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px}.button{display:inline-flex;align-items:center;justify-content:center;text-align:center;padding:11px 15px;border:1px solid var(--line);color:var(--text);text-decoration:none;font-size:12px;font-weight:600;line-height:1.5}.button:hover{border-color:var(--green);color:var(--mint)}.button.primary{background:var(--green);border-color:var(--green);color:#08120f}.button.primary:hover{background:var(--mint);color:#08120f}
     .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0 10px}
     .metric{background:rgba(17,22,34,.94);border:1px solid var(--line);padding:19px}.value{font-size:48px;font-weight:700}.metric p{margin:0;color:var(--muted);font-size:12px}
@@ -39,6 +39,7 @@
     .architecture{border:1px solid var(--line);padding:22px;background:#080b10;margin-top:18px;overflow:auto;white-space:pre;color:#b9f4d9;font:13px/1.65 "JetBrains Mono",monospace}
     .tag-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.tag{border:1px solid #31495b;color:#cbd5e1;font-size:11px;padding:6px 9px}
     .shot{margin:16px 0 0;border:1px solid var(--line);background:var(--panel);padding:10px}.shot img{display:block;width:100%;height:auto}.shot figcaption{color:var(--muted);font-size:12px;padding:10px 5px 4px}
+    .photo-grid .shot{margin:0}.photo-grid .shot img{aspect-ratio:4/3;object-fit:cover;transition:transform .35s ease}.photo-grid .shot:hover img{transform:scale(1.012)}
     .warning{border-left:3px solid var(--green);background:rgba(17,22,34,.9);padding:20px 24px}
     .footer{padding:36px 0 52px;color:var(--muted);font-size:12px}.footer a{white-space:normal}
     @media(max-width:760px){header .wrap{padding:12px 18px}.wrap{padding:0 18px}.hero{padding:36px 0 24px}.hero-grid,.two{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.metric:last-child{grid-column:1/-1}.value{font-size:39px}.hero-art{max-width:520px}section{padding:30px 0}}
@@ -58,10 +59,10 @@
           <p class="caption">Projeto coletivo realizado em contexto institucional. Este estudo descreve apenas informações divulgadas na documentação pública, sem expor configurações internas.</p>
           <div class="actions">
             <a class="button primary" href="https://github.com/lteodoro780/vanguardeira-project" target="_blank" rel="noopener noreferrer">VER REPOSITÓRIO ↗</a>
-            <a class="button" href="#evidencias">VER EVIDÊNCIAS ↓</a>
+            <a class="button" href="#evidencias">VER FOTOS REAIS ↓</a>
           </div>
         </div>
-        <figure class="hero-art"><img src="../img/vanguardeira.webp" alt="Capa conceitual do projeto Sala Vanguardeira"></figure>
+        <figure class="hero-art"><img src="../img/registro/lab-debian.webp" alt="Fotografia real do laboratório com estações executando Debian" width="1330" height="1152" fetchpriority="high"><figcaption class="caption" style="padding:9px 3px 2px">Registro do laboratório preparado para uso educacional.</figcaption></figure>
       </div>
     </div>
 
@@ -151,17 +152,18 @@ EM CASO DE FALHA → RECUPERAÇÃO / REVISÃO</div>
     <section id="evidencias" aria-labelledby="midias">
       <div class="overline">05 / EVIDÊNCIAS</div>
       <h2 id="midias">Documentação e galeria</h2>
-      <p>O repositório reúne instruções de preparação, instalação, rede, otimização, manutenção e uma galeria pública. As imagens a seguir foram vinculadas diretamente à documentação já publicada.</p>
-      <div class="two">
-        <figure class="shot">
-          <img src="https://github.com/user-attachments/assets/3d4d6074-21e0-4a0c-ae78-8f44629ba32e" alt="Registro fotográfico de TV Box publicado na galeria do projeto" loading="lazy">
-          <figcaption>Hardware reaproveitado — <a href="https://github.com/lteodoro780/vanguardeira-project/blob/main/Gallery.md" target="_blank" rel="noopener noreferrer">galeria original ↗</a></figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="https://github.com/user-attachments/assets/abeb1a24-789e-4bc5-b4e3-2135ab5aa82c" alt="Captura do ambiente Linux disponibilizada na galeria pública" loading="lazy">
-          <figcaption>Ambiente Linux — <a href="https://github.com/lteodoro780/vanguardeira-project/blob/main/Gallery.md" target="_blank" rel="noopener noreferrer">galeria original ↗</a></figcaption>
-        </figure>
+      <p>Registros fotográficos reais da preparação das TV Boxes, testes e ambiente de laboratório. As imagens foram otimizadas e tiveram metadados removidos. A participação foi coletiva; as fotos não substituem a documentação técnica.</p>
+      <div class="two photo-grid" aria-label="Fotos reais da Sala Vanguardeira">
+        <figure class="shot"><img src="../img/registro/lab-debian.webp" loading="lazy" decoding="async" width="1330" height="1152" alt="Visão ampla das estações do laboratório com ambiente Linux Debian"><figcaption><strong>Laboratório Linux em funcionamento</strong> — Estações do laboratório com Debian em execução após a preparação do ambiente.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/lote-b13.webp" loading="lazy" decoding="async" width="1536" height="864" alt="Caixas de dispositivos TV Box B13 organizadas em um lote"><figcaption><strong>Lote de dispositivos B13</strong> — Dispositivos preparados para avaliação de compatibilidade e reaproveitamento.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/placa-arm.webp" loading="lazy" decoding="async" width="900" height="1200" alt="Placa eletrônica azul de TV Box com dissipador e portas de conexão"><figcaption><strong>Inspeção de placa ARM</strong> — Placa de dispositivo embarcado exposta para identificação dos componentes e análise de compatibilidade.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/hardware-aberto.webp" loading="lazy" decoding="async" width="1536" height="1152" alt="TV Box aberta mostrando placa eletrônica verde e conexões"><figcaption><strong>Dispositivo aberto para testes</strong> — Inspeção visual de componentes e interfaces de hardware embarcado.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/scripts-tvbox.webp" loading="lazy" decoding="async" width="1070" height="188" alt="Terminal Linux mostrando scripts e mensagem de ausência de interface Wi-Fi"><figcaption><strong>Testes de rede e scripts Linux</strong> — Diagnóstico de interface de rede em dispositivo embarcado e verificação de scripts locais.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/desktop-linux.webp" loading="lazy" decoding="async" width="1536" height="864" alt="Monitor exibindo uma sessão desktop Linux com interface gráfica"><figcaption><strong>Linux inicializado</strong> — Ambiente desktop Linux em funcionamento após testes de inicialização.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/lab-implantado.webp" loading="lazy" decoding="async" width="1190" height="864" alt="Linhas de estações de trabalho montadas em sala de treinamento"><figcaption><strong>Estações preparadas para uso</strong> — Registro do ambiente montado com estações e equipamentos reaproveitados.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/tvbox-preparacao.webp" loading="lazy" decoding="async" width="960" height="1110" alt="Dispositivo TV Box preto em teste numa bancada de trabalho"><figcaption><strong>Unidade de TV Box para preparação</strong> — Exemplo de equipamento recebido para testes e preparação.</figcaption></figure>
       </div>
+      <p class="caption" style="margin-top:18px">Veja também a <a href="../bastidores.html">galeria de bastidores técnicos</a>. As imagens não mostram topologias internas, credenciais ou endereços de serviços.</p>
       <div class="actions">
         <a class="button" href="https://github.com/lteodoro780/vanguardeira-project/blob/main/docs/installation.md" target="_blank" rel="noopener noreferrer">INSTALAÇÃO ↗</a>
         <a class="button" href="https://github.com/lteodoro780/vanguardeira-project/blob/main/docs/network.md" target="_blank" rel="noopener noreferrer">REDE ↗</a>
