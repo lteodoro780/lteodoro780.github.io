@@ -18,7 +18,8 @@ assert.ok(fs.existsSync(jsDir), 'Bundle JS não foi criado');
 const bundles = fs.readdirSync(jsDir).filter(f=>f.endsWith('.js'));
 assert.ok(bundles.length>0, 'Sem JavaScript compilado');
 const chunks = bundles.map(f=>fs.readFileSync(path.join(jsDir,f),'utf8')).join('\n');
-for (const text of ['SENTINELA','SISTEMA DE SELOS','SALA VANGUARDEIRA','Contato profissional direto','Bastidores técnicos e fotos reais']) {
+// Verificar marcador estavel no bundle em vez de string acentuada: o minificador converte letras para Unicode escapado.
+for (const text of ['SENTINELA','SISTEMA DE SELOS','SALA VANGUARDEIRA','Contato profissional direto','gallery-active-photo']) {
   assert.ok(chunks.includes(text), `Texto da V3 não encontrado no JS: ${text}`);
 }
 assert.ok(!chunks.includes('ticket registrado [OK]'), 'Confirmação fictícia de ticket encontrada');
