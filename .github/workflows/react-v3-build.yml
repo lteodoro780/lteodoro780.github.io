@@ -26,38 +26,58 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Detectar codigo-fonte
+        id: fonte
+        working-directory: .
+        run: |
+          if [ -f frontend/package.json ] && [ -f frontend/yarn.lock ]; then
+            echo 'presente=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'presente=false' >> "$GITHUB_OUTPUT"
+            echo 'Aguardando importacao do pacote React a partir do Bazzite.'
+          fi
       - name: Preparar Node.js
+        if: steps.fonte.outputs.presente == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: yarn
           cache-dependency-path: frontend/yarn.lock
       - name: Instalar Yarn 1
+        if: steps.fonte.outputs.presente == 'true'
         run: |
           corepack enable
           corepack prepare yarn@1.22.22 --activate
       - name: Validar paginas estaticas
+        if: steps.fonte.outputs.presente == 'true'
         run: python3 scripts/validate-static.py
       - name: Instalar dependencias
+        if: steps.fonte.outputs.presente == 'true'
         run: yarn install --frozen-lockfile --non-interactive
       - name: Compilar
+        if: steps.fonte.outputs.presente == 'true'
         env:
           CI: 'true'
         run: yarn build
       - name: Validar build
+        if: steps.fonte.outputs.presente == 'true'
         run: node scripts/validate-build.mjs
       - name: Instalar Playwright de teste
+        if: steps.fonte.outputs.presente == 'true'
         run: npm install --prefix "$GITHUB_WORKSPACE/.qa" --no-save --no-package-lock playwright@1.55.0
       - name: Instalar Chromium
+        if: steps.fonte.outputs.presente == 'true'
         run: "$GITHUB_WORKSPACE/.qa/node_modules/.bin/playwright" install --with-deps chromium
       - name: Servir site
+        if: steps.fonte.outputs.presente == 'true'
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 --directory build > /tmp/l0noc-react.log 2>&1 &
           echo $! > /tmp/l0noc-react.pid
       - name: Testar escritorio e celular
+        if: steps.fonte.outputs.presente == 'true'
         run: NODE_PATH="$GITHUB_WORKSPACE/.qa/node_modules" node tests/react-build-smoke.cjs
       - name: Salvar capturas de tela
-        if: always()
+        if: always() && steps.fonte.outputs.presente == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: l0noc-v3-fotos-screenshots
@@ -65,7 +85,7 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
       - name: Salvar build sem publicar
-        if: success()
+        if: success() && steps.fonte.outputs.presente == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: l0noc-v3-react-build-nao-publicado
