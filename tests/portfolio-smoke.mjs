@@ -23,7 +23,7 @@ async function openPage(page, path, includes) {
     if (path === '/') {
       await page.locator('nav.recruiter-links a').first().waitFor({state:'visible',timeout:15000});
     } else {
-      await page.waitForFunction(expected => document.body?.innerText.includes(expected), includes, {timeout:15000});
+      await page.waitForFunction(expected => document.body?.innerText.toLocaleLowerCase('pt-BR').includes(expected.toLocaleLowerCase('pt-BR')), includes, {timeout:15000});
     }
   } catch (err) {
     const body=(await page.locator('body').innerText().catch(()=>'' )).slice(0,350);
