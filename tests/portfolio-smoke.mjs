@@ -44,6 +44,7 @@ try {
         await openPage(page,'/','L0·NOC');
         await page.locator('nav.recruiter-links a[href="./projetos.html"]').waitFor();
         await page.locator('[data-testid="boot-screen"]').waitFor({state:'hidden',timeout:20000});
+        await page.waitForTimeout(1700); // aguarda animações iniciais antes da captura
         await page.screenshot({path:'test-artifacts/home-'+device.label+'.png',fullPage:true});
         assert.equal(await page.locator('nav.recruiter-links a').count(),3);
         await page.locator('nav.recruiter-links a[href="./projetos.html"]').click();
