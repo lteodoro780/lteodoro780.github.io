@@ -17,7 +17,7 @@ async function run(name, task) {
 async function openPage(page, path, includes) {
   const response = await page.goto(BASE + path, {waitUntil:'domcontentloaded', timeout:25000});
   assert.equal(response?.status(), 200, 'HTTP 200 esperado: '+path);
-  assert.ok((await page.locator('body').innerText()).includes(includes), 'Texto ausente: '+includes);
+  await page.waitForFunction(expected => document.body?.innerText.includes(expected), includes, {timeout:15000});
 }
 async function mobileOverflow(page) {
   const dim=await page.evaluate(() => ({w:innerWidth,doc:document.documentElement.scrollWidth}));
