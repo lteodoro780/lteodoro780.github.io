@@ -31,3 +31,11 @@ jobs:
           echo $! > /tmp/portfolio-http.pid
       - name: Desktop and mobile smoke tests
         run: node tests/portfolio-smoke.mjs
+      - name: Save visual review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v3-browser-screenshots
+          path: test-artifacts/
+          if-no-files-found: ignore
+          retention-days: 7
