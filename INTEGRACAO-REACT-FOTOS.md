@@ -51,3 +51,9 @@ substitui revisão humana.
 
 Não mesclar ou publicar sem confirmação expressa. A entrada de código React
 em `frontend/` sozinha **não altera o site público**.
+
+## Preparação de publicação concluída
+
+O build React aprovado foi copiado para a raiz **desta branch de integração**, incluindo `index.html`, `static/`, `img/registro/`, `bastidores.html` e os estudos de caso. O processo de preparação rodou no [GitHub Actions](https://github.com/lteodoro780/lteodoro780.github.io/actions/runs/38657007434) com sucesso.
+
+Foi criada a branch de segurança [`backup-site-pre-v3-20261014`](https://github.com/lteodoro780/lteodoro780.github.io/tree/backup-site-pre-v3-20261014) no commit anterior da `main`. A publicação da V3 ocorrerá por pull request, sem force push.
