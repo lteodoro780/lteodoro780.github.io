@@ -34,6 +34,26 @@ const fs = require('node:fs');
         assert.equal(await page.locator('.cyber-ticker').count(),1);
         assert.equal(await page.locator('.cyber-taskbar').count(),1);
 
+        // V8: infraestrutura cenográfica e HUD sem métricas operacionais falsas
+        assert.equal(await page.locator('.v8-server-plate').count(),4);
+        assert.equal(await page.locator('.v8-server-unit').count(),33);
+        assert.equal(await page.locator('[data-testid="v8-datacenter-hud"]').count(),1);
+        assert.equal(await page.locator('.v8-datacenter-backdrop').count(),1);
+        assert.equal(await page.locator('.v8-datacenter-floor').count(),1);
+        assert.equal(await page.locator('.v8-topology-scene').count(),1);
+        const stage = page.locator('[data-testid="v8-datacenter-hud"]');
+        assert.equal(await stage.isVisible(),label==='desktop');
+        const hudText = await stage.innerText();
+        assert.ok(hudText.includes('APLICAÇÕES') && hudText.includes('AUTOMAÇÃO'));
+        assert.ok(!/128.6 PB\/s|99.9%|CPU 24%|RAM 68%/.test(hudText));
+        if(label==='desktop'){
+          const about = page.locator('[data-testid="window-sobre"]');
+          await about.waitFor({timeout:10000});
+          assert.equal(await about.locator('.v8-about-facts').count(),1);
+          assert.equal(await about.locator('.v8-about-skills span').count(),6);
+        }
+
+
         assert.equal(await page.locator('[data-testid="desktop-icon-telemetria"]').count(),0);
         assert.equal(await page.locator('[data-testid="desktop-icon-tecnicos"]').count(),1);
         assert.equal(await page.locator('[data-testid="incident-trigger"]').count(),0);
