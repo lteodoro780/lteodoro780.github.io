@@ -35,8 +35,18 @@ const fs = require('node:fs');
           label === 'mobile' ? 'none' : 'globe-orbit-dash',
           'Órbitas devem ser estáticas no celular e lentas no desktop'
         );
+        // Teste real de movimento da superfície; a V7 anterior só animava
+        // traços orbitais e o globo ficava completamente estático.
+        const surface = globe.locator('[data-testid="globe-spinning-surface"]');
+        assert.equal(await surface.count(),1,'Camada giratória ausente no SVG');
+        assert.equal(await surface.evaluate(el => getComputedStyle(el).animationName),'globe-spin-surface','Rotação da superfície ausente');
+        const firstPosition = await surface.evaluate(el => el.getCTM().e);
+        await page.waitForTimeout(1100);
+        const secondPosition = await surface.evaluate(el => el.getCTM().e);
+        assert.ok(Math.abs(secondPosition - firstPosition) > 5,'Continentes não estão se movendo de fato');
         await page.emulateMedia({reducedMotion:'reduce'});
         assert.equal(await orbit.evaluate(el => getComputedStyle(el).animationName),'none','Movimento reduzido não foi respeitado');
+        assert.equal(await surface.evaluate(el => getComputedStyle(el).animationName),'none','Superfície girando mesmo com movimento reduzido');
         await page.emulateMedia({reducedMotion:'no-preference'});
         assert.equal(await page.locator('div.grain').count(),0,'Textura de ruído SVG deve estar ausente');
         assert.equal(await page.locator('[data-testid="v7-background-hud"]').count(),0,'HUD extra da V7 deve sair para manter visual V3');
