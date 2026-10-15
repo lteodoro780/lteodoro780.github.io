@@ -19,10 +19,11 @@ const bundles = fs.readdirSync(jsDir).filter(f=>f.endsWith('.js'));
 assert.ok(bundles.length>0, 'Sem JavaScript compilado');
 const chunks = bundles.map(f=>fs.readFileSync(path.join(jsDir,f),'utf8')).join('\n');
 // Verificar marcador estavel no bundle em vez de string acentuada: o minificador converte letras para Unicode escapado.
-for (const text of ['SENTINELA','SISTEMA DE SELOS','SALA VANGUARDEIRA','Contato profissional direto','gallery-active-photo','mobile-cta-projects','telemetry-stat-arm','telemetry-photo-chart']) {
+for (const text of ['SENTINELA','SISTEMA DE SELOS','SALA VANGUARDEIRA','Contato profissional direto','gallery-active-photo','mobile-cta-projects','app-projetos-tecnicos','technical-project-','HERMES Security Portable','TLuizLabs','Infra TI Labs']) {
   assert.ok(chunks.includes(text), `Texto da V3 não encontrado no JS: ${text}`);
 }
 assert.ok(!chunks.includes('TELEMETRIA SIMULADA'), 'Texto antigo de telemetria sintética ainda no bundle');
+assert.ok(!chunks.includes('telemetry-stat-arm'), 'Telemetria antiga ainda incluída no bundle');
 assert.ok(!chunks.includes('INCIDENTE SIMULADO'), 'Simulador de incidente ainda no bundle');
 assert.ok(!chunks.includes('ticket registrado [OK]'), 'Confirmação fictícia de ticket encontrada');
 console.log(`PASS: build válido, ${expected.length} arquivos essenciais e ${bundles.length} scripts compilados.`);

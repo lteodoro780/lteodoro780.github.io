@@ -1,20 +1,22 @@
-name: Validar Telemetria V5 sem publicar
+name: Revisar Projetos Técnicos V6 sem publicar
 
 on:
   push:
     branches:
-      - telemetria-evidencias-20261014
+      - v6-projetos-tecnicos-sem-telemetria-20261014
     paths:
-      - '.github/workflows/telemetria-v5-review.yml'
+      - '.github/workflows/projetos-tecnicos-v6-review.yml'
+      - 'frontend/src/components/os/apps/ProjetosTecnicos.jsx'
+      - 'frontend/src/content/technicalProjects.js'
       - 'frontend/tests/react-build-smoke.cjs'
-      - 'frontend/src/components/os/apps/Telemetria.jsx'
+      - 'frontend/scripts/validate-build.mjs'
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  validar-e-preparar:
+  validar-v6:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -26,7 +28,7 @@ jobs:
           node-version: '22'
           cache: yarn
           cache-dependency-path: frontend/yarn.lock
-      - name: Validar React e páginas estáticas
+      - name: Build e verificações estáticas
         working-directory: frontend
         env:
           CI: 'true'
@@ -38,23 +40,23 @@ jobs:
           yarn install --frozen-lockfile --non-interactive
           yarn build
           node scripts/validate-build.mjs
-      - name: Executar testes mobile e desktop
+      - name: Testes mobile e desktop
         working-directory: frontend
         run: |
           set -euo pipefail
           npm install --prefix ../.qa --no-save --no-package-lock playwright@1.55.0
           ../.qa/node_modules/.bin/playwright install --with-deps chromium
-          python3 -m http.server 8765 --bind 127.0.0.1 --directory build > /tmp/l0noc-v5-server.log 2>&1 &
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory build > /tmp/l0noc-v6-server.log 2>&1 &
           NODE_PATH="$GITHUB_WORKSPACE/.qa/node_modules" node tests/react-build-smoke.cjs
-      - name: Guardar capturas para análise
+      - name: Capturas da revisão
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: l0noc-v5-telemetria-capturas
+          name: l0noc-v6-projetos-tecnicos-capturas
           path: frontend/artifacts/
           if-no-files-found: ignore
           retention-days: 14
-      - name: Preparar build somente na branch de revisão
+      - name: Preparar build na branch de revisão, sem deploy
         shell: bash
         run: |
           set -euo pipefail
@@ -73,10 +75,10 @@ jobs:
           git add -A
           git diff --cached --check
           if ! git diff --cached --quiet; then
-            git commit -m "build(portfolio): preparar telemetria documental V5 para Pages"
-            git push origin HEAD:refs/heads/telemetria-evidencias-20261014
+            git commit -m "build(portfolio): preparar Projetos Técnicos V6 para revisão"
+            git push origin HEAD:refs/heads/v6-projetos-tecnicos-sem-telemetria-20261014
           fi
       - name: Resumo
         run: |
-          echo "### V5: apenas branch de revisão" >> "$GITHUB_STEP_SUMMARY"
-          echo "A main não foi modificada." >> "$GITHUB_STEP_SUMMARY"
+          echo "### Projetos Técnicos V6 validada e preparada em branch isolada" >> "$GITHUB_STEP_SUMMARY"
+          echo "A main e o GitHub Pages não foram alterados." >> "$GITHUB_STEP_SUMMARY"
