@@ -18,6 +18,22 @@ const fs = require('node:fs');
         await page.locator('[data-testid="boot-screen"]').waitFor({state:'hidden',timeout:20000});
         await page.waitForTimeout(1400);
         assert.equal(await page.locator('nav.recruiter-links a').count(),3);
+        const atmosphere = page.locator('[data-testid="v7-cyber-atmosphere"]');
+        assert.equal(await atmosphere.count(),1, 'Canvas de atmosfera não foi montado');
+        assert.equal(await atmosphere.isVisible(),true);
+        const canvasState = await atmosphere.evaluate(el => ({
+          width: el.width, height: el.height,
+          pointerEvents: getComputedStyle(el).pointerEvents,
+          context: !!el.getContext('2d'),
+        }));
+        assert.ok(canvasState.width > 0 && canvasState.height > 0, 'Canvas com tamanho inválido');
+        assert.equal(canvasState.pointerEvents, 'none', 'Canvas não pode bloquear interação');
+        assert.equal(canvasState.context, true);
+        assert.equal(await page.locator('iframe[srcdoc]').count(),0, 'V7 não deve carregar iframe de terceiros');
+        assert.equal(await page.locator('.cyber-layer-stack').count(),1);
+        assert.equal(await page.locator('.cyber-ticker').count(),1);
+        assert.equal(await page.locator('.cyber-taskbar').count(),1);
+
         assert.equal(await page.locator('[data-testid="desktop-icon-telemetria"]').count(),0);
         assert.equal(await page.locator('[data-testid="desktop-icon-tecnicos"]').count(),1);
         assert.equal(await page.locator('[data-testid="incident-trigger"]').count(),0);
@@ -101,6 +117,7 @@ const fs = require('node:fs');
         await contact.waitFor({timeout:10000});
         assert.ok((await contact.innerText()).includes('não registra tickets'));
         assert.equal(await contact.locator('form').count(),0);
+        assert.equal(await page.locator('.cyber-window').count() >= 1,true);
         assert.equal(errors.length,0,`Erros JS: ${errors.join('; ')}`);
         console.log(`PASS: React V3 ${label}, navegação, imagens e contato.`);
       } finally {await page.close()}
