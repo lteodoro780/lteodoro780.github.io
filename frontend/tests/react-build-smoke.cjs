@@ -30,7 +30,18 @@ const fs = require('node:fs');
         assert.equal(canvasState.pointerEvents, 'none', 'Canvas não pode bloquear interação');
         assert.equal(canvasState.context, true);
         assert.equal(await page.locator('iframe[srcdoc]').count(),0, 'V7 não deve carregar iframe de terceiros');
-        assert.equal(await page.locator('.cyber-layer-stack').count(),1);
+        assert.equal(await page.locator('.v8-neon-stack svg').count(),1);
+        assert.equal(await page.locator('.v8-wallpaper').count(),1,'Novo tema V8 ausente');
+        assert.equal(await page.locator('.v8-datacenter-scene').count(),1,'Fundo data center ausente');
+        assert.equal(await page.locator('.v8-svg-tier').count(),5,'Cinco níveis do data center ausentes');
+        assert.equal(await page.locator('.v8-svg-cube').count(),46,'Mini racks da maquete ausentes');
+        assert.equal(await page.locator('.v8-system-labels > div').count(),4);
+        if(label === 'mobile') {
+          assert.equal(await page.locator('.v8-system-labels').isVisible(),false,
+            'Cards visuais não devem disputar espaço na versão mobile');
+        } else {
+          assert.equal(await page.locator('.v8-datacenter-scene').isVisible(),true);
+        }
         assert.equal(await page.locator('.cyber-ticker').count(),1);
         assert.equal(await page.locator('.cyber-taskbar').count(),1);
 
