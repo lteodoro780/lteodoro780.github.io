@@ -251,3 +251,31 @@
 
 
 @media(max-width:767px){.wallpaper-intro{bottom:102px!important}}
+
+/* V4: recrutamento mobile — apresentação direta, sem telemetria sintética. */
+@media (max-width: 767px) {
+  .mobile-recruiter-intro {
+    position: absolute;
+    z-index: 12;
+    top: clamp(225px, 31svh, 282px);
+    left: 12px;
+    right: 12px;
+    bottom: 124px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 16px;
+    border: 1px solid rgba(110, 231, 183, .38);
+    background: rgba(8, 14, 24, .91);
+    box-shadow: 0 20px 65px rgba(0, 0, 0, .46);
+    backdrop-filter: blur(14px);
+    scrollbar-width: thin;
+    scrollbar-color: #334155 transparent;
+  }
+  [data-testid="desktop-icons"] { row-gap: 9px; }
+  [data-testid="desktop-icons"] > button { min-height: 77px; }
+  .topology-central-host { opacity: .34; pointer-events: none; }
+}
+@media (max-width: 360px) {
+  .mobile-recruiter-intro { left: 8px; right: 8px; padding: 12px; }
+  .recruiter-links a { font-size: 9px; }
+}
