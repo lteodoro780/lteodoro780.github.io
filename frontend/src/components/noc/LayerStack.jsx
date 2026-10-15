@@ -1,10 +1,10 @@
-// Topologia decorativa V7: quatro quadrados 3D animados apenas por CSS.
-// Sem requestAnimationFrame, Canvas, listeners de ponteiro ou motion values.
+// Aparência da topologia V3 aplicada à base funcional V7.
+// Quatro camadas em perspectiva, com movimento CSS leve em vez de loops JS/Canvas.
 const LAYERS = [
-  { label: "obs · métricas", tone: "#334155" },
+  { label: "obs · métricas", tone: "#64748b" },
   { label: "data · storage", tone: "#334155" },
-  { label: "app · cluster", tone: "#06B6D4" },
-  { label: "edge · network", tone: "#10B981" },
+  { label: "app · cluster", tone: "#06b6d4" },
+  { label: "edge · network", tone: "#10b981" },
 ];
 
 const Plate = ({ layer, index }) => (
@@ -13,25 +13,23 @@ const Plate = ({ layer, index }) => (
     className="layer-plate absolute inset-0 border"
     style={{
       borderColor: layer.tone,
-      // Separar as placas também em X/Y. Só o eixo Z fazia
-      // os painéis opacos se sobreporem visualmente em uma única placa.
-      "--topology-x": `${-index * 12}px`,
-      "--topology-y": `${-index * 36}px`,
-      "--topology-depth": `${index * 16}px`,
-      "--topology-phase": `${-index * 0.55}s`,
+      "--topology-x": `${-index * 15}px`,
+      "--topology-y": `${-index * 20}px`,
+      "--topology-depth": `${index * 27}px`,
+      "--topology-phase": `${-index * 0.38}s`,
       transformStyle: "preserve-3d",
     }}
   >
     {index === 0 && <div className="absolute inset-0 layer-grid opacity-70" />}
     <span
       className="absolute left-3 top-3 font-mono text-xs uppercase tracking-widest"
-      style={{ color: layer.tone === "#334155" ? "#94A3B8" : layer.tone }}
+      style={{ color: layer.tone === "#334155" ? "#94a3b8" : layer.tone }}
     >
       L{index} · {layer.label}
     </span>
     <span
       className="absolute bottom-3 right-3 h-2 w-2 rounded-full"
-      style={{ background: layer.tone === "#334155" ? "#10B981" : layer.tone }}
+      style={{ background: layer.tone === "#334155" ? "#10b981" : layer.tone }}
     />
   </div>
 );
