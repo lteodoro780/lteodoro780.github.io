@@ -43,7 +43,7 @@ const fs = require('node:fs');
         assert.equal(await page.locator('.v8-topology-scene').count(),1);
         const stage = page.locator('[data-testid="v8-datacenter-hud"]');
         assert.equal(await stage.isVisible(),label==='desktop');
-        const hudText = await stage.innerText();
+        const hudText = await stage.textContent();
         assert.ok(hudText.includes('APLICAÇÕES') && hudText.includes('AUTOMAÇÃO'));
         assert.ok(!/128.6 PB\/s|99.9%|CPU 24%|RAM 68%/.test(hudText));
         if(label==='desktop'){
