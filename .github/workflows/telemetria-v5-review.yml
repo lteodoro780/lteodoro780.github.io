@@ -6,6 +6,8 @@ on:
       - telemetria-evidencias-20261014
     paths:
       - '.github/workflows/telemetria-v5-review.yml'
+      - 'frontend/tests/react-build-smoke.cjs'
+      - 'frontend/src/components/os/apps/Telemetria.jsx'
   workflow_dispatch:
 
 permissions:
