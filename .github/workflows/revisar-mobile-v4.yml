@@ -63,6 +63,8 @@ jobs:
           test "$(find img/registro -maxdepth 1 -name '*.webp' | wc -l)" -eq 20
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Playwright e capturas de QA não pertencem ao site nem ao repositório.
+          rm -rf .qa frontend/artifacts
           git add -A
           git diff --cached --check
           if ! git diff --cached --quiet; then
