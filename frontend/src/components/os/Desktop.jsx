@@ -9,7 +9,6 @@ import { Taskbar } from "./Taskbar";
 import { StartMenu } from "./StartMenu";
 import { APP } from "./appMeta";
 import { APP_COMPONENTS } from "./apps";
-import { IncidentMode } from "../noc/IncidentMode";
 import { useDesktop, useIsMobile } from "../../lib/desktop";
 
 export const Desktop = () => {
@@ -55,7 +54,6 @@ export const Desktop = () => {
       </div>
       <StartMenu open={startOpen} onClose={() => setStartOpen(false)} onReboot={reboot} />
       <Taskbar onStart={() => setStartOpen((o) => !o)} startOpen={startOpen} />
-      <IncidentMode />
     </>
   );
 };
