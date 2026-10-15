@@ -1,0 +1,89 @@
+name: Preparar publicacao V3 na branch
+
+on:
+  push:
+    branches:
+      - v3-react-fotos-integracao-20261014
+    paths:
+      - .github/workflows/preparar-publicacao-v3.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: preparar-v3-react-fotos
+  cancel-in-progress: false
+
+jobs:
+  gerar-site-publicavel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout da branch de integracao
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: yarn
+          cache-dependency-path: frontend/yarn.lock
+      - name: Instalar Yarn e compilar
+        working-directory: frontend
+        env:
+          CI: 'true'
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.22 --activate
+          python3 scripts/validate-static.py
+          yarn install --frozen-lockfile --non-interactive
+          yarn build
+          node scripts/validate-build.mjs
+      - name: Montar arquivos para GitHub Pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f frontend/build/index.html
+          test -f frontend/build/bastidores.html
+          test -f frontend/build/.nojekyll
+          test -f frontend/build/img/registro/lab-debian.webp
+          # Somente a branch de integracao e alterada, com backup anterior da main.
+          rm -rf static
+          cp -a frontend/build/. .
+          test -f index.html && test -f static/js/$(find static/js -name 'main.*.js' -printf '%f\n' | head -1)
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path('index.html').read_text()
+          matches = re.findall(r'src="([^"]+\.js)"', html)
+          if not matches:
+              raise SystemExit("Site compilado sem JavaScript")
+          for src in matches:
+              candidate = Path(src.lstrip('./'))
+              if not candidate.is_file():
+                  raise SystemExit(f"JavaScript ausente: {candidate}")
+          images = list(Path('img/registro').glob('*.webp'))
+          if len(images) != 20:
+              raise SystemExit(f"Esperados 20 arquivos WebP de fotos + thumbs, encontrados {len(images)}")
+          print(f'Publicavel: {len(matches)} script(s); {len(images)} fotos e miniaturas')
+          PY
+      - name: Registrar artefatos compilados SOMENTE na branch de integracao
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo "Arquivos publicados ja correspondem ao build."
+            exit 0
+          fi
+          git commit -m "build(portfolio): preparar React V3 e fotos para Pages"
+          git push origin HEAD:refs/heads/v3-react-fotos-integracao-20261014
+      - name: Registrar resumo
+        run: |
+          echo "Branch preparada para PR: v3-react-fotos-integracao-20261014" >> "$GITHUB_STEP_SUMMARY"
+          echo "O workflow NAO altera main nem realiza deploy." >> "$GITHUB_STEP_SUMMARY"
