@@ -1,0 +1,75 @@
+name: Revisar UX mobile V4 sem publicar
+
+on:
+  push:
+    branches:
+      - ux-mobile-sem-simulacao-20261014
+    paths:
+      - '.github/workflows/revisar-mobile-v4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  react-ux-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: yarn
+          cache-dependency-path: frontend/yarn.lock
+      - name: Compilar e validar
+        working-directory: frontend
+        env:
+          CI: 'true'
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.22 --activate
+          python3 scripts/validate-static.py
+          yarn install --frozen-lockfile --non-interactive
+          yarn build
+          node scripts/validate-build.mjs
+      - name: Testar em Chromium desktop e celular
+        working-directory: frontend
+        run: |
+          npm install --prefix ../.qa --no-save --no-package-lock playwright@1.55.0
+          ../.qa/node_modules/.bin/playwright install --with-deps chromium
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory build > /tmp/l0noc-v4-server.log 2>&1 &
+          NODE_PATH="$GITHUB_WORKSPACE/.qa/node_modules" node tests/react-build-smoke.cjs
+      - name: Guardar capturas para revisão
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: l0noc-mobile-v4-capturas
+          path: frontend/artifacts/
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Atualizar arquivos publicáveis SOMENTE nesta branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f frontend/build/index.html
+          test -f frontend/build/bastidores.html
+          test -f frontend/build/img/registro/lab-debian.webp
+          rm -rf static
+          cp -a frontend/build/. .
+          node --check "$(find static/js -maxdepth 1 -name 'main.*.js' -type f | head -1)"
+          test "$(find img/registro -maxdepth 1 -name '*.webp' | wc -l)" -eq 20
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          if ! git diff --cached --quiet; then
+            git commit -m "build(portfolio): preparar UX mobile e conteúdo real para Pages"
+            git push origin HEAD:refs/heads/ux-mobile-sem-simulacao-20261014
+          fi
+      - name: Resumo
+        run: |
+          echo "### V4 pronta apenas para revisão" >> "$GITHUB_STEP_SUMMARY"
+          echo "A main NÃO foi atualizada." >> "$GITHUB_STEP_SUMMARY"
