@@ -1,26 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { motion, useDragControls, useMotionValue } from "framer-motion";
 import { Copy, Minus, Square, X } from "lucide-react";
-import Lenis from "lenis";
 import { useDesktop } from "../../lib/desktop";
-
-const useWindowLenis = (ref) => {
-  useEffect(() => {
-    const wrapper = ref.current;
-    if (!wrapper || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
-    const lenis = new Lenis({ wrapper, content: wrapper.firstElementChild, duration: 1.1 });
-    let id;
-    const raf = (t) => {
-      lenis.raf(t);
-      id = requestAnimationFrame(raf);
-    };
-    id = requestAnimationFrame(raf);
-    return () => {
-      cancelAnimationFrame(id);
-      lenis.destroy();
-    };
-  }, [ref]);
-};
 
 const Ctrl = ({ onClick, label, testid, danger, children }) => (
   <button
@@ -39,8 +20,6 @@ export const Window = ({ id, meta, st, isTop, mobile, areaRef, children }) => {
   const controls = useDragControls();
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const body = useRef(null);
-  useWindowLenis(body);
   const full = mobile || st.max;
   const Icon = meta.icon;
   useEffect(() => {
@@ -73,7 +52,7 @@ export const Window = ({ id, meta, st, isTop, mobile, areaRef, children }) => {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.94, transition: { duration: 0.18 } }}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      className={`cyber-window pointer-events-auto absolute flex flex-col overflow-hidden border bg-noc-bg/95 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)] backdrop-blur-xl transition-[border-color] duration-300 ${isTop ? "border-noc-line2" : "border-noc-line"}`}
+      className={`cyber-window pointer-events-auto absolute flex flex-col overflow-hidden border bg-noc-bg/95 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)] transition-[border-color] duration-300 ${isTop ? "border-noc-line2" : "border-noc-line"}`}
     >
       <header
         onPointerDown={(e) => { if (!full) controls.start(e); }}
@@ -96,7 +75,7 @@ export const Window = ({ id, meta, st, isTop, mobile, areaRef, children }) => {
           <Ctrl testid={`window-close-${id}`} label="Fechar" danger onClick={() => d.close(id)}><X size={14} /></Ctrl>
         </div>
       </header>
-      <div ref={body} className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
         <div className="p-4 sm:p-6">{children}</div>
       </div>
     </motion.section>
