@@ -1,0 +1,44 @@
+name: Portfolio V3 - smoke tests
+
+on:
+  push:
+    branches:
+      - v3-sobre-carreira-20261014
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Playwright
+        run: npm install --no-save --no-package-lock playwright@1.55.0
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Check JavaScript syntax
+        run: |
+          BUNDLE="$(find static/js -maxdepth 1 -type f -name 'main.*.js' | head -1)"
+          test -n "$BUNDLE" || { echo 'Bundle JS nao encontrado'; exit 1; }
+          node --check "$BUNDLE"
+      - name: Serve static site
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/portfolio-http.log 2>&1 &
+          echo $! > /tmp/portfolio-http.pid
+      - name: Desktop and mobile smoke tests
+        run: node tests/portfolio-smoke.mjs
+      - name: Save visual review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v3-browser-screenshots
+          path: test-artifacts/
+          if-no-files-found: ignore
+          retention-days: 7
