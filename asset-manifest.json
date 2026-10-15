@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "./static/css/main.57a85fed.css",
+    "main.js": "./static/js/main.cd8b6f36.js",
+    "static/media/luis-florencio.webp": "./static/media/luis-florencio.8dca26cac75e508fdffb.webp",
+    "index.html": "./index.html",
+    "main.57a85fed.css.map": "./static/css/main.57a85fed.css.map",
+    "main.cd8b6f36.js.map": "./static/js/main.cd8b6f36.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.57a85fed.css",
+    "static/js/main.cd8b6f36.js"
+  ]
+}

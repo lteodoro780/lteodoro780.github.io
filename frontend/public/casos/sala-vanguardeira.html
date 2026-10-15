@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0d14">
+  <meta name="description" content="Estudo de caso Sala Vanguardeira: reaproveitamento de mais de 60 TV Boxes ARM com Armbian para estações Linux educacionais, implantação e troubleshooting.">
+  <meta property="og:title" content="Sala Vanguardeira | Estudo de caso · L0·NOC">
+  <meta property="og:description" content="Mais de 60 dispositivos ARM reaproveitados: preparação, Linux embarcado, recuperação e desafios de implantação.">
+  <meta property="og:type" content="article">
+  <title>Sala Vanguardeira | Estudo de caso · L0·NOC</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{color-scheme:dark;--bg:#0a0d14;--panel:#111622;--line:#263244;--muted:#a6b4c7;--text:#f1f5f9;--green:#10b981;--mint:#6ee7b7}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);background:var(--bg);font:15px/1.8 "JetBrains Mono",monospace;overflow-wrap:anywhere}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.15;background-image:linear-gradient(#284156 1px,transparent 1px),linear-gradient(90deg,#284156 1px,transparent 1px);background-size:48px 48px}
+    a{color:var(--mint);text-decoration-thickness:1px;text-underline-offset:3px}a:hover{color:white}a:focus-visible{outline:2px solid var(--green);outline-offset:4px}
+    .skip{position:absolute;top:-100px;left:1rem;background:white;color:#111;padding:.7rem;z-index:99}.skip:focus{top:1rem}
+    .wrap{position:relative;max-width:1120px;padding:0 26px;margin:0 auto}
+    header{border-bottom:1px solid var(--line);background:rgba(10,13,20,.93)}
+    header .wrap{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .brand{font-weight:600;color:var(--mint);text-decoration:none;white-space:nowrap}
+    .back{color:var(--text);font-size:12px;text-decoration:none;border:1px solid var(--line);padding:8px 12px}
+    .eyebrow,.overline{font-size:11px;color:var(--mint);text-transform:uppercase;letter-spacing:.15em}
+    .hero{padding:58px 0 42px}.hero-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:36px;align-items:center}
+    h1,h2,h3,.value{font-family:"Barlow Condensed",sans-serif;line-height:1.04;text-transform:uppercase;letter-spacing:.01em}
+    h1{font-size:clamp(48px,7vw,90px);margin:14px 0 20px}h2{font-size:clamp(30px,4vw,48px);margin:0 0 16px}h3{font-size:26px;margin:0 0 12px}
+    p{margin:0 0 16px}strong{color:white} .lead{font-size:16px;color:#d3dce8;max-width:760px}
+    .hero-art{border:1px solid var(--line);background:var(--panel);padding:8px}.hero-art img{width:100%;height:auto;max-height:390px;display:block;object-fit:cover;aspect-ratio:4/3} .hero h1{font-size:clamp(42px,5.8vw,78px);overflow-wrap:normal;word-break:normal}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px}.button{display:inline-flex;align-items:center;justify-content:center;text-align:center;padding:11px 15px;border:1px solid var(--line);color:var(--text);text-decoration:none;font-size:12px;font-weight:600;line-height:1.5}.button:hover{border-color:var(--green);color:var(--mint)}.button.primary{background:var(--green);border-color:var(--green);color:#08120f}.button.primary:hover{background:var(--mint);color:#08120f}
+    .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0 10px}
+    .metric{background:rgba(17,22,34,.94);border:1px solid var(--line);padding:19px}.value{font-size:48px;font-weight:700}.metric p{margin:0;color:var(--muted);font-size:12px}
+    .caption{font-size:12px;color:var(--muted)} section{padding:38px 0;border-bottom:1px solid var(--line)}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:22px}.card{background:var(--panel);border:1px solid var(--line);padding:24px}
+    .card p:last-child{margin-bottom:0}ul{padding-left:21px;margin:8px 0 0}li{margin-bottom:10px}li::marker{color:var(--green)}
+    .architecture{border:1px solid var(--line);padding:22px;background:#080b10;margin-top:18px;overflow:auto;white-space:pre;color:#b9f4d9;font:13px/1.65 "JetBrains Mono",monospace}
+    .tag-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.tag{border:1px solid #31495b;color:#cbd5e1;font-size:11px;padding:6px 9px}
+    .shot{margin:16px 0 0;border:1px solid var(--line);background:var(--panel);padding:10px}.shot img{display:block;width:100%;height:auto}.shot figcaption{color:var(--muted);font-size:12px;padding:10px 5px 4px}
+    .photo-grid .shot{margin:0}.photo-grid .shot img{aspect-ratio:4/3;object-fit:cover;transition:transform .35s ease}.photo-grid .shot:hover img{transform:scale(1.012)}
+    .warning{border-left:3px solid var(--green);background:rgba(17,22,34,.9);padding:20px 24px}
+    .footer{padding:36px 0 52px;color:var(--muted);font-size:12px}.footer a{white-space:normal}
+    @media(max-width:760px){header .wrap{padding:12px 18px}.wrap{padding:0 18px}.hero{padding:36px 0 24px}.hero-grid,.two{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.metric:last-child{grid-column:1/-1}.value{font-size:39px}.hero-art{max-width:520px}section{padding:30px 0}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+  <header><div class="wrap"><a class="brand" href="../index.html" aria-label="Voltar ao portfólio L0 NOC">L0·NOC / CASE STUDIES</a><a class="back" href="../index.html">← VOLTAR AO PORTFÓLIO</a></div></header>
+  <main class="wrap" id="conteudo">
+    <div class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">PROJETO 04 / LINUX EMBARCADO + INFRAESTRUTURA</div>
+          <h1>Sala<br>Vanguardeira<span style="color:var(--green)">.</span></h1>
+          <p class="lead">Reaproveitamento tecnológico de TV Boxes ARM para compor estações Linux destinadas a atividades educacionais e de laboratório.</p>
+          <p class="caption">Projeto coletivo realizado em contexto institucional. Este estudo descreve apenas informações divulgadas na documentação pública, sem expor configurações internas.</p>
+          <div class="actions">
+            <a class="button primary" href="https://github.com/lteodoro780/vanguardeira-project" target="_blank" rel="noopener noreferrer">VER REPOSITÓRIO ↗</a>
+            <a class="button" href="#evidencias">VER FOTOS REAIS ↓</a>
+          </div>
+        </div>
+        <figure class="hero-art"><img src="../img/registro/lab-debian.webp" alt="Fotografia real do laboratório com estações executando Debian" width="1330" height="1152" fetchpriority="high"><figcaption class="caption" style="padding:9px 3px 2px">Registro do laboratório preparado para uso educacional.</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="metrics" aria-label="Resumo do projeto documentado">
+      <div class="metric"><div class="value">60+</div><p>TV Boxes adaptadas para uso educacional, conforme documentação do projeto</p></div>
+      <div class="metric"><div class="value">ARM</div><p>arquitetura utilizada nos dispositivos documentados</p></div>
+      <div class="metric"><div class="value">Linux</div><p>ambiente leve com Armbian e ferramentas de administração</p></div>
+    </div>
+    <p class="caption">Fonte: <a href="https://github.com/lteodoro780/vanguardeira-project/blob/main/README.md" target="_blank" rel="noopener noreferrer">visão geral do projeto</a>. Não há medição pública de economia, disponibilidade ou desempenho para apresentar como resultado.</p>
+
+    <section aria-labelledby="problema">
+      <div class="overline">01 / CONTEXTO</div>
+      <h2 id="problema">O desafio</h2>
+      <p>Viabilizar estações computacionais para atividades educacionais utilizando equipamentos de baixo custo e hardware reaproveitado. A proposta envolveu adaptar TV Boxes originalmente destinadas a outras finalidades para executar Linux e integrar um ambiente de laboratório.</p>
+      <p>As limitações eram concretas: processadores ARM, variações de placas e bootloaders, pouca memória RAM e compatibilidade variável de armazenamento e vídeo. Esse cenário exige validação de hardware e procedimentos de recuperação, não apenas a instalação de um sistema operacional.</p>
+    </section>
+
+    <section aria-labelledby="contribuicao">
+      <div class="overline">02 / PARTICIPAÇÃO</div>
+      <h2 id="contribuicao">Minha contribuição</h2>
+      <div class="two">
+        <div class="card">
+          <h3>Preparação e implantação</h3>
+          <p>Participação nas atividades de preparação dos dispositivos, instalação e ajustes do Linux ARM, configuração de rede e testes funcionais, conforme as áreas de atuação registradas no repositório.</p>
+        </div>
+        <div class="card">
+          <h3>Suporte e validação</h3>
+          <p>Apoio à identificação de incompatibilidades, aos procedimentos de recuperação e à manutenção das estações em ambiente educacional, considerando as limitações de hardware e de conectividade.</p>
+        </div>
+      </div>
+      <p class="caption" style="margin-top:14px">O projeto foi desenvolvido em equipe. Não atribuo a mim isoladamente a adaptação de todas as unidades ou decisões tomadas pelo grupo.</p>
+    </section>
+
+    <section aria-labelledby="metodo">
+      <div class="overline">03 / MÉTODO</div>
+      <h2 id="metodo">Da TV Box à estação Linux</h2>
+      <p>A documentação técnica descreve um fluxo de instalação e manutenção para modelos da família RK322x, incluindo equipamentos MXQ 5G com memória limitada. Trata-se do procedimento registrado, não de garantia de compatibilidade com qualquer TV Box.</p>
+      <div class="two">
+        <div>
+          <ul>
+            <li><strong>Identificação do hardware:</strong> verificar plataforma, periféricos e compatibilidade da imagem Linux.</li>
+            <li><strong>Preparação e recuperação:</strong> utilizar Multitool e realizar backup da eMMC antes de modificá-la.</li>
+            <li><strong>Instalação:</strong> preparar o boot, gravar imagem compatível do Armbian e verificar a inicialização.</li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li><strong>Configuração:</strong> ajustar contas, serviços e aplicações leves para os recursos disponíveis.</li>
+            <li><strong>Rede e administração:</strong> priorizar Ethernet e utilizar ferramentas Linux, como SSH, para suporte.</li>
+            <li><strong>Validação:</strong> observar vídeo, conectividade, estabilidade e possibilidade de recuperação.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="architecture" role="img" aria-label="Fluxo de referência: dispositivo ARM, identificar hardware, fazer backup e preparar Multitool, instalar Armbian, configurar rede e serviços, validar estação de laboratório.">TV BOX / PLATAFORMA ARM
+           │
+           ▼
+IDENTIFICAÇÃO DE HARDWARE + DTB
+           │
+           ▼
+BACKUP eMMC + PREPARAÇÃO MULTITOOL
+           │
+           ▼
+INSTALAÇÃO ARMBIAN COMPATÍVEL
+           │
+           ▼
+AJUSTES DE REDE / SERVIÇOS / SSH
+           │
+           ▼
+TESTES E USO EDUCACIONAL
+
+EM CASO DE FALHA → RECUPERAÇÃO / REVISÃO</div>
+      <div class="tag-list" aria-label="Tecnologias"><span class="tag">Linux</span><span class="tag">Armbian</span><span class="tag">ARM / RK322x</span><span class="tag">Multitool</span><span class="tag">eMMC</span><span class="tag">Device Tree / DTB</span><span class="tag">Ethernet</span><span class="tag">SSH</span></div>
+    </section>
+
+    <section aria-labelledby="desafios">
+      <div class="overline">04 / TROUBLESHOOTING</div>
+      <h2 id="desafios">Problemas que exigem investigação</h2>
+      <div class="two">
+        <div class="card"><h3>Boot e vídeo</h3><p>Uma imagem incompatível ou DTB inadequado pode impedir a inicialização ou a saída HDMI. A documentação recomenda conferir a revisão do hardware, testar arquivos compatíveis e manter caminho de recuperação.</p></div>
+        <div class="card"><h3>Armazenamento eMMC</h3><p>Problemas de detecção e escrita podem envolver bootloader, revisão da placa ou kernel. O backup antes da gravação evita depender de uma instalação irreversível.</p></div>
+        <div class="card"><h3>Memória e desempenho</h3><p>Há dispositivos documentados com 1 GB de RAM. A escolha de desktop e aplicativos leves, redução de processos de fundo e cuidado com swap são práticas importantes; sem divulgar ganhos numéricos não medidos.</p></div>
+        <div class="card"><h3>Rede e administração</h3><p>Ethernet e SSH facilitam manutenção e diagnóstico, mas a documentação também registra desafios com drivers, DHCP, conectividade e diferenças entre dispositivos.</p></div>
+      </div>
+      <p class="caption" style="margin-top:14px">Referências: <a href="https://github.com/lteodoro780/vanguardeira-project/blob/main/docs/troubleshooting.md" target="_blank" rel="noopener noreferrer">troubleshooting</a>, <a href="https://github.com/lteodoro780/vanguardeira-project/blob/main/docs/hardware.md" target="_blank" rel="noopener noreferrer">hardware</a> e <a href="https://github.com/lteodoro780/vanguardeira-project/blob/main/docs/optimization.md" target="_blank" rel="noopener noreferrer">otimização</a>.</p>
+    </section>
+
+    <section id="evidencias" aria-labelledby="midias">
+      <div class="overline">05 / EVIDÊNCIAS</div>
+      <h2 id="midias">Documentação e galeria</h2>
+      <p>Registros fotográficos reais da preparação das TV Boxes, testes e ambiente de laboratório. As imagens foram otimizadas e tiveram metadados removidos. A participação foi coletiva; as fotos não substituem a documentação técnica.</p>
+      <div class="two photo-grid" aria-label="Fotos reais da Sala Vanguardeira">
+        <figure class="shot"><img src="../img/registro/lab-debian.webp" loading="lazy" decoding="async" width="1330" height="1152" alt="Visão ampla das estações do laboratório com ambiente Linux Debian"><figcaption><strong>Laboratório Linux em funcionamento</strong> — Estações do laboratório com Debian em execução após a preparação do ambiente.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/lote-b13.webp" loading="lazy" decoding="async" width="1536" height="864" alt="Caixas de dispositivos TV Box B13 organizadas em um lote"><figcaption><strong>Lote de dispositivos B13</strong> — Dispositivos preparados para avaliação de compatibilidade e reaproveitamento.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/placa-arm.webp" loading="lazy" decoding="async" width="900" height="1200" alt="Placa eletrônica azul de TV Box com dissipador e portas de conexão"><figcaption><strong>Inspeção de placa ARM</strong> — Placa de dispositivo embarcado exposta para identificação dos componentes e análise de compatibilidade.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/hardware-aberto.webp" loading="lazy" decoding="async" width="1536" height="1152" alt="TV Box aberta mostrando placa eletrônica verde e conexões"><figcaption><strong>Dispositivo aberto para testes</strong> — Inspeção visual de componentes e interfaces de hardware embarcado.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/scripts-tvbox.webp" loading="lazy" decoding="async" width="1070" height="188" alt="Terminal Linux mostrando scripts e mensagem de ausência de interface Wi-Fi"><figcaption><strong>Testes de rede e scripts Linux</strong> — Diagnóstico de interface de rede em dispositivo embarcado e verificação de scripts locais.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/desktop-linux.webp" loading="lazy" decoding="async" width="1536" height="864" alt="Monitor exibindo uma sessão desktop Linux com interface gráfica"><figcaption><strong>Linux inicializado</strong> — Ambiente desktop Linux em funcionamento após testes de inicialização.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/lab-implantado.webp" loading="lazy" decoding="async" width="1190" height="864" alt="Linhas de estações de trabalho montadas em sala de treinamento"><figcaption><strong>Estações preparadas para uso</strong> — Registro do ambiente montado com estações e equipamentos reaproveitados.</figcaption></figure>
+        <figure class="shot"><img src="../img/registro/tvbox-preparacao.webp" loading="lazy" decoding="async" width="960" height="1110" alt="Dispositivo TV Box preto em teste numa bancada de trabalho"><figcaption><strong>Unidade de TV Box para preparação</strong> — Exemplo de equipamento recebido para testes e preparação.</figcaption></figure>
+      </div>
+      <p class="caption" style="margin-top:18px">Veja também a <a href="../bastidores.html">galeria de bastidores técnicos</a>. As imagens não mostram topologias internas, credenciais ou endereços de serviços.</p>
+      <div class="actions">
+        <a class="button" href="https://github.com/lteodoro780/vanguardeira-project/blob/main/docs/installation.md" target="_blank" rel="noopener noreferrer">INSTALAÇÃO ↗</a>
+        <a class="button" href="https://github.com/lteodoro780/vanguardeira-project/blob/main/docs/network.md" target="_blank" rel="noopener noreferrer">REDE ↗</a>
+        <a class="button" href="https://github.com/lteodoro780/vanguardeira-project/blob/main/docs/troubleshooting.md" target="_blank" rel="noopener noreferrer">DIAGNÓSTICO ↗</a>
+      </div>
+    </section>
+
+    <section aria-labelledby="resultado">
+      <div class="overline">06 / RESULTADOS E LIMITES</div>
+      <h2 id="resultado">O que foi entregue</h2>
+      <div class="warning">
+        <p><strong>Resultado documentado:</strong> mais de 60 dispositivos foram adaptados para estações Linux destinadas a usos educacionais e de laboratório, segundo o README público.</p>
+        <p><strong>Limites da evidência:</strong> não há, no material consultado, auditoria independente, taxa de sucesso por dispositivo, custos comparativos ou benchmark de desempenho. Portanto, não atribuo economia percentual nem disponibilidade medida.</p>
+        <p style="margin-bottom:0"><strong>Evolução planejada:</strong> padronização adicional de implantação, automação de atualizações e ampliação da documentação aparecem no roadmap; não são apresentados como funcionalidades já concluídas.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="aprendizado">
+      <div class="overline">07 / VALOR PROFISSIONAL</div>
+      <h2 id="aprendizado">O que este projeto demonstra</h2>
+      <p>Participar do reaproveitamento de hardware em escala exige mais do que conhecer comandos Linux. Envolve avaliar compatibilidade, estabelecer processos de recuperação, configurar sistemas enxutos, investigar falhas e colaborar para que equipamentos limitados possam atender uma necessidade real.</p>
+      <p>Este estudo evidencia competências de <strong>infraestrutura Linux, sistemas embarcados, implantação, rede e diagnóstico técnico</strong>, com documentação pública do processo e distinção clara entre entregas e melhorias futuras.</p>
+      <div class="actions">
+        <a class="button primary" href="https://github.com/lteodoro780/vanguardeira-project" target="_blank" rel="noopener noreferrer">EXPLORAR A DOCUMENTAÇÃO ↗</a>
+        <a class="button" href="../index.html">RETORNAR AO L0·NOC ↗</a>
+      </div>
+    </section>
+  </main>
+  <footer class="footer"><div class="wrap">L0·NOC · Portfólio profissional · Informações baseadas no <a href="https://github.com/lteodoro780/vanguardeira-project" target="_blank" rel="noopener noreferrer">repositório público do projeto</a>. Participação em projeto coletivo, sem alegação de endosso institucional.</div></footer>
+</body>
+</html>
