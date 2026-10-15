@@ -517,3 +517,34 @@ transform:perspective(430px) rotateX(63deg) scale(1.8);transform-origin:bottom;o
  .v8-wallpaper .v8-rack-cluster{gap:7%}
  .v8-wallpaper .v8-rack-unit{min-height:3px}
 }
+
+
+/* V8 — maquete vetorial definitiva no hero, inspirada na ilustração aprovada. */
+.v8-neon-stack {
+  position:absolute;
+  inset:-15% -6% -14%;
+  display:grid;
+  place-items:center;
+  pointer-events:none;
+  isolation:isolate;
+  filter:drop-shadow(0 0 15px rgba(0,208,255,.26)) drop-shadow(0 26px 25px rgba(0,0,0,.68));
+}
+.v8-neon-stack svg{width:100%;height:100%;overflow:visible}
+.v8-svg-tier {
+  transform-origin:center;
+  transform-box:fill-box;
+  animation:v8-layer-floating 7s ease-in-out infinite;
+}
+@keyframes v8-layer-floating {
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-4px)}
+}
+.v8-svg-cube{filter:drop-shadow(0 1px 3px rgba(0,202,255,.25))}
+.v8-wallpaper .v8-holo-core{display:none}
+.v8-wallpaper .v8-holo-base{opacity:.2}
+@media(max-width:767px){
+  .v8-neon-stack{inset:2% -12%;opacity:.7}
+}
+@media(prefers-reduced-motion:reduce){
+  .v8-svg-tier{animation:none}
+}
