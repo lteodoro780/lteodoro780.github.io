@@ -12,7 +12,7 @@ const Icon = ({ label, icon: I, onClick, testid, i, ready }) => (
     className="group flex w-[76px] flex-col items-center gap-1.5 p-1 outline-none"
   >
     <span
-      className={`cyber-desktop-icon grid h-14 w-14 place-items-center border bg-noc-panel/80 backdrop-blur transition-[border-color,transform,background-color] duration-300 group-hover:-translate-y-0.5 group-focus-visible:border-noc-ok border-noc-line text-slate-100 group-hover:border-noc-ok group-hover:text-emerald-400`}
+      className={`cyber-desktop-icon grid h-14 w-14 place-items-center border bg-noc-panel/90 transition-[border-color,transform,background-color] duration-300 group-hover:-translate-y-0.5 group-focus-visible:border-noc-ok border-noc-line text-slate-100 group-hover:border-noc-ok group-hover:text-emerald-400`}
     >
       <I size={22} strokeWidth={1.6} />
     </span>
