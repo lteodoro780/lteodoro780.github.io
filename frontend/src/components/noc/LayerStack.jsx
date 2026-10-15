@@ -1,19 +1,20 @@
-// V7 modo leve: mantém as cinco camadas visuais sem ciclo de renderização
-// ou processamento de movimento do ponteiro.
+// Topologia decorativa V7: quatro quadrados 3D animados apenas por CSS.
+// Sem requestAnimationFrame, Canvas, listeners de ponteiro ou motion values.
 const LAYERS = [
   { label: "obs · métricas", tone: "#334155" },
   { label: "data · storage", tone: "#334155" },
   { label: "app · cluster", tone: "#06B6D4" },
-  { label: "ingress · lb", tone: "#334155" },
-  { label: "edge · cdn", tone: "#10B981" },
+  { label: "edge · network", tone: "#10B981" },
 ];
 
 const Plate = ({ layer, index }) => (
   <div
+    data-testid="topology-square"
     className="layer-plate absolute inset-0 border"
     style={{
       borderColor: layer.tone,
-      transform: `translateZ(${index * 44}px)`,
+      "--topology-depth": `${index * 42}px`,
+      "--topology-phase": `${-index * 0.55}s`,
       transformStyle: "preserve-3d",
     }}
   >
@@ -32,11 +33,14 @@ const Plate = ({ layer, index }) => (
 );
 
 export const LayerStack = () => (
-  <div data-testid="hero-layer-stack" className="relative grid h-full w-full place-items-center" style={{ perspective: 1400 }}>
+  <div
+    data-testid="hero-layer-stack"
+    className="relative grid h-full w-full place-items-center"
+    style={{ perspective: 1400 }}
+  >
     <div
-      data-testid="static-layer-stack"
+      data-testid="animated-layer-stack"
       className="cyber-layer-stack relative h-[180px] w-[180px] sm:h-[230px] sm:w-[230px]"
-      style={{ transform: "rotateX(56deg) rotateZ(-38deg)", transformStyle: "preserve-3d" }}
     >
       {LAYERS.map((layer, index) => (
         <Plate key={layer.label} layer={layer} index={index} />
