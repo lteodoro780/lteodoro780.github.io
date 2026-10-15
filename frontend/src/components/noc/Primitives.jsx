@@ -49,7 +49,7 @@ export const SectionHead = ({ index, code, lines, kicker, testid }) => (
   </div>
 );
 
-export const Dot = ({ color = "bg-noc-ok", ping = true }) => (
+export const Dot = ({ color = "bg-noc-ok", ping = false }) => (
   <span className="relative inline-flex h-2 w-2">
     {ping && <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 ${color}`} />}
     <span className={`relative inline-flex h-2 w-2 rounded-full ${color}`} />
