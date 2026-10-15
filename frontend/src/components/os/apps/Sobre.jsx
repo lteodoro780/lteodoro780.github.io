@@ -17,7 +17,16 @@ const Evidence = ({ label, value, detail }) => (
 export const SobreApp = () => {
   const { open } = useDesktop();
   return <div data-testid="app-sobre">
-    <div data-testid="about-photo" className="about-photo-banner"><img src={`${process.env.PUBLIC_URL}/img/luis-florencio.webp`} alt="Foto de Luis O. Florencio" loading="eager" /></div>
+    <div className="v8-about-header">
+      <div data-testid="about-photo" className="about-photo-banner"><img src={`${process.env.PUBLIC_URL}/img/luis-florencio.webp`} alt="Foto de Luis O. Florencio" loading="eager" /></div>
+      <aside className="v8-about-facts" aria-label="Áreas técnicas">
+        <strong className="v8-about-facts-heading">ATUAÇÃO</strong>
+        <span>Linux</span>
+        <span>Windows</span>
+        <span>Redes</span>
+        <span>Automação</span>
+      </aside>
+    </div>
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.16em] text-slate-400">
       <span className="flex items-center gap-2 text-emerald-400"><Dot /> perfil profissional</span>
       <span>{PROFILE.location}</span>
@@ -27,6 +36,9 @@ export const SobreApp = () => {
     </h2>
     <p data-testid="hero-role" className="mt-5 font-mono text-sm uppercase tracking-[0.12em] text-emerald-400">&gt; {PROFILE.role}</p>
     <p className="mt-3 font-mono text-sm leading-relaxed text-slate-300">{PROFILE.bio}</p>
+    <div className="v8-about-skills" aria-label="Tecnologias com experiência">
+      {["LINUX", "ACTIVE DIRECTORY", "DOCKER", "ZABBIX", "PYTHON", "POWERSHELL"].map(item => <span key={item}>{item}</span>)}
+    </div>
     <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-3">
       <Evidence label="Experiência" value="Desde 2021" detail="Infraestrutura e suporte" />
       <Evidence label="Formação" value="ADS" detail="Concluída em 2026" />
