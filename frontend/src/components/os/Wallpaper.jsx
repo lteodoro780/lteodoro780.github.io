@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { LayerStack } from "../noc/LayerStack";
-import { CyberAtmosphere } from "../noc/CyberAtmosphere";
 import { EASE } from "../noc/Primitives";
 import { PROFILE } from "../../content";
 import { useDesktop } from "../../lib/desktop";
@@ -18,12 +17,11 @@ export const Wallpaper = ({ ready }) => {
     <div className="cyber-ambient-glow pointer-events-none absolute inset-0" aria-hidden="true" />
     <img src={`${process.env.PUBLIC_URL}/img/rack.jpg`} alt="" aria-hidden="true" className="wallpaper-photo absolute right-0 top-0 h-full w-full object-cover opacity-25 grayscale contrast-125 md:w-[60%]" />
     <div className="absolute inset-0 bg-noc-ok/5 mix-blend-color" />
-    <CyberAtmosphere />
     <div className="cyber-scan-overlay pointer-events-none absolute inset-0" aria-hidden="true" />
     <div data-testid="v7-background-hud" className="cyber-hud-caption pointer-events-none absolute hidden select-none xl:block" aria-hidden="true">
       <span className="cyber-hud-rule" />
       <span className="block">L0 / LOCAL INTERFACE</span>
-      <span className="mt-1 block text-emerald-500/60">ASCII · TOPOLOGY · SYSTEMS</span>
+      <span className="mt-1 block text-emerald-500/60">TOPOLOGY · SYSTEMS</span>
       <span className="mt-3 block text-[10px] opacity-70">[+] NETWORK / AUTOMATION</span>
     </div>
     <div className="cyber-hud-coordinate pointer-events-none absolute hidden select-none lg:block" aria-hidden="true">
