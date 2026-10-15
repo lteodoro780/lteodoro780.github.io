@@ -1,10 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Power, Siren } from "lucide-react";
+import { Power } from "lucide-react";
 import { Logo } from "../noc/Logo";
 import { APPS } from "./appMeta";
 import { PROFILE } from "../../content";
 import { useDesktop } from "../../lib/desktop";
-import { useIncident } from "../../lib/incident";
 
 const Item = ({ onClick, testid, icon: I, label, hint, danger }) => (
   <button
@@ -20,7 +19,6 @@ const Item = ({ onClick, testid, icon: I, label, hint, danger }) => (
 
 export const StartMenu = ({ open, onClose, onReboot }) => {
   const d = useDesktop();
-  const { start, step } = useIncident();
   const run = (fn) => () => { fn(); onClose(); };
   return (
     <AnimatePresence>
@@ -48,8 +46,7 @@ export const StartMenu = ({ open, onClose, onReboot }) => {
               ))}
             </div>
             <div className="border-t border-noc-line py-2">
-              <Item testid="start-item-incidente" icon={Siren} label="Simular incidente" danger onClick={run(() => { if (step < 0) start(); })} />
-              <Item testid="start-item-reboot" icon={Power} label="Reiniciar" onClick={run(onReboot)} />
+              <Item testid="start-item-reboot" icon={Power} label="Reiniciar interface" onClick={run(onReboot)} />
             </div>
           </motion.div>
         </>
