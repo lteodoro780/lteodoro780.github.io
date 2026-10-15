@@ -25,6 +25,17 @@ const fs = require('node:fs');
         assert.equal(await stack.count(),1,'Topologia central preservada');
         const squares = stack.locator('[data-testid="topology-square"]');
         assert.equal(await squares.count(),4,'Topologia deve ter exatamente 4 quadrados');
+        // Contar elementos não basta: os quatro quadrados anteriores
+        // compartilhavam o mesmo contorno visual e pareciam um só.
+        const geometry = await squares.evaluateAll(elements => elements.map(el => {
+          const rect = el.getBoundingClientRect();
+          return { x: rect.x, y: rect.y, color: getComputedStyle(el).backgroundColor };
+        }));
+        const distinct = new Set(geometry.map(p => `${Math.round(p.x / 8)}:${Math.round(p.y / 8)}`));
+        assert.equal(distinct.size,4,'Os quatro quadrados precisam ter posições distintas na tela');
+        const first = geometry[0], last = geometry[3];
+        assert.ok(Math.hypot(first.x-last.x, first.y-last.y) > 35,'Quadrados sem separação visual suficiente');
+        assert.notEqual(geometry[0].color,geometry[3].color,'Camadas superiores devem ser translúcidas');
         for (const square of await squares.all()) {
           assert.equal(await square.evaluate(el => getComputedStyle(el).animationName),'topology-float','Somente a topologia deve receber animação contínua');
         }
@@ -54,6 +65,12 @@ const fs = require('node:fs');
           await page.locator('[data-testid="window-close-servicos"]').click();
         } else {
           assert.equal(await page.locator('[data-testid="mobile-intro"]').isVisible(),false);
+          const closeSobre = page.locator('[data-testid="window-close-sobre"]');
+          if (await closeSobre.isVisible()) {
+            await closeSobre.click();
+            await page.locator('[data-testid="window-sobre"]').waitFor({state:'hidden',timeout:10000});
+          }
+          await page.screenshot({path:'artifacts/topologia-4-quadrados-desktop.png'});
         }
         assert.ok(!(await page.locator('body').innerText()).includes('PING DEMO'));
         await page.screenshot({path:`artifacts/home-${label}.png`});
