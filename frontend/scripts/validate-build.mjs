@@ -19,7 +19,7 @@ const bundles = fs.readdirSync(jsDir).filter(f=>f.endsWith('.js'));
 assert.ok(bundles.length>0, 'Sem JavaScript compilado');
 const chunks = bundles.map(f=>fs.readFileSync(path.join(jsDir,f),'utf8')).join('\n');
 // Verificar marcador estavel no bundle em vez de string acentuada: o minificador converte letras para Unicode escapado.
-for (const text of ['SENTINELA','SISTEMA DE SELOS','SALA VANGUARDEIRA','Contato profissional direto','gallery-active-photo','mobile-cta-projects','app-projetos-tecnicos','technical-project-hermes','technical-project-tluizlabs','technical-project-infra-labs']) {
+for (const text of ['SENTINELA','SISTEMA DE SELOS','SALA VANGUARDEIRA','Contato profissional direto','gallery-active-photo','mobile-cta-projects','app-projetos-tecnicos','technical-project-','HERMES Security Portable','TLuizLabs','Infra TI Labs']) {
   assert.ok(chunks.includes(text), `Texto da V3 não encontrado no JS: ${text}`);
 }
 assert.ok(!chunks.includes('TELEMETRIA SIMULADA'), 'Texto antigo de telemetria sintética ainda no bundle');
