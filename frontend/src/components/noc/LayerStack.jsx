@@ -21,6 +21,13 @@ const Plate = ({ l, i }) => (
     }}
   >
     <div className="absolute inset-0 layer-grid opacity-70" />
+    <div aria-hidden="true" className="v8-rack-cluster">
+      {Array.from({ length: i === 0 ? 7 : i === 4 ? 6 : 10 }, (_, n) => (
+        <span key={n} className="v8-rack-unit">
+          <i/><i/><i/>
+        </span>
+      ))}
+    </div>
     <span className="absolute left-3 top-3 font-mono text-xs uppercase tracking-widest" style={{ color: l.tone === "#334155" ? "#94A3B8" : l.tone }}>
       L{i} · {l.label}
     </span>
