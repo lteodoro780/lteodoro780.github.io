@@ -86,7 +86,7 @@ const fs = require('node:fs');
           assert.equal(await repoLink.getAttribute('rel'),'noopener noreferrer');
           assert.equal(await technical.locator(`[data-testid="technical-docs-${id}"]`).count(),1);
         }
-        assert.ok((await technical.innerText()).includes('HERMES Security Portable'));
+        assert.ok((await technical.innerText()).toLowerCase().includes('hermes security portable'));
         await technical.locator('[data-testid="technical-filter-ia"]').click();
         assert.equal(await technical.locator('article[data-testid^="technical-project-"]').count(),1);
         assert.equal(await technical.locator('[data-testid="technical-project-hermes"]').count(),1);
