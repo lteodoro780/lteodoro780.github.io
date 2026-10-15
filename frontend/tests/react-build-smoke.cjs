@@ -18,6 +18,22 @@ const fs = require('node:fs');
         await page.locator('[data-testid="boot-screen"]').waitFor({state:'hidden',timeout:20000});
         await page.waitForTimeout(1400);
         assert.equal(await page.locator('nav.recruiter-links a').count(),3);
+        assert.equal(await page.locator('[data-testid="desktop-icon-telemetria"]').count(),0);
+        assert.equal(await page.locator('[data-testid="incident-trigger"]').count(),0);
+        assert.equal(await page.locator('[data-testid="desktop-icon-incidente"]').count(),0);
+        if(label === 'mobile') {
+          const intro=page.locator('[data-testid="mobile-intro"]');
+          assert.equal(await intro.isVisible(),true,'Apresentação mobile não apareceu');
+          assert.ok((await intro.innerText()).includes('Analista de Infraestrutura'));
+          assert.equal(await intro.locator('a[href*="linkedin.com"]').count(),1);
+          assert.equal(await intro.locator('a[href*="github.com"]').count(),1);
+          await intro.locator('[data-testid="mobile-cta-projects"]').click();
+          await page.locator('[data-testid="window-servicos"]').waitFor({timeout:10000});
+          await page.locator('[data-testid="window-close-servicos"]').click();
+        } else {
+          assert.equal(await page.locator('[data-testid="mobile-intro"]').isVisible(),false);
+        }
+        assert.ok(!(await page.locator('body').innerText()).includes('PING DEMO'));
         await page.screenshot({path:`artifacts/home-${label}.png`});
         const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
         assert.ok(overflow<3,`Home com overflow horizontal: ${overflow}px`);
