@@ -19,9 +19,10 @@ const bundles = fs.readdirSync(jsDir).filter(f=>f.endsWith('.js'));
 assert.ok(bundles.length>0, 'Sem JavaScript compilado');
 const chunks = bundles.map(f=>fs.readFileSync(path.join(jsDir,f),'utf8')).join('\n');
 // Verificar marcador estavel no bundle em vez de string acentuada: o minificador converte letras para Unicode escapado.
-for (const text of ['SENTINELA','SISTEMA DE SELOS','SALA VANGUARDEIRA','Contato profissional direto','gallery-active-photo','mobile-cta-projects','app-projetos-tecnicos','technical-project-','HERMES Security Portable','TLuizLabs','Infra TI Labs','cyber-window','cyber-layer-stack','animated-layer-stack','topology-square','ticker-v3-track']) {
+for (const text of ['SENTINELA','SISTEMA DE SELOS','SALA VANGUARDEIRA','Contato profissional direto','gallery-active-photo','mobile-cta-projects','app-projetos-tecnicos','technical-project-','HERMES Security Portable','TLuizLabs','Infra TI Labs','cyber-window','interactive-globe','globe-node-','globe-svg','mobile-globe-shortcuts','ticker-v3-track']) {
   assert.ok(chunks.includes(text), `Texto da V3 não encontrado no JS: ${text}`);
 }
+assert.ok(!chunks.includes('topology-square'), 'Topologia antiga ainda no bundle');
 assert.ok(!chunks.includes('v7-cyber-atmosphere'), 'Canvas ASCII continua presente no bundle');
 assert.ok(!chunks.includes('TELEMETRIA SIMULADA'), 'Texto antigo de telemetria sintética ainda no bundle');
 assert.ok(!chunks.includes('telemetry-stat-arm'), 'Telemetria antiga ainda incluída no bundle');
