@@ -12,7 +12,7 @@ const LAYERS = [
 const Plate = ({ l, i }) => (
   <motion.div
     className="layer-plate absolute inset-0 border"
-    style={{ borderColor: l.tone, transformStyle: "preserve-3d" }}
+    style={{ borderColor: l.tone, transformStyle: "preserve-3d", top: (4 - i) * 25, bottom: -(4 - i) * 25 }}
     initial={{ z: 0, opacity: 0 }}
     animate={{ z: [i * 44, i * 44 + 8, i * 44], opacity: 1 }}
     transition={{
