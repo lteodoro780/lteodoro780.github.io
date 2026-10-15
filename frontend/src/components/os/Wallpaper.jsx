@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { LayerStack } from "../noc/LayerStack";
+import { GloboDigital, GLOBE_NODES } from "../noc/GloboDigital";
 import { EASE } from "../noc/Primitives";
 import { PROFILE } from "../../content";
 import { useDesktop } from "../../lib/desktop";
@@ -16,7 +16,7 @@ export const Wallpaper = ({ ready }) => {
     <div className="noc-grid absolute inset-0 opacity-60" />
     <img src={`${process.env.PUBLIC_URL}/img/rack.jpg`} alt="" aria-hidden="true" className="wallpaper-photo absolute right-0 top-0 h-full w-full object-cover opacity-25 grayscale contrast-125 md:w-[60%]" />
     <div className="absolute inset-0 bg-noc-ok/5 mix-blend-color" />
-    <div className="topology-central-host"><LayerStack /></div>
+    <div className="globe-central-host"><GloboDigital onSelect={open} /></div>
     <div className="wallpaper-intro absolute bottom-5 left-4 right-4 hidden md:block md:bottom-8 md:left-8">
       <h1 data-testid="wallpaper-name" className="font-display text-[9rem] font-extrabold uppercase leading-[0.8] tracking-[-0.02em] text-slate-50 xl:text-[12rem]">
         <Line ready={ready} delay={0.1}>{PROFILE.first}</Line>
@@ -57,6 +57,22 @@ export const Wallpaper = ({ ready }) => {
         <a href={`https://${PROFILE.linkedin}`} target="_blank" rel="noopener noreferrer" className="text-emerald-300 hover:text-white">LinkedIn ↗</a>
         <a href={`https://${PROFILE.github}`} target="_blank" rel="noopener noreferrer" className="text-emerald-300 hover:text-white">GitHub ↗</a>
         <span className="text-slate-400">Três Corações, MG</span>
+      </div>
+      <div data-testid="mobile-globe-shortcuts" className="mt-4 border-t border-noc-line pt-3">
+        <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-emerald-300">Explorar por área</p>
+        <div className="flex flex-wrap gap-2">
+          {GLOBE_NODES.map(node => (
+            <button
+              key={node.id}
+              data-testid={`mobile-globe-node-${node.id}`}
+              type="button"
+              onClick={() => open(node.app)}
+              className="min-h-10 border border-noc-line2 bg-noc-bg/90 px-2 py-2 font-mono text-[10px] uppercase text-slate-200 focus-visible:border-emerald-400 focus-visible:outline-2 focus-visible:outline-emerald-400"
+            >
+              {node.label} ↗
+            </button>
+          ))}
+        </div>
       </div>
     </motion.section>
   </div>;
