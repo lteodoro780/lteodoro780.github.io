@@ -74,7 +74,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee, .scanline, .incident-vignette, .incident-sweep { animation: none; }
+  .scanline, .incident-vignette, .incident-sweep { animation: none; }
 }
 
 
