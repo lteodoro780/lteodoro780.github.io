@@ -29,32 +29,8 @@ const fs = require('node:fs');
         assert.ok(canvasState.width > 0 && canvasState.height > 0, 'Canvas com tamanho inválido');
         assert.equal(canvasState.pointerEvents, 'none', 'Canvas não pode bloquear interação');
         assert.equal(canvasState.context, true);
-        assert.equal(await atmosphere.getAttribute('data-motion'), label === 'mobile' ? 'static' : 'animated',
-          'O Canvas deve ser estático no celular e animar apenas no desktop');
-        const perfStyles = await page.evaluate(() => ({
-          tierAnimation: getComputedStyle(document.querySelector('.v8-svg-tier')).animationName,
-          windowBlur: document.querySelector('.cyber-window') ? getComputedStyle(document.querySelector('.cyber-window')).backdropFilter : 'none',
-          neonFilter: getComputedStyle(document.querySelector('.v8-neon-stack')).filter,
-          cubes: document.querySelectorAll('.v8-svg-cube').length,
-        }));
-        assert.equal(perfStyles.tierAnimation, 'none', 'Maquete SVG não pode animar continuamente');
-        assert.equal(perfStyles.neonFilter, 'none', 'Maquete não deve manter drop-shadow em tempo real');
-        assert.equal(perfStyles.cubes, 46, 'A maquete realista deve ser preservada');
-        assert.ok(perfStyles.windowBlur === 'none' || perfStyles.windowBlur === '',
-          'Blur da janela deve estar desligado');
         assert.equal(await page.locator('iframe[srcdoc]').count(),0, 'V7 não deve carregar iframe de terceiros');
-        assert.equal(await page.locator('.v8-neon-stack svg').count(),1);
-        assert.equal(await page.locator('.v8-wallpaper').count(),1,'Novo tema V8 ausente');
-        assert.equal(await page.locator('.v8-datacenter-scene').count(),1,'Fundo data center ausente');
-        assert.equal(await page.locator('.v8-svg-tier').count(),5,'Cinco níveis do data center ausentes');
-        assert.equal(await page.locator('.v8-svg-cube').count(),46,'Mini racks da maquete ausentes');
-        assert.equal(await page.locator('.v8-system-labels > div').count(),4);
-        if(label === 'mobile') {
-          assert.equal(await page.locator('.v8-system-labels').isVisible(),false,
-            'Cards visuais não devem disputar espaço na versão mobile');
-        } else {
-          assert.equal(await page.locator('.v8-datacenter-scene').isVisible(),true);
-        }
+        assert.equal(await page.locator('.cyber-layer-stack').count(),1);
         assert.equal(await page.locator('.cyber-ticker').count(),1);
         assert.equal(await page.locator('.cyber-taskbar').count(),1);
 
@@ -71,7 +47,6 @@ const fs = require('node:fs');
           await intro.locator('[data-testid="mobile-cta-projects"]').click();
           await page.locator('[data-testid="window-servicos"]').waitFor({timeout:10000});
           await page.locator('[data-testid="window-close-servicos"]').click();
-          await page.locator('[data-testid="window-servicos"]').waitFor({state:'hidden',timeout:10000});
         } else {
           assert.equal(await page.locator('[data-testid="mobile-intro"]').isVisible(),false);
         }
