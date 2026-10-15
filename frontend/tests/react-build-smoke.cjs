@@ -29,6 +29,19 @@ const fs = require('node:fs');
         assert.ok(canvasState.width > 0 && canvasState.height > 0, 'Canvas com tamanho inválido');
         assert.equal(canvasState.pointerEvents, 'none', 'Canvas não pode bloquear interação');
         assert.equal(canvasState.context, true);
+        assert.equal(await atmosphere.getAttribute('data-motion'), label === 'mobile' ? 'static' : 'animated',
+          'O Canvas deve ser estático no celular e animar apenas no desktop');
+        const perfStyles = await page.evaluate(() => ({
+          tierAnimation: getComputedStyle(document.querySelector('.v8-svg-tier')).animationName,
+          windowBlur: getComputedStyle(document.querySelector('.cyber-window')).backdropFilter,
+          neonFilter: getComputedStyle(document.querySelector('.v8-neon-stack')).filter,
+          cubes: document.querySelectorAll('.v8-svg-cube').length,
+        }));
+        assert.equal(perfStyles.tierAnimation, 'none', 'Maquete SVG não pode animar continuamente');
+        assert.equal(perfStyles.neonFilter, 'none', 'Maquete não deve manter drop-shadow em tempo real');
+        assert.equal(perfStyles.cubes, 46, 'A maquete realista deve ser preservada');
+        assert.ok(perfStyles.windowBlur === 'none' || perfStyles.windowBlur === '',
+          'Blur da janela deve estar desligado');
         assert.equal(await page.locator('iframe[srcdoc]').count(),0, 'V7 não deve carregar iframe de terceiros');
         assert.equal(await page.locator('.v8-neon-stack svg').count(),1);
         assert.equal(await page.locator('.v8-wallpaper').count(),1,'Novo tema V8 ausente');
