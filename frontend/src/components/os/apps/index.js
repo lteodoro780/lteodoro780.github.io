@@ -1,5 +1,4 @@
 import { SobreApp } from "./Sobre";
-import { TelemetriaApp } from "./Telemetria";
 import { ServicosApp } from "./Servicos";
 import { MetricasApp } from "./Metricas";
 import { CarreiraApp } from "./Carreira";
@@ -8,7 +7,6 @@ import { GaleriaApp } from "./Galeria";
 
 export const APP_COMPONENTS = {
   sobre: SobreApp,
-  telemetria: TelemetriaApp,
   servicos: ServicosApp,
   metricas: MetricasApp,
   carreira: CarreiraApp,

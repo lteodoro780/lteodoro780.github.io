@@ -1,11 +1,8 @@
 import { useState } from "react";
-import { Siren } from "lucide-react";
 import { Logo } from "../noc/Logo";
-import { Dot } from "../noc/Primitives";
 import { APP } from "./appMeta";
 import { useDesktop } from "../../lib/desktop";
-import { useIncident } from "../../lib/incident";
-import { useInterval, useJitter } from "../../lib/live";
+import { useInterval } from "../../lib/live";
 
 const hm = () => new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 
@@ -41,8 +38,6 @@ const TaskButton = ({ id }) => {
 
 export const Taskbar = ({ onStart, startOpen }) => {
   const d = useDesktop();
-  const { active, step, start } = useIncident();
-  const ping = useJitter(13, 3, 1100);
   return (
     <footer data-testid="taskbar" className="fixed inset-x-0 bottom-0 z-50 flex h-12 items-center gap-2 border-t border-noc-line bg-noc-bg/85 px-2 backdrop-blur-xl">
       <button
@@ -57,24 +52,7 @@ export const Taskbar = ({ onStart, startOpen }) => {
         {Object.keys(d.wins).map((id) => <TaskButton key={id} id={id} />)}
       </div>
       <div className="flex shrink-0 items-center gap-3 pr-1">
-        <span data-testid="nav-latency" className="hidden font-mono text-xs tabular-nums text-slate-400 lg:inline">
-          PING DEMO <span className={active ? "text-red-400" : "text-slate-100"}>{active ? ping + 820 : ping}ms</span>
-        </span>
-        <span
-          data-testid="system-status-badge"
-          className={`hidden items-center gap-2 rounded-full border px-3 py-1 font-mono text-xs transition-colors duration-500 md:flex ${active ? "border-red-500/50 bg-red-500/10 text-red-400" : "border-noc-ok/30 bg-noc-ok/10 text-emerald-400"}`}
-        >
-          <Dot color={active ? "bg-red-500" : "bg-noc-ok"} /> {active ? "INCIDENTE SIMULADO" : "MODO DEMO"}
-        </span>
-        <button
-          data-testid="incident-trigger"
-          onClick={start}
-          disabled={step >= 0}
-          aria-label="Simular incidente"
-          className="grid h-9 w-9 place-items-center border border-red-500/40 text-red-400 transition-colors hover:bg-red-500 hover:text-noc-bg disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-red-400"
-        >
-          <Siren size={15} />
-        </button>
+        <span className="hidden font-mono text-xs tracking-wider text-emerald-400 lg:inline">PORTFÓLIO PROFISSIONAL</span>
         <Clock />
       </div>
     </footer>

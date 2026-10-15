@@ -1,20 +1,18 @@
 import { motion } from "framer-motion";
-import { Siren } from "lucide-react";
 import { APPS } from "./appMeta";
 import { useDesktop } from "../../lib/desktop";
-import { useIncident } from "../../lib/incident";
 
-const Icon = ({ label, icon: I, onClick, testid, i, ready, danger }) => (
+const Icon = ({ label, icon: I, onClick, testid, i, ready }) => (
   <motion.button
     data-testid={testid}
     onClick={onClick}
     initial={{ opacity: 0, y: 12 }}
     animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
     transition={{ delay: 0.3 + i * 0.05, duration: 0.5 }}
-    className="group flex w-[76px] flex-col items-center gap-2 p-1 outline-none"
+    className="group flex w-[76px] flex-col items-center gap-1.5 p-1 outline-none"
   >
     <span
-      className={`grid h-14 w-14 place-items-center border bg-noc-panel/80 backdrop-blur transition-[border-color,transform,background-color] duration-300 group-hover:-translate-y-0.5 group-focus-visible:border-noc-ok ${danger ? "border-red-500/40 text-red-400 group-hover:border-red-500" : "border-noc-line text-slate-100 group-hover:border-noc-ok group-hover:text-emerald-400"}`}
+      className={`grid h-14 w-14 place-items-center border bg-noc-panel/80 backdrop-blur transition-[border-color,transform,background-color] duration-300 group-hover:-translate-y-0.5 group-focus-visible:border-noc-ok border-noc-line text-slate-100 group-hover:border-noc-ok group-hover:text-emerald-400`}
     >
       <I size={22} strokeWidth={1.6} />
     </span>
@@ -24,7 +22,6 @@ const Icon = ({ label, icon: I, onClick, testid, i, ready, danger }) => (
 
 export const DesktopIcons = ({ ready }) => {
   const { open } = useDesktop();
-  const { start, step } = useIncident();
   return (
     <nav
       data-testid="desktop-icons"
@@ -33,7 +30,6 @@ export const DesktopIcons = ({ ready }) => {
       {APPS.map((a, i) => (
         <Icon key={a.id} testid={`desktop-icon-${a.id}`} label={a.label} icon={a.icon} i={i} ready={ready} onClick={() => open(a.id)} />
       ))}
-      <Icon testid="desktop-icon-incidente" label="Incidente" icon={Siren} i={APPS.length} ready={ready} danger onClick={() => { if (step < 0) start(); }} />
     </nav>
   );
 };

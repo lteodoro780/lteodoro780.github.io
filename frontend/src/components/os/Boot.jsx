@@ -3,11 +3,11 @@ import { motion } from "framer-motion";
 import { Logo } from "../noc/Logo";
 
 const LINES = [
-  "L0·NOC BIOS v1.0 · luis-o-florencio-01",
-  "verificando memória ............ OK",
-  "montando /dev/portfolio ........ OK",
-  "iniciando telemetria ........... OK",
-  "carregando área de trabalho .... OK",
+  "L0·NOC · portfólio profissional",
+  "carregando trajetória .......... OK",
+  "carregando projetos ............ OK",
+  "preparando galeria ............. OK",
+  "abrindo portfólio .............. OK",
 ];
 
 export const Boot = ({ onDone }) => {
