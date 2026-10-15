@@ -293,6 +293,17 @@
   height: 100%;
   overflow: visible;
 }
+/* A superfície é que gira: dois mapas SVG contínuos deslizam dentro da
+   máscara circular; a borda, os nós e os rótulos permanecem fixos.
+   24s por volta, sem JavaScript por frame. */
+.globe-spinning-surface {
+  animation: globe-spin-surface 24s linear infinite;
+  transform-origin: 0 0;
+}
+@keyframes globe-spin-surface {
+  from { transform: translateX(0); }
+  to { transform: translateX(-310px); }
+}
 .globe-orbit-track {
   animation: globe-orbit-dash 34s linear infinite;
 }
@@ -373,6 +384,6 @@
   .globe-orbit-track { animation: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .globe-orbit-track { animation: none; }
+  .globe-spinning-surface, .globe-orbit-track { animation: none; }
   .globe-node { transition: none; }
 }
