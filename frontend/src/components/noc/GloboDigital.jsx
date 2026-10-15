@@ -1,7 +1,7 @@
 import { memo } from "react";
 
 // Cinco pontos do globo ligados às janelas reais da V7.
-// SVG estático: nenhum canvas, WebGL, timer ou atualização por frame.
+// Superfície com rotação aparente contínua via SVG/CSS, sem Canvas, WebGL ou timers JavaScript.
 export const GLOBE_NODES = Object.freeze([
   { id: "infraestrutura", label: "INFRAESTRUTURA", detail: "Redes · AD / GPO", app: "metricas" },
   { id: "linux", label: "LINUX", detail: "Servidores · Docker", app: "tecnicos" },
@@ -29,6 +29,11 @@ const GlobeArt = memo(() => (
         <circle cx="2.8" cy="2.8" r="1" fill="#34d9ce" opacity=".75"/>
       </pattern>
       <clipPath id="globe-circle-clip"><circle cx="300" cy="222" r="155"/></clipPath>
+      <radialGradient id="globe-sphere-shade" cx="47%" cy="45%" r="65%">
+        <stop offset="0" stopColor="#06111a" stopOpacity="0"/>
+        <stop offset=".64" stopColor="#06111a" stopOpacity=".05"/>
+        <stop offset="1" stopColor="#06111a" stopOpacity=".72"/>
+      </radialGradient>
     </defs>
 
     <g className="globe-orbit-back" fill="none" stroke="#10b981" strokeWidth=".9" opacity=".35">
@@ -46,7 +51,10 @@ const GlobeArt = memo(() => (
         <path d="M145 222H455 M156 163Q300 201 444 163 M171 125Q300 170 429 125 M156 282Q300 244 444 282 M171 320Q300 275 429 320"/>
         <path d="M145 222C198 274 403 274 455 222 M145 222C199 170 403 170 455 222" strokeOpacity=".43"/>
       </g>
-      <g fill="url(#globe-world-dots)" stroke="#2dd4bf" strokeOpacity=".22" strokeWidth=".8">
+      {/* Duas cópias idênticas da superfície (310 unidades à parte) 
+          criam uma volta completa sem salto visual em cada ciclo. */}
+      <g data-testid="globe-spinning-surface" className="globe-spinning-surface">
+        <g id="globe-landmass-tile" fill="url(#globe-world-dots)" stroke="#2dd4bf" strokeOpacity=".3" strokeWidth=".8">
         <path d="M164 145L195 119 241 108 266 125 249 145 264 161 246 175 228 174 210 201 194 209 183 187 169 182 166 161Z"/>
         <path d="M220 193L247 198 260 220 255 236 241 230 230 213Z"/>
         <path d="M249 237L284 234 309 251 302 275 290 293 284 322 271 347 262 326 263 299 252 281 247 256Z"/>
@@ -55,7 +63,10 @@ const GlobeArt = memo(() => (
         <path d="M348 142L380 112 419 128 446 150 451 176 429 185 419 207 394 200 382 219 361 208 369 182 351 171Z"/>
         <path d="M395 279L432 275 452 295 434 312 404 309 392 296Z"/>
         <path d="M356 263L365 270 363 285 356 287Z"/>
+        </g>
+        <use href="#globe-landmass-tile" x="310"/>
       </g>
+      <circle cx="300" cy="222" r="155" fill="url(#globe-sphere-shade)" pointerEvents="none"/>
       <path d="M190 170Q306 92 417 183 M228 318Q308 286 398 226 M236 192Q330 281 414 170" fill="none" stroke="#10b981" strokeWidth="1" strokeOpacity=".62" strokeDasharray="3 8"/>
       <g fill="#10b981" stroke="#a7f3d0" strokeWidth=".8">
         <circle cx="202" cy="171" r="3.5"/>
