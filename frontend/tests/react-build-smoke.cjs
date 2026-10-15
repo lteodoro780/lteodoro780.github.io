@@ -21,26 +21,19 @@ const fs = require('node:fs');
         assert.equal(await page.locator('[data-testid="v7-cyber-atmosphere"]').count(),0, 'Canvas ASCII deve ter sido removido');
         assert.equal(await page.locator('iframe[srcdoc]').count(),0, 'V7 não deve carregar iframe de terceiros');
         assert.equal(await page.locator('.cyber-layer-stack').count(),1);
-        const stack = page.locator('[data-testid="animated-layer-stack"]');
-        assert.equal(await stack.count(),1,'Topologia central preservada');
-        const squares = stack.locator('[data-testid="topology-square"]');
-        assert.equal(await squares.count(),4,'Topologia deve ter exatamente 4 quadrados');
-        // Contar elementos não basta: os quatro quadrados anteriores
-        // compartilhavam o mesmo contorno visual e pareciam um só.
-        const geometry = await squares.evaluateAll(elements => elements.map(el => {
-          const rect = el.getBoundingClientRect();
-          return { x: rect.x, y: rect.y, color: getComputedStyle(el).backgroundColor };
-        }));
-        const distinct = new Set(geometry.map(p => `${Math.round(p.x / 8)}:${Math.round(p.y / 8)}`));
-        assert.equal(distinct.size,4,'Os quatro quadrados precisam ter posições distintas na tela');
-        const first = geometry[0], last = geometry[3];
-        assert.ok(Math.hypot(first.x-last.x, first.y-last.y) > 35,'Quadrados sem separação visual suficiente');
-        assert.notEqual(geometry[0].color,geometry[3].color,'Camadas superiores devem ser translúcidas');
-        for (const square of await squares.all()) {
-          assert.equal(await square.evaluate(el => getComputedStyle(el).animationName),'topology-float','Somente a topologia deve receber animação contínua');
-        }
+        // O globo substitui inteiramente as quatro placas da topologia.
+        assert.equal(await page.locator('[data-testid="animated-layer-stack"]').count(),0);
+        const globe = page.locator('[data-testid="interactive-globe"]');
+        assert.equal(await globe.count(),1,'Globo digital não foi montado');
+        assert.equal(await globe.locator('[data-testid="globe-svg"]').count(),1,'SVG do globo ausente');
+        assert.equal(await globe.locator('canvas').count(),0,'Globo não pode usar Canvas');
+        const globeNodes = globe.locator('[data-testid^="globe-node-"]');
+        assert.equal(await globeNodes.count(),5,'Globo precisa ter cinco áreas clicáveis');
+        assert.equal(await page.locator('[data-testid="mobile-globe-shortcuts"] button').count(),5,'Atalhos touch ausentes');
+        const orbit = globe.locator('.globe-orbit-track').first();
+        assert.equal(await orbit.evaluate(el => getComputedStyle(el).animationName),'globe-orbit-dash','Órbita animada ausente');
         await page.emulateMedia({reducedMotion:'reduce'});
-        assert.equal(await squares.first().evaluate(el => getComputedStyle(el).animationName),'none','Preferência por movimento reduzido respeitada');
+        assert.equal(await orbit.evaluate(el => getComputedStyle(el).animationName),'none','Movimento reduzido não foi respeitado');
         await page.emulateMedia({reducedMotion:'no-preference'});
         assert.equal(await page.locator('div.grain').count(),0,'Textura de ruído SVG deve estar ausente');
         assert.equal(await page.locator('[data-testid="v7-background-hud"]').count(),0,'HUD extra da V7 deve sair para manter visual V3');
@@ -73,6 +66,11 @@ const fs = require('node:fs');
           await page.locator('[data-testid="window-close-servicos"]').click();
           await page.locator('[data-testid="window-servicos"]').waitFor({state:'hidden',timeout:10000});
           await page.waitForTimeout(250); // permitir concluir a transição de saída no celular
+          assert.equal(await globeNodes.first().isVisible(),false,'Labels de desktop devem sair do mobile');
+          await page.locator('[data-testid="mobile-globe-node-linux"]').click();
+          await page.locator('[data-testid="window-tecnicos"]').waitFor({timeout:10000});
+          await page.locator('[data-testid="window-close-tecnicos"]').click();
+          await page.locator('[data-testid="window-tecnicos"]').waitFor({state:'hidden',timeout:10000});
         } else {
           assert.equal(await page.locator('[data-testid="mobile-intro"]').isVisible(),false);
           const closeSobre = page.locator('[data-testid="window-close-sobre"]');
@@ -80,7 +78,16 @@ const fs = require('node:fs');
             await closeSobre.click();
             await page.locator('[data-testid="window-sobre"]').waitFor({state:'hidden',timeout:10000});
           }
-          await page.screenshot({path:'artifacts/topologia-4-quadrados-desktop.png'});
+          assert.equal(await globeNodes.first().isVisible(),true,'Hotspots de desktop devem ser visíveis');
+          await page.locator('[data-testid="globe-node-linux"]').click();
+          await page.locator('[data-testid="window-tecnicos"]').waitFor({timeout:10000});
+          await page.locator('[data-testid="window-close-tecnicos"]').click();
+          await page.locator('[data-testid="window-tecnicos"]').waitFor({state:'hidden',timeout:10000});
+          await page.locator('[data-testid="globe-node-monitoramento"]').click();
+          await page.locator('[data-testid="window-metricas"]').waitFor({timeout:10000});
+          await page.locator('[data-testid="window-close-metricas"]').click();
+          await page.locator('[data-testid="window-metricas"]').waitFor({state:'hidden',timeout:10000});
+          await page.screenshot({path:'artifacts/globo-interativo-desktop.png'});
         }
         assert.ok(!(await page.locator('body').innerText()).includes('PING DEMO'));
         await page.screenshot({path:`artifacts/home-${label}.png`});
