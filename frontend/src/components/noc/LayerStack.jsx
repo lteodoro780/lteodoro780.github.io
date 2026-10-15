@@ -13,12 +13,16 @@ const Plate = ({ layer, index }) => (
     className="layer-plate absolute inset-0 border"
     style={{
       borderColor: layer.tone,
-      "--topology-depth": `${index * 42}px`,
+      // Separar as placas também em X/Y. Só o eixo Z fazia
+      // os painéis opacos se sobreporem visualmente em uma única placa.
+      "--topology-x": `${-index * 12}px`,
+      "--topology-y": `${-index * 36}px`,
+      "--topology-depth": `${index * 16}px`,
       "--topology-phase": `${-index * 0.55}s`,
       transformStyle: "preserve-3d",
     }}
   >
-    <div className="absolute inset-0 layer-grid opacity-70" />
+    {index === 0 && <div className="absolute inset-0 layer-grid opacity-70" />}
     <span
       className="absolute left-3 top-3 font-mono text-xs uppercase tracking-widest"
       style={{ color: layer.tone === "#334155" ? "#94A3B8" : layer.tone }}
