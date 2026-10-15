@@ -82,7 +82,7 @@ const fs = require('node:fs');
         assert.ok((await telemetry.locator('[data-testid="telemetry-stat-arm"]').innerText()).includes('60+'));
         assert.equal(await telemetry.locator('[data-testid^="telemetry-project-"]').count(),3);
         assert.ok((await telemetry.innerText()).includes('não acessa sistemas internos'));
-        assert.equal(await telemetry.locator('[data-testid^="telemetry-photo-"]').count(),4);
+        assert.equal(await telemetry.locator('[data-testid^="telemetry-photo-"]:not([data-testid="telemetry-photo-chart"])').count(),4);
         await page.screenshot({path:`artifacts/telemetria-${label}.png`});
         await page.goto(base+'/curriculo.html');
         assert.ok(await page.locator('button[onclick="window.print()"]') .isVisible());
