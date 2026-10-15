@@ -1,4 +1,4 @@
-name: L0 NOC V7 - modo leve: build, browser e Pages
+name: "L0 NOC V7 - modo leve - build, browser e Pages"
 
 on:
   push:
