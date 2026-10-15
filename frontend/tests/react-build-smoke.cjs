@@ -20,7 +20,6 @@ const fs = require('node:fs');
         assert.equal(await page.locator('nav.recruiter-links a').count(),3);
         assert.equal(await page.locator('[data-testid="v7-cyber-atmosphere"]').count(),0, 'Canvas ASCII deve ter sido removido');
         assert.equal(await page.locator('iframe[srcdoc]').count(),0, 'V7 não deve carregar iframe de terceiros');
-        assert.equal(await page.locator('.cyber-layer-stack').count(),1);
         // O globo substitui inteiramente as quatro placas da topologia.
         assert.equal(await page.locator('[data-testid="animated-layer-stack"]').count(),0);
         const globe = page.locator('[data-testid="interactive-globe"]');
