@@ -31,7 +31,7 @@ export const StartMenu = ({ open, onClose, onReboot }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 16, transition: { duration: 0.15 } }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-14 left-2 z-50 w-[min(340px,calc(100vw-1rem))] border border-noc-line2 bg-noc-bg/95 backdrop-blur-xl"
+            className="fixed bottom-14 left-2 z-50 w-[min(340px,calc(100vw-1rem))] border border-noc-line2 bg-noc-bg"
           >
             <div className="flex items-center gap-3 border-b border-noc-line p-4">
               <Logo size={36} />

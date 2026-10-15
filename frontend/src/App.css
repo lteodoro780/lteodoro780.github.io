@@ -27,7 +27,6 @@
 .layer-plate {
   background: rgba(17, 22, 34, 0.82);
   box-shadow: 0 0 40px rgba(16, 185, 129, 0.08);
-  backdrop-filter: blur(2px);
 }
 .layer-grid {
   background-image:
@@ -55,26 +54,11 @@
 .caret { animation: blink 1s steps(1) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 
-.marquee { animation: marquee 70s linear infinite; }
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
 .contents-grid > * { height: 100%; }
 
 .wallpaper-photo {
   mask-image: linear-gradient(to left, #000 20%, transparent 95%);
   -webkit-mask-image: linear-gradient(to left, #000 20%, transparent 95%);
-}
-
-.grain {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 .incident-vignette {
@@ -90,7 +74,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee, .scanline, .incident-vignette, .incident-sweep { animation: none; }
+  .scanline, .incident-vignette, .incident-sweep { animation: none; }
 }
 
 
@@ -112,7 +96,6 @@
 .topology-central-host [data-testid="hero-layer-stack"] > div {
   width: clamp(220px, 21vw, 320px);
   height: clamp(220px, 21vw, 320px);
-  will-change: transform;
 }
 /* Foto real dentro da janela Sobre */
 .about-photo-banner {
@@ -143,8 +126,7 @@
   position: absolute;
   inset: -14px;
   background: url("./assets/luis-florencio.webp") center 31% / cover no-repeat;
-  filter: blur(17px) brightness(.33) saturate(.6);
-  transform: scale(1.08);
+  opacity: .18;
 }
 .about-photo-banner::after {
   content: "";
@@ -178,7 +160,6 @@
   padding: 5px 9px;
   font: 10px "JetBrains Mono", monospace;
   letter-spacing: .14em;color: #6ee7b7;
-  backdrop-filter: blur(6px);
 }
 [data-testid^="project-repo-"][href=""],
 [data-testid^="project-demo-"][href=""],
@@ -210,7 +191,6 @@
   border: 1px solid #334155;
   background: rgba(10,13,20,.95);
   box-shadow: 0 8px 28px rgba(0,0,0,.28);
-  backdrop-filter: blur(14px);
   max-width: calc(100vw - 14px);
 }
 .recruiter-links a {
@@ -246,7 +226,6 @@
 }
 @media(prefers-reduced-motion:reduce) {
   .recruiter-links a {transition:none;}
-  .marquee {animation:none !important;}
 }
 
 
@@ -265,9 +244,8 @@
     overscroll-behavior: contain;
     padding: 16px;
     border: 1px solid rgba(110, 231, 183, .38);
-    background: rgba(8, 14, 24, .91);
-    box-shadow: 0 20px 65px rgba(0, 0, 0, .46);
-    backdrop-filter: blur(14px);
+    background: #0b1220;
+    box-shadow: 0 12px 38px rgba(0, 0, 0, .4);
     scrollbar-width: thin;
     scrollbar-color: #334155 transparent;
   }
@@ -326,7 +304,6 @@
 
 .cyber-layer-stack {
   isolation: isolate;
-  filter: drop-shadow(0 12px 30px rgba(6,182,212,.12));
 }
 .cyber-layer-stack::before {
   content: "";
@@ -387,7 +364,6 @@
   .cyber-ambient-glow { opacity: .5; }
   .cyber-scan-overlay { opacity: .12; }
   .cyber-window::after { opacity: .26; }
-  .cyber-layer-stack { filter: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .cyber-desktop-icon::after { transition: none; }

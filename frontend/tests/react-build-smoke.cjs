@@ -21,6 +21,13 @@ const fs = require('node:fs');
         assert.equal(await page.locator('[data-testid="v7-cyber-atmosphere"]').count(),0, 'Canvas ASCII deve ter sido removido');
         assert.equal(await page.locator('iframe[srcdoc]').count(),0, 'V7 não deve carregar iframe de terceiros');
         assert.equal(await page.locator('.cyber-layer-stack').count(),1);
+        const stack = page.locator('[data-testid="static-layer-stack"]');
+        assert.equal(await stack.count(),1,'Topologia estática preservada');
+        assert.equal(await stack.locator('.layer-plate').count(),5,'Cinco camadas preservadas');
+        assert.equal(await stack.evaluate(el => el.getAnimations({subtree:true}).length),0,'Topologia não deve manter animações ativas');
+        assert.equal(await page.locator('div.grain').count(),0,'Textura de ruído SVG deve estar ausente');
+        assert.equal(await page.locator('[data-testid="ticker-static-track"]').count(),1,'Faixa superior estática');
+        assert.equal(await page.locator('.marquee').count(),0,'Marquee animado removido');
         assert.equal(await page.locator('.cyber-ticker').count(),1);
         assert.equal(await page.locator('.cyber-taskbar').count(),1);
 
@@ -36,6 +43,8 @@ const fs = require('node:fs');
           assert.equal(await intro.locator('a[href*="github.com"]').count(),1);
           await intro.locator('[data-testid="mobile-cta-projects"]').click();
           await page.locator('[data-testid="window-servicos"]').waitFor({timeout:10000});
+          const panel = page.locator('[data-testid="window-servicos"]');
+          assert.equal(await panel.evaluate(el => getComputedStyle(el).backdropFilter),'none','Janela não deve usar blur');
           await page.locator('[data-testid="window-close-servicos"]').click();
         } else {
           assert.equal(await page.locator('[data-testid="mobile-intro"]').isVisible(),false);
@@ -108,6 +117,7 @@ const fs = require('node:fs');
         assert.ok((await contact.innerText()).includes('não registra tickets'));
         assert.equal(await contact.locator('form').count(),0);
         assert.equal(await page.locator('.cyber-window').count() >= 1,true);
+        assert.equal(await page.locator('.cyber-window').first().evaluate(el => getComputedStyle(el).backdropFilter),'none','Blur de janela removido');
         assert.equal(errors.length,0,`Erros JS: ${errors.join('; ')}`);
         console.log(`PASS: React V3 ${label}, navegação, imagens e contato.`);
       } finally {await page.close()}

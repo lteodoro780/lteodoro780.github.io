@@ -39,7 +39,7 @@ const TaskButton = ({ id }) => {
 export const Taskbar = ({ onStart, startOpen }) => {
   const d = useDesktop();
   return (
-    <footer data-testid="taskbar" className="cyber-taskbar fixed inset-x-0 bottom-0 z-50 flex h-12 items-center gap-2 border-t border-noc-line bg-noc-bg/85 px-2 backdrop-blur-xl">
+    <footer data-testid="taskbar" className="cyber-taskbar fixed inset-x-0 bottom-0 z-50 flex h-12 items-center gap-2 border-t border-noc-line bg-noc-bg px-2">
       <button
         data-testid="start-button"
         onClick={onStart}
