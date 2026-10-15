@@ -27,7 +27,7 @@ const TOPICS = [
 ];
 
 export const DataCenterHUD = () => (
-  <div data-testid="v8-datacenter-hud" aria-hidden="true" className="v8-hud-stage pointer-events-none absolute inset-0 hidden 2xl:block">
+  <div data-testid="v8-datacenter-hud" aria-hidden="true" className="v8-hud-stage pointer-events-none absolute inset-0 hidden xl:block">
     <div className="v8-hud-left">
       {GROUPS.map((group, i) => (
         <div key={group.title} className="v8-hud-section">
