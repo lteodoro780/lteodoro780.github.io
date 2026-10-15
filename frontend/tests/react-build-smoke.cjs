@@ -71,6 +71,7 @@ const fs = require('node:fs');
           await intro.locator('[data-testid="mobile-cta-projects"]').click();
           await page.locator('[data-testid="window-servicos"]').waitFor({timeout:10000});
           await page.locator('[data-testid="window-close-servicos"]').click();
+          await page.locator('[data-testid="window-servicos"]').waitFor({state:'hidden',timeout:10000});
         } else {
           assert.equal(await page.locator('[data-testid="mobile-intro"]').isVisible(),false);
         }
