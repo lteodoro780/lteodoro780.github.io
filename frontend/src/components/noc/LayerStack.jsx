@@ -50,7 +50,7 @@ export const LayerStack = () => {
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.4, ease: EASE, delay: 0.4 }}
-        className="relative h-[180px] w-[180px] sm:h-[230px] sm:w-[230px]"
+        className="cyber-layer-stack relative h-[180px] w-[180px] sm:h-[230px] sm:w-[230px]"
         style={{ rotateX: rx, rotateZ: rz, transformStyle: "preserve-3d" }}
       >
         {LAYERS.map((l, i) => (
