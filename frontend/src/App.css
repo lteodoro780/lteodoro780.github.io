@@ -725,3 +725,43 @@
 @media (prefers-reduced-motion:reduce) {
   .v8-server-stack {will-change:auto !important;}
 }
+
+/* V8 revisão visual: arte isométrica vetorial de 4 pisos com servidores aparentes. */
+.v8-rack-left {
+  z-index:0;
+  filter:grayscale(1) sepia(.95) hue-rotate(152deg) saturate(4) brightness(.51) contrast(1.45);
+  opacity:.43;
+  object-position:18% center;
+  mask-image:linear-gradient(to right,#000 5%,rgba(0,0,0,.88) 48%,transparent 100%);
+}
+.v8-topology-svg {
+  width:min(93%,740px);
+  max-height:96%;
+  height:auto;
+  overflow:visible;
+  filter:drop-shadow(0 0 12px rgba(0,224,255,.55)) drop-shadow(0 13px 22px rgba(0,0,0,.7));
+}
+.v8-topology-svg .v8-server-plate {
+  transform:none;
+  box-shadow:none !important;
+  background:none;
+  border:none;
+  padding:0;
+}
+.v8-topology-svg .v8-server-plate::after {content:none;}
+.v8-topology-svg .v8-server-unit {transform:none;box-shadow:none;background:none;border:none;}
+.v8-topology-svg .v8-server-unit::before,
+.v8-topology-svg .v8-server-unit::after {content:none;}
+.v8-topology-svg .v8-server-unit circle {
+  filter:drop-shadow(0 0 3px #00dfff);
+}
+@media(max-width:1535px) {
+  .v8-topology-svg {width:min(96%,630px);max-height:90%;}
+}
+@media(max-width:767px) {
+  .v8-topology-svg {width:96%;max-height:100%;filter:drop-shadow(0 0 8px rgba(0,224,255,.24));}
+  .v8-rack-left {opacity:.24;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .v8-topology-svg {filter:none;}
+}
