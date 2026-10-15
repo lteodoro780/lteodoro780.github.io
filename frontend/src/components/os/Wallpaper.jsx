@@ -13,7 +13,8 @@ const Line = ({ ready, delay, children }) => (
 
 export const Wallpaper = ({ ready }) => {
   const { open } = useDesktop();
-  return <div data-testid="wallpaper" className="fixed inset-x-0 bottom-12 top-8 overflow-hidden">
+  return <div data-testid="wallpaper" className="v8-wallpaper fixed inset-x-0 bottom-12 top-8 overflow-hidden">
+    <div className="v8-datacenter-scene absolute inset-0" aria-hidden="true" />
     <div className="noc-grid absolute inset-0 opacity-60" />
     <div className="cyber-ambient-glow pointer-events-none absolute inset-0" aria-hidden="true" />
     <img src={`${process.env.PUBLIC_URL}/img/rack.jpg`} alt="" aria-hidden="true" className="wallpaper-photo absolute right-0 top-0 h-full w-full object-cover opacity-25 grayscale contrast-125 md:w-[60%]" />
@@ -29,7 +30,17 @@ export const Wallpaper = ({ ready }) => {
     <div className="cyber-hud-coordinate pointer-events-none absolute hidden select-none lg:block" aria-hidden="true">
       <span className="text-emerald-400/70">⊞</span> L0 / 07 · FRONTEND / REACT
     </div>
+    <div className="v8-hero-system" aria-hidden="true">
+      <div className="v8-holo-base" />
+      <div className="v8-holo-core"><span>NETWORK</span><span>LINUX</span><span>AUTOMATION</span></div>
+    </div>
     <div className="topology-central-host"><LayerStack /></div>
+    <div className="v8-system-labels" aria-hidden="true">
+      <div><strong>01 / APLICAÇÕES</strong><span>SERVIDORES · CONTAINERS</span></div>
+      <div><strong>02 / SERVIÇOS</strong><span>DNS · DHCP · ACTIVE DIRECTORY</span></div>
+      <div><strong>03 / INFRAESTRUTURA</strong><span>REDES · VIRTUALIZAÇÃO</span></div>
+      <div><strong>04 / AUTOMAÇÃO</strong><span>PYTHON · BASH · POWERSHELL</span></div>
+    </div>
     <div className="wallpaper-intro absolute bottom-5 left-4 right-4 hidden md:block md:bottom-8 md:left-8">
       <h1 data-testid="wallpaper-name" className="font-display text-[9rem] font-extrabold uppercase leading-[0.8] tracking-[-0.02em] text-slate-50 xl:text-[12rem]">
         <Line ready={ready} delay={0.1}>{PROFILE.first}</Line>
