@@ -30,7 +30,7 @@ const fs = require('node:fs');
         assert.equal(canvasState.pointerEvents, 'none', 'Canvas não pode bloquear interação');
         assert.equal(canvasState.context, true);
         assert.equal(await page.locator('iframe[srcdoc]').count(),0, 'V7 não deve carregar iframe de terceiros');
-        assert.equal(await page.locator('.cyber-layer-stack').count(),1);
+        assert.equal(await page.locator('.v8-topology-svg').count(),1);
         assert.equal(await page.locator('.cyber-ticker').count(),1);
         assert.equal(await page.locator('.cyber-taskbar').count(),1);
 
