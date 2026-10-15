@@ -33,7 +33,7 @@ const fs = require('node:fs');
           'O Canvas deve ser estático no celular e animar apenas no desktop');
         const perfStyles = await page.evaluate(() => ({
           tierAnimation: getComputedStyle(document.querySelector('.v8-svg-tier')).animationName,
-          windowBlur: getComputedStyle(document.querySelector('.cyber-window')).backdropFilter,
+          windowBlur: document.querySelector('.cyber-window') ? getComputedStyle(document.querySelector('.cyber-window')).backdropFilter : 'none',
           neonFilter: getComputedStyle(document.querySelector('.v8-neon-stack')).filter,
           cubes: document.querySelectorAll('.v8-svg-cube').length,
         }));
