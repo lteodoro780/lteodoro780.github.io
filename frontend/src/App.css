@@ -314,19 +314,34 @@
   transform: rotateX(53deg) rotateZ(-34deg);
 }
 .cyber-layer-stack .layer-plate {
-  animation: topology-float 6.6s ease-in-out infinite;
+  animation: topology-float 7s ease-in-out infinite;
   animation-delay: var(--topology-phase);
   backface-visibility: hidden;
+  /* As placas superiores precisam ser translúcidas: fundos opacos
+     escondiam três dos quatro quadrados. */
+  background: rgba(8, 18, 28, .13);
+  box-shadow: 0 0 16px rgba(6, 182, 212, .07);
+}
+.cyber-layer-stack .layer-plate:first-child {
+  background: rgba(17, 22, 34, .80);
 }
 @keyframes topology-float {
-  0%, 100% { transform: translate3d(0, 0, var(--topology-depth)); }
-  50% { transform: translate3d(0, -5px, calc(var(--topology-depth) + 10px)); }
+  0%, 100% {
+    transform: translate3d(var(--topology-x), var(--topology-y), var(--topology-depth));
+  }
+  50% {
+    transform: translate3d(
+      var(--topology-x),
+      calc(var(--topology-y) - 5px),
+      calc(var(--topology-depth) + 7px)
+    );
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .cyber-layer-stack { transition: none; }
   .cyber-layer-stack .layer-plate {
     animation: none;
-    transform: translateZ(var(--topology-depth));
+    transform: translate3d(var(--topology-x), var(--topology-y), var(--topology-depth));
   }
 }
 .cyber-layer-stack::before {
@@ -338,9 +353,6 @@
   transform: translateZ(-1px);
   pointer-events: none;
   z-index: -1;
-}
-.cyber-layer-stack .layer-plate {
-  box-shadow: 0 0 32px rgba(6,182,212,.07), inset 0 0 20px rgba(16,185,129,.035);
 }
 
 .cyber-window {
