@@ -1,7 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { motion, useDragControls, useMotionValue } from "framer-motion";
 import { Copy, Minus, Square, X } from "lucide-react";
-import Lenis from "lenis";
 import { useDesktop } from "../../lib/desktop";
 
 const useWindowLenis = (ref) => {
