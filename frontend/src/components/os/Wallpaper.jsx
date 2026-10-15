@@ -27,7 +27,7 @@ export const Wallpaper = ({ ready }) => {
     <DataCenterHUD />
     <div className="topology-central-host"><LayerStack /></div>
     <div className="wallpaper-intro absolute bottom-5 left-4 right-4 hidden md:block md:bottom-8 md:left-8">
-      <h1 data-testid="wallpaper-name" className="font-display text-[9rem] font-extrabold uppercase leading-[0.8] tracking-[-0.02em] text-slate-50 xl:text-[12rem]">
+      <h1 data-testid="wallpaper-name" className="font-display text-[7rem] font-extrabold uppercase leading-[0.8] tracking-[-0.02em] text-slate-50 xl:text-[9rem]">
         <Line ready={ready} delay={0.1}>{PROFILE.first}</Line>
         <Line ready={ready} delay={0.25}><span className="text-outline">{PROFILE.last}</span><span className="text-noc-ok">.</span></Line>
       </h1>
