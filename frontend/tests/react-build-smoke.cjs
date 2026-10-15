@@ -43,8 +43,16 @@ const fs = require('node:fs');
         assert.equal(await squares.first().evaluate(el => getComputedStyle(el).animationName),'none','Preferência por movimento reduzido respeitada');
         await page.emulateMedia({reducedMotion:'no-preference'});
         assert.equal(await page.locator('div.grain').count(),0,'Textura de ruído SVG deve estar ausente');
-        assert.equal(await page.locator('[data-testid="ticker-static-track"]').count(),1,'Faixa superior estática');
-        assert.equal(await page.locator('.marquee').count(),0,'Marquee animado removido');
+        assert.equal(await page.locator('[data-testid="v7-background-hud"]').count(),0,'HUD extra da V7 deve sair para manter visual V3');
+        assert.equal(await page.locator('.cyber-scan-overlay').count(),0,'Sobreposição neon da V7 deve sair');
+        assert.equal(await page.locator('.cyber-ambient-glow').count(),0,'Glow de fundo da V7 deve sair');
+        const ticker = page.locator('[data-testid="ticker-v3-track"]');
+        assert.equal(await ticker.count(),1,'Barra superior com estética V3');
+        assert.equal(await ticker.locator('[aria-hidden="true"]').count(),1,'Marquee precisa de uma cópia acessível e outra decorativa');
+        assert.equal(await ticker.evaluate(el => getComputedStyle(el).animationName),'marquee','Palavras devem deslizar como na V3');
+        await page.emulateMedia({reducedMotion:'reduce'});
+        assert.equal(await ticker.evaluate(el => getComputedStyle(el).animationName),'none','Preferência de movimento reduzido respeitada na barra');
+        await page.emulateMedia({reducedMotion:'no-preference'});
         assert.equal(await page.locator('.cyber-ticker').count(),1);
         assert.equal(await page.locator('.cyber-taskbar').count(),1);
 
