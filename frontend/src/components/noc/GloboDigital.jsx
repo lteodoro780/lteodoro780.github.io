@@ -80,7 +80,7 @@ const GlobeArt = memo(() => (
       <path d="M455 101L414 101 398 152"/>
       <path d="M468 234L432 234 410 205"/>
       <path d="M455 356L416 356 364 305"/>
-      <path d="M131 357L182 357 253 317"/>
+      <path d="M131 302L182 302 253 317"/>
     </g>
     <text x="299" y="438" fontSize="10" fontFamily="monospace" fill="#64748b" textAnchor="middle" letterSpacing="2">
       L0 / INFRAESTRUTURA INTERCONECTADA
