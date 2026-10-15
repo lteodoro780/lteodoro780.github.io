@@ -471,3 +471,63 @@ transform:perspective(430px) rotateX(63deg) scale(1.8);transform-origin:bottom;o
 @media(prefers-reduced-motion:reduce){
   .v8-svg-tier{animation:none}
 }
+
+
+/* V8 performance hotfix: prefer compositing a static neon scene over repeated SVG filters.
+   O layout, a maquete e os textos continuam iguais. */
+.v8-neon-stack,
+.v8-svg-cube,
+.v8-wallpaper .topology-central-host {
+  filter: none !important;
+}
+.v8-svg-tier {
+  animation: none !important;
+}
+.v8-neon-stack {
+  isolation: auto;
+  contain: layout paint;
+}
+.v8-wallpaper .cyber-atmosphere {
+  opacity: .48;
+}
+.cyber-atmosphere {
+  mix-blend-mode: normal !important;
+  filter: none !important;
+}
+.v8-datacenter-scene {
+  box-shadow: none;
+}
+.cyber-window {
+  background-color: rgba(7, 15, 25, .98);
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.cyber-ticker,
+.cyber-taskbar,
+.recruiter-links,
+.cyber-desktop-icon,
+.mobile-recruiter-intro {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.cyber-ticker,
+.cyber-taskbar {
+  background: rgba(5, 11, 19, .97);
+}
+@media (max-width: 767px) {
+  .v8-neon-stack {
+    opacity: .35;
+  }
+  .v8-wallpaper .cyber-atmosphere {
+    opacity: .13;
+  }
+  .mobile-recruiter-intro {
+    background: rgba(8, 14, 24, .97);
+  }
+  .grain {
+    opacity: .025;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v8-svg-tier, .marquee { animation: none !important; }
+}
