@@ -142,5 +142,18 @@ const fs = require('node:fs');
         console.log(`PASS: React V3 ${label}, navegação, imagens e contato.`);
       } finally {await page.close()}
     }
+    // Referência aprovada era uma tela larga: conferir cards HUD de ambos os lados.
+    const wide = await browser.newPage({viewport:{width:1672,height:941}});
+    try {
+      await wide.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
+      await wide.locator('[data-testid="boot-screen"]').waitFor({state:'hidden',timeout:20000});
+      await wide.locator('[data-testid="window-sobre"]').waitFor({timeout:10000});
+      await wide.waitForTimeout(850);
+      assert.equal(await wide.locator('.v8-hud-left .v8-hud-section').count(),4);
+      assert.equal(await wide.locator('.v8-hud-right .v8-hud-module').count(),4);
+      assert.ok(await wide.locator('.v8-hud-right').isVisible(),'HUD direito não visível no desktop largo');
+      assert.equal(await wide.locator('.v8-server-plate').count(),4);
+      await wide.screenshot({path:'artifacts/home-wide.png'});
+    } finally {await wide.close()}
   } finally {await browser.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});
