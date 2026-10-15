@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "./static/css/main.fac18874.css",
-    "main.js": "./static/js/main.3429603b.js",
+    "main.css": "./static/css/main.ea5cd80b.css",
+    "main.js": "./static/js/main.63f7b002.js",
     "static/media/luis-florencio.webp": "./static/media/luis-florencio.8dca26cac75e508fdffb.webp",
     "index.html": "./index.html",
-    "main.fac18874.css.map": "./static/css/main.fac18874.css.map",
-    "main.3429603b.js.map": "./static/js/main.3429603b.js.map"
+    "main.ea5cd80b.css.map": "./static/css/main.ea5cd80b.css.map",
+    "main.63f7b002.js.map": "./static/js/main.63f7b002.js.map"
   },
   "entrypoints": [
-    "static/css/main.fac18874.css",
-    "static/js/main.3429603b.js"
+    "static/css/main.ea5cd80b.css",
+    "static/js/main.63f7b002.js"
   ]
 }
