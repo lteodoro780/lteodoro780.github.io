@@ -71,6 +71,8 @@ const fs = require('node:fs');
           const panel = page.locator('[data-testid="window-servicos"]');
           assert.equal(await panel.evaluate(el => getComputedStyle(el).backdropFilter),'none','Janela não deve usar blur');
           await page.locator('[data-testid="window-close-servicos"]').click();
+          await page.locator('[data-testid="window-servicos"]').waitFor({state:'hidden',timeout:10000});
+          await page.waitForTimeout(250); // permitir concluir a transição de saída no celular
         } else {
           assert.equal(await page.locator('[data-testid="mobile-intro"]').isVisible(),false);
           const closeSobre = page.locator('[data-testid="window-close-sobre"]');
