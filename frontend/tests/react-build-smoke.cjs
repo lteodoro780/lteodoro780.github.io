@@ -21,10 +21,16 @@ const fs = require('node:fs');
         assert.equal(await page.locator('[data-testid="v7-cyber-atmosphere"]').count(),0, 'Canvas ASCII deve ter sido removido');
         assert.equal(await page.locator('iframe[srcdoc]').count(),0, 'V7 não deve carregar iframe de terceiros');
         assert.equal(await page.locator('.cyber-layer-stack').count(),1);
-        const stack = page.locator('[data-testid="static-layer-stack"]');
-        assert.equal(await stack.count(),1,'Topologia estática preservada');
-        assert.equal(await stack.locator('.layer-plate').count(),5,'Cinco camadas preservadas');
-        assert.equal(await stack.evaluate(el => el.getAnimations({subtree:true}).length),0,'Topologia não deve manter animações ativas');
+        const stack = page.locator('[data-testid="animated-layer-stack"]');
+        assert.equal(await stack.count(),1,'Topologia central preservada');
+        const squares = stack.locator('[data-testid="topology-square"]');
+        assert.equal(await squares.count(),4,'Topologia deve ter exatamente 4 quadrados');
+        for (const square of await squares.all()) {
+          assert.equal(await square.evaluate(el => getComputedStyle(el).animationName),'topology-float','Somente a topologia deve receber animação contínua');
+        }
+        await page.emulateMedia({reducedMotion:'reduce'});
+        assert.equal(await squares.first().evaluate(el => getComputedStyle(el).animationName),'none','Preferência por movimento reduzido respeitada');
+        await page.emulateMedia({reducedMotion:'no-preference'});
         assert.equal(await page.locator('div.grain').count(),0,'Textura de ruído SVG deve estar ausente');
         assert.equal(await page.locator('[data-testid="ticker-static-track"]').count(),1,'Faixa superior estática');
         assert.equal(await page.locator('.marquee').count(),0,'Marquee animado removido');
