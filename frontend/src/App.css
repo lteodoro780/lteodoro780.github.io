@@ -282,20 +282,13 @@
 
 
 /* V7 — Ghost OS depth + Cyberpunk terminal texture + restrained HUD light.
-   Apresentação decorativa: a rede de pontos não representa infraestrutura real. */
+   Apresentação decorativa: luz ambiente e HUD não representam infraestrutura real. */
 .cyber-ambient-glow {
   background:
     radial-gradient(ellipse 40% 55% at 50% 32%, rgba(6, 182, 212, .09), transparent 74%),
     radial-gradient(ellipse 45% 65% at 79% 54%, rgba(16, 185, 129, .055), transparent 82%),
     linear-gradient(115deg, rgba(3, 9, 16, .06), transparent 50%, rgba(8, 28, 30, .09));
   z-index: 0;
-}
-
-.cyber-atmosphere {
-  z-index: 0;
-  opacity: .68;
-  mix-blend-mode: screen;
-  filter: drop-shadow(0 0 4px rgba(16, 185, 129, .12));
 }
 
 .cyber-scan-overlay {
@@ -391,7 +384,6 @@
 }
 
 @media (max-width: 767px) {
-  .cyber-atmosphere { opacity: .32; }
   .cyber-ambient-glow { opacity: .5; }
   .cyber-scan-overlay { opacity: .12; }
   .cyber-window::after { opacity: .26; }
