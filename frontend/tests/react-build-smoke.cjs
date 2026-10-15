@@ -18,17 +18,7 @@ const fs = require('node:fs');
         await page.locator('[data-testid="boot-screen"]').waitFor({state:'hidden',timeout:20000});
         await page.waitForTimeout(1400);
         assert.equal(await page.locator('nav.recruiter-links a').count(),3);
-        const atmosphere = page.locator('[data-testid="v7-cyber-atmosphere"]');
-        assert.equal(await atmosphere.count(),1, 'Canvas de atmosfera não foi montado');
-        assert.equal(await atmosphere.isVisible(),true);
-        const canvasState = await atmosphere.evaluate(el => ({
-          width: el.width, height: el.height,
-          pointerEvents: getComputedStyle(el).pointerEvents,
-          context: !!el.getContext('2d'),
-        }));
-        assert.ok(canvasState.width > 0 && canvasState.height > 0, 'Canvas com tamanho inválido');
-        assert.equal(canvasState.pointerEvents, 'none', 'Canvas não pode bloquear interação');
-        assert.equal(canvasState.context, true);
+        assert.equal(await page.locator('[data-testid="v7-cyber-atmosphere"]').count(),0, 'Canvas ASCII deve ter sido removido');
         assert.equal(await page.locator('iframe[srcdoc]').count(),0, 'V7 não deve carregar iframe de terceiros');
         assert.equal(await page.locator('.cyber-layer-stack').count(),1);
         assert.equal(await page.locator('.cyber-ticker').count(),1);
