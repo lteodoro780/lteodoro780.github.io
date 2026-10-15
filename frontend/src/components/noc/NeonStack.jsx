@@ -42,7 +42,7 @@ const Tier = ({ level, tier }) => {
       <polygon points={`350,${cy + 73} 562,${cy} 562,${cy + 20} 350,${cy + 93}`} fill="url(#v8-edge-right)" stroke="#0ae5fb" strokeOpacity=".66" strokeWidth="1.4" />
       <polygon points={points(350, cy, 212, 73)} fill="url(#v8-panel-top)" stroke={tier.accent} strokeWidth="1.8" strokeOpacity=".88" />
       <polygon points={points(350, cy, 212, 73)} fill="url(#v8-grid)" opacity=".54" />
-      <g filter="url(#v8-soft-neon)" opacity=".72">
+      <g opacity=".72">
         <polyline points={`138,${cy} 350,${cy+73} 562,${cy}`} fill="none" stroke={tier.accent} strokeWidth="2.7" />
       </g>
       <g>
@@ -51,7 +51,7 @@ const Tier = ({ level, tier }) => {
         ))}
       </g>
       <text x="154" y={cy+3} fill="#63e7f5" fontSize="9" fontFamily="monospace" letterSpacing="2" opacity=".88">L{level} / {tier.label}</text>
-      <circle cx="350" cy={cy + 74} r="3.3" fill={tier.accent} filter="url(#v8-soft-neon)" />
+      <circle cx="350" cy={cy + 74} r="3.3" fill={tier.accent} />
       <circle cx="562" cy={cy} r="2.4" fill="#55f7ff" />
     </g>
   );
@@ -74,7 +74,6 @@ export const NeonStack = () => (
         <pattern id="v8-grid" width="26" height="26" patternUnits="userSpaceOnUse">
           <path d="M 26 0 L 0 0 0 26" fill="none" stroke="#3be8fa" strokeOpacity=".29" strokeWidth=".75"/>
         </pattern>
-        <filter id="v8-soft-neon" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4.3" /></filter>
         <radialGradient id="v8-halo"><stop stopColor="#04dcf1" stopOpacity=".24"/><stop offset="1" stopColor="#01b4df" stopOpacity="0"/></radialGradient>
       </defs>
       <ellipse cx="350" cy="575" rx="297" ry="81" fill="url(#v8-halo)" />
