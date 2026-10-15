@@ -302,8 +302,32 @@
   letter-spacing: .16em;
 }
 
+/* Única animação contínua do desktop: os 4 quadrados da topologia.
+   CSS transform, sem JavaScript por frame e sem filtros animados. */
 .cyber-layer-stack {
   isolation: isolate;
+  transform: rotateX(56deg) rotateZ(-38deg);
+  transform-style: preserve-3d;
+  transition: transform 300ms ease-out;
+}
+.topology-central-host:hover .cyber-layer-stack {
+  transform: rotateX(53deg) rotateZ(-34deg);
+}
+.cyber-layer-stack .layer-plate {
+  animation: topology-float 6.6s ease-in-out infinite;
+  animation-delay: var(--topology-phase);
+  backface-visibility: hidden;
+}
+@keyframes topology-float {
+  0%, 100% { transform: translate3d(0, 0, var(--topology-depth)); }
+  50% { transform: translate3d(0, -5px, calc(var(--topology-depth) + 10px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cyber-layer-stack { transition: none; }
+  .cyber-layer-stack .layer-plate {
+    animation: none;
+    transform: translateZ(var(--topology-depth));
+  }
 }
 .cyber-layer-stack::before {
   content: "";
