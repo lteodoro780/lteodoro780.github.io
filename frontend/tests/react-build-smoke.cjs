@@ -30,7 +30,11 @@ const fs = require('node:fs');
         assert.equal(await globeNodes.count(),5,'Globo precisa ter cinco áreas clicáveis');
         assert.equal(await page.locator('[data-testid="mobile-globe-shortcuts"] button').count(),5,'Atalhos touch ausentes');
         const orbit = globe.locator('.globe-orbit-track').first();
-        assert.equal(await orbit.evaluate(el => getComputedStyle(el).animationName),'globe-orbit-dash','Órbita animada ausente');
+        assert.equal(
+          await orbit.evaluate(el => getComputedStyle(el).animationName),
+          label === 'mobile' ? 'none' : 'globe-orbit-dash',
+          'Órbitas devem ser estáticas no celular e lentas no desktop'
+        );
         await page.emulateMedia({reducedMotion:'reduce'});
         assert.equal(await orbit.evaluate(el => getComputedStyle(el).animationName),'none','Movimento reduzido não foi respeitado');
         await page.emulateMedia({reducedMotion:'no-preference'});
