@@ -30,9 +30,29 @@ const fs = require('node:fs');
         assert.equal(canvasState.pointerEvents, 'none', 'Canvas não pode bloquear interação');
         assert.equal(canvasState.context, true);
         assert.equal(await page.locator('iframe[srcdoc]').count(),0, 'V7 não deve carregar iframe de terceiros');
-        assert.equal(await page.locator('.cyber-layer-stack').count(),1);
+        assert.equal(await page.locator('.v8-topology-svg').count(),1);
         assert.equal(await page.locator('.cyber-ticker').count(),1);
         assert.equal(await page.locator('.cyber-taskbar').count(),1);
+
+        // V8: infraestrutura cenográfica e HUD sem métricas operacionais falsas
+        assert.equal(await page.locator('.v8-server-plate').count(),4);
+        assert.equal(await page.locator('.v8-server-unit').count(),33);
+        assert.equal(await page.locator('[data-testid="v8-datacenter-hud"]').count(),1);
+        assert.equal(await page.locator('.v8-datacenter-backdrop').count(),1);
+        assert.equal(await page.locator('.v8-datacenter-floor').count(),1);
+        assert.equal(await page.locator('.v8-topology-scene').count(),1);
+        const stage = page.locator('[data-testid="v8-datacenter-hud"]');
+        assert.equal(await stage.isVisible(),label==='desktop');
+        const hudText = await stage.textContent();
+        assert.ok(hudText.includes('APLICAÇÕES') && hudText.includes('AUTOMAÇÃO'));
+        assert.ok(!/128.6 PB\/s|99.9%|CPU 24%|RAM 68%/.test(hudText));
+        if(label==='desktop'){
+          const about = page.locator('[data-testid="window-sobre"]');
+          await about.waitFor({timeout:10000});
+          assert.equal(await about.locator('.v8-about-facts').count(),1);
+          assert.equal(await about.locator('.v8-about-skills span').count(),6);
+        }
+
 
         assert.equal(await page.locator('[data-testid="desktop-icon-telemetria"]').count(),0);
         assert.equal(await page.locator('[data-testid="desktop-icon-tecnicos"]').count(),1);
@@ -122,5 +142,18 @@ const fs = require('node:fs');
         console.log(`PASS: React V3 ${label}, navegação, imagens e contato.`);
       } finally {await page.close()}
     }
+    // Referência aprovada era uma tela larga: conferir cards HUD de ambos os lados.
+    const wide = await browser.newPage({viewport:{width:1672,height:941}});
+    try {
+      await wide.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
+      await wide.locator('[data-testid="boot-screen"]').waitFor({state:'hidden',timeout:20000});
+      await wide.locator('[data-testid="window-sobre"]').waitFor({timeout:10000});
+      await wide.waitForTimeout(850);
+      assert.equal(await wide.locator('.v8-hud-left .v8-hud-section').count(),4);
+      assert.equal(await wide.locator('.v8-hud-right .v8-hud-module').count(),4);
+      assert.ok(await wide.locator('.v8-hud-right').isVisible(),'HUD direito não visível no desktop largo');
+      assert.equal(await wide.locator('.v8-server-plate').count(),4);
+      await wide.screenshot({path:'artifacts/home-wide.png'});
+    } finally {await wide.close()}
   } finally {await browser.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});
