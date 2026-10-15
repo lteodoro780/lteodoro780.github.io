@@ -24,10 +24,7 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Check JavaScript syntax
-        run: |
-          BUNDLE="$(find static/js -maxdepth 1 -type f -name 'main.*.js' | head -1)"
-          test -n "$BUNDLE" || { echo 'Bundle JS nao encontrado'; exit 1; }
-          node --check "$BUNDLE"
+        run: node --check static/js/main.e0a73799.js
       - name: Serve static site
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/portfolio-http.log 2>&1 &
