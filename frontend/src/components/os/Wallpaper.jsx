@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { LayerStack } from "../noc/LayerStack";
+import { NeonStack } from "../noc/NeonStack";
 import { CyberAtmosphere } from "../noc/CyberAtmosphere";
 import { EASE } from "../noc/Primitives";
 import { PROFILE } from "../../content";
@@ -34,7 +34,7 @@ export const Wallpaper = ({ ready }) => {
       <div className="v8-holo-base" />
       <div className="v8-holo-core"><span>NETWORK</span><span>LINUX</span><span>AUTOMATION</span></div>
     </div>
-    <div className="topology-central-host"><LayerStack /></div>
+    <div className="topology-central-host"><NeonStack /></div>
     <div className="v8-system-labels" aria-hidden="true">
       <div><strong>01 / APLICAÇÕES</strong><span>SERVIDORES · CONTAINERS</span></div>
       <div><strong>02 / SERVIÇOS</strong><span>DNS · DHCP · ACTIVE DIRECTORY</span></div>
