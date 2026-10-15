@@ -17,6 +17,7 @@ export const Wallpaper = ({ ready }) => {
   return <div data-testid="wallpaper" className="fixed inset-x-0 bottom-12 top-8 overflow-hidden">
     <div className="v8-datacenter-backdrop pointer-events-none absolute inset-0" aria-hidden="true" />
     <div className="v8-datacenter-floor pointer-events-none absolute inset-0" aria-hidden="true" />
+    <img src={`${process.env.PUBLIC_URL}/img/rack.jpg`} className="v8-rack-left pointer-events-none absolute left-0 top-0 h-full w-[45%] object-cover" alt="" aria-hidden="true" />
     <div className="noc-grid absolute inset-0 opacity-60" />
     <div className="cyber-ambient-glow pointer-events-none absolute inset-0" aria-hidden="true" />
     <img src={`${process.env.PUBLIC_URL}/img/rack.jpg`} alt="" aria-hidden="true" className="wallpaper-photo v8-wallpaper-photo absolute right-0 top-0 h-full w-full object-cover opacity-25 grayscale contrast-125 md:w-[60%]" />
