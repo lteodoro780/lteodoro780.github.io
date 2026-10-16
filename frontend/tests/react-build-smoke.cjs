@@ -35,7 +35,7 @@ const fs = require('node:fs');
         assert.equal(await map.locator('.infra-map-link').count(),6,'Seis conexões SVG devem aparecer');
         assert.equal(await page.locator('[data-testid="mobile-infra-shortcuts"] button').count(),6,'Atalhos mobile ausentes');
         const activeLine = map.locator('.infra-map-link[data-link="infraestrutura"] .infra-map-link__flow');
-        assert.equal(await activeLine.evaluate(el => getComputedStyle(el).animationName),label==='mobile'?'infra-data-flow':'infra-data-flow','Conexão principal não foi encontrada');
+        assert.equal(await activeLine.evaluate(el => getComputedStyle(el).animationName),label==='mobile'?'none':'infra-data-flow','Conexão principal não foi encontrada');
         await page.emulateMedia({reducedMotion:'reduce'});
         assert.equal(await activeLine.evaluate(el => getComputedStyle(el).animationName),'none','Fluxo não deve animar com movimento reduzido');
         await page.emulateMedia({reducedMotion:'no-preference'});
