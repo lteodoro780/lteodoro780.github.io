@@ -30,4 +30,13 @@ assert.ok(!chunks.includes('TELEMETRIA SIMULADA'), 'Texto antigo de telemetria s
 assert.ok(!chunks.includes('telemetry-stat-arm'), 'Telemetria antiga ainda incluída no bundle');
 assert.ok(!chunks.includes('INCIDENTE SIMULADO'), 'Simulador de incidente ainda no bundle');
 assert.ok(!chunks.includes('ticket registrado [OK]'), 'Confirmação fictícia de ticket encontrada');
+const cssDir = path.join(root, 'static', 'css');
+const builtCss = fs.readdirSync(cssDir).filter(name=>name.endsWith('.css'))
+  .map(name=>fs.readFileSync(path.join(cssDir, name),'utf8')).join('\n');
+for(const required of ['.v3-layer-stack','.topology-central-host','.portfolio-wallpaper-solid','prefers-reduced-motion']) {
+  assert.ok(builtCss.includes(required), `Estilo da topografia V3 ausente: ${required}`);
+}
+assert.ok(!builtCss.includes('.infra-map-scene') && !builtCss.includes('.globe-scene'),
+  'Estilos do globo/mapa ainda presentes no build');
+console.log(`PASS: topografia V3 presente no CSS compilado, mapa e globo ausentes.`);
 console.log(`PASS: build válido, ${expected.length} arquivos essenciais e ${bundles.length} scripts compilados.`);
