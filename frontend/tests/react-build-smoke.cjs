@@ -20,33 +20,24 @@ const fs = require('node:fs');
         assert.equal(await page.locator('nav.recruiter-links a').count(),3);
         assert.equal(await page.locator('[data-testid="v7-cyber-atmosphere"]').count(),0, 'Canvas ASCII deve ter sido removido');
         assert.equal(await page.locator('iframe[srcdoc]').count(),0, 'V7 não deve carregar iframe de terceiros');
-        // O globo substitui inteiramente as quatro placas da topologia.
+        // O mapa aberto substitui o globo, mas mantém navegação V7.
+        assert.equal(await page.locator('[data-testid="interactive-globe"]').count(),0,'Globo antigo não pode aparecer');
         assert.equal(await page.locator('[data-testid="animated-layer-stack"]').count(),0);
-        const globe = page.locator('[data-testid="interactive-globe"]');
-        assert.equal(await globe.count(),1,'Globo digital não foi montado');
-        assert.equal(await globe.locator('[data-testid="globe-svg"]').count(),1,'SVG do globo ausente');
-        assert.equal(await globe.locator('canvas').count(),0,'Globo não pode usar Canvas');
-        const globeNodes = globe.locator('[data-testid^="globe-node-"]');
-        assert.equal(await globeNodes.count(),5,'Globo precisa ter cinco áreas clicáveis');
-        assert.equal(await page.locator('[data-testid="mobile-globe-shortcuts"] button').count(),5,'Atalhos touch ausentes');
-        const orbit = globe.locator('.globe-orbit-track').first();
-        assert.equal(
-          await orbit.evaluate(el => getComputedStyle(el).animationName),
-          label === 'mobile' ? 'none' : 'globe-orbit-dash',
-          'Órbitas devem ser estáticas no celular e lentas no desktop'
-        );
-        // Teste real de movimento da superfície; a V7 anterior só animava
-        // traços orbitais e o globo ficava completamente estático.
-        const surface = globe.locator('[data-testid="globe-spinning-surface"]');
-        assert.equal(await surface.count(),1,'Camada giratória ausente no SVG');
-        assert.equal(await surface.evaluate(el => getComputedStyle(el).animationName),'globe-spin-surface','Rotação da superfície ausente');
-        const firstPosition = await surface.evaluate(el => el.getCTM().e);
-        await page.waitForTimeout(1100);
-        const secondPosition = await surface.evaluate(el => el.getCTM().e);
-        assert.ok(Math.abs(secondPosition - firstPosition) > 5,'Continentes não estão se movendo de fato');
+        assert.equal(await page.locator('[data-testid="wallpaper-name"]').count(),0,'Nome gigante deve sair do desktop');
+        assert.equal(await page.locator('.wallpaper-photo').count(),0,'Foto de rack removida da área inicial');
+        assert.equal(await page.locator('.infra-wallpaper-solid').evaluate(el => getComputedStyle(el).backgroundColor),'rgb(7, 19, 27)','Fundo deve ser sólido');
+        const map = page.locator('[data-testid="interactive-infra-map"]');
+        assert.equal(await map.count(),1,'Mapa de infraestrutura não montou');
+        assert.equal(await map.locator('[data-testid="infra-map-svg"]').count(),1,'SVG do mapa ausente');
+        assert.equal(await map.locator('canvas').count(),0,'Mapa não deve usar Canvas');
+        const mapNodes = map.locator('[data-testid^="infra-map-node-"]');
+        assert.equal(await mapNodes.count(),6,'Mapa precisa de seis áreas interativas');
+        assert.equal(await map.locator('.infra-map-link').count(),6,'Seis conexões SVG devem aparecer');
+        assert.equal(await page.locator('[data-testid="mobile-infra-shortcuts"] button').count(),6,'Atalhos mobile ausentes');
+        const activeLine = map.locator('.infra-map-link[data-link="infraestrutura"] .infra-map-link__flow');
+        assert.equal(await activeLine.evaluate(el => getComputedStyle(el).animationName),label==='mobile'?'none':'infra-data-flow','Conexão principal não foi encontrada');
         await page.emulateMedia({reducedMotion:'reduce'});
-        assert.equal(await orbit.evaluate(el => getComputedStyle(el).animationName),'none','Movimento reduzido não foi respeitado');
-        assert.equal(await surface.evaluate(el => getComputedStyle(el).animationName),'none','Superfície girando mesmo com movimento reduzido');
+        assert.equal(await activeLine.evaluate(el => getComputedStyle(el).animationName),'none','Fluxo não deve animar com movimento reduzido');
         await page.emulateMedia({reducedMotion:'no-preference'});
         assert.equal(await page.locator('div.grain').count(),0,'Textura de ruído SVG deve estar ausente');
         assert.equal(await page.locator('[data-testid="v7-background-hud"]').count(),0,'HUD extra da V7 deve sair para manter visual V3');
@@ -79,8 +70,8 @@ const fs = require('node:fs');
           await page.locator('[data-testid="window-close-servicos"]').click();
           await page.locator('[data-testid="window-servicos"]').waitFor({state:'hidden',timeout:10000});
           await page.waitForTimeout(250); // permitir concluir a transição de saída no celular
-          assert.equal(await globeNodes.first().isVisible(),false,'Labels de desktop devem sair do mobile');
-          await page.locator('[data-testid="mobile-globe-node-linux"]').click();
+          assert.equal(await mapNodes.first().isVisible(),false,'Módulos de desktop devem ficar ocultos no mobile');
+          await page.locator('[data-testid="mobile-infra-node-linux"]').click();
           await page.locator('[data-testid="window-tecnicos"]').waitFor({timeout:10000});
           await page.locator('[data-testid="window-close-tecnicos"]').click();
           await page.locator('[data-testid="window-tecnicos"]').waitFor({state:'hidden',timeout:10000});
@@ -91,16 +82,21 @@ const fs = require('node:fs');
             await closeSobre.click();
             await page.locator('[data-testid="window-sobre"]').waitFor({state:'hidden',timeout:10000});
           }
-          assert.equal(await globeNodes.first().isVisible(),true,'Hotspots de desktop devem ser visíveis');
-          await page.locator('[data-testid="globe-node-linux"]').click();
+          assert.equal(await mapNodes.first().isVisible(),true,'Módulos de desktop devem ser visíveis');
+          const linuxNode = map.locator('[data-testid="infra-map-node-linux"]');
+          await linuxNode.hover();
+          assert.equal(await map.getAttribute('data-map-selected'),'linux','Hover deve destacar Linux');
+          assert.equal(await linuxNode.getAttribute('aria-pressed'),'true','Módulo selecionado não está acessível');
+          assert.equal(await map.locator('[data-link="linux"]').getAttribute('data-active'),'true','Conexão Linux não destacada');
+          await page.locator('[data-testid="infra-map-node-linux"]').click();
           await page.locator('[data-testid="window-tecnicos"]').waitFor({timeout:10000});
           await page.locator('[data-testid="window-close-tecnicos"]').click();
           await page.locator('[data-testid="window-tecnicos"]').waitFor({state:'hidden',timeout:10000});
-          await page.locator('[data-testid="globe-node-monitoramento"]').click();
+          await page.locator('[data-testid="infra-map-node-monitoramento"]').click();
           await page.locator('[data-testid="window-metricas"]').waitFor({timeout:10000});
           await page.locator('[data-testid="window-close-metricas"]').click();
           await page.locator('[data-testid="window-metricas"]').waitFor({state:'hidden',timeout:10000});
-          await page.screenshot({path:'artifacts/globo-interativo-desktop.png'});
+          await page.screenshot({path:'artifacts/mapa-infraestrutura-desktop.png'});
         }
         assert.ok(!(await page.locator('body').innerText()).includes('PING DEMO'));
         await page.screenshot({path:`artifacts/home-${label}.png`});

@@ -1,28 +1,19 @@
 import { motion } from "framer-motion";
-import { GloboDigital, GLOBE_NODES } from "../noc/GloboDigital";
-import { EASE } from "../noc/Primitives";
+import { MapaInfraestrutura, MAP_NODES } from "../noc/MapaInfraestrutura";
 import { PROFILE } from "../../content";
 import { useDesktop } from "../../lib/desktop";
-
-const Line = ({ ready, delay, children }) => (
-  <span className="block overflow-hidden pb-[0.02em]">
-    <motion.span className="block" initial={{ y: "108%" }} animate={ready ? { y: 0 } : { y: "108%" }} transition={{ duration: 1.2, ease: EASE, delay }}>{children}</motion.span>
-  </span>
-);
 
 export const Wallpaper = ({ ready }) => {
   const { open } = useDesktop();
   return <div data-testid="wallpaper" className="fixed inset-x-0 bottom-12 top-8 overflow-hidden">
-    <div className="noc-grid absolute inset-0 opacity-60" />
-    <img src={`${process.env.PUBLIC_URL}/img/rack.jpg`} alt="" aria-hidden="true" className="wallpaper-photo absolute right-0 top-0 h-full w-full object-cover opacity-25 grayscale contrast-125 md:w-[60%]" />
-    <div className="absolute inset-0 bg-noc-ok/5 mix-blend-color" />
-    <div className="globe-central-host"><GloboDigital onSelect={open} /></div>
-    <div className="wallpaper-intro absolute bottom-5 left-4 right-4 hidden md:block md:bottom-8 md:left-8">
-      <h1 data-testid="wallpaper-name" className="font-display text-[9rem] font-extrabold uppercase leading-[0.8] tracking-[-0.02em] text-slate-50 xl:text-[12rem]">
-        <Line ready={ready} delay={0.1}>{PROFILE.first}</Line>
-        <Line ready={ready} delay={0.25}><span className="text-outline">{PROFILE.last}</span><span className="text-noc-ok">.</span></Line>
-      </h1>
-      <motion.p initial={{ opacity: 0 }} animate={{ opacity: ready ? 1 : 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="mt-4 font-mono text-xs uppercase tracking-[0.2em] text-slate-300"><span className="text-emerald-400">&gt;</span> {PROFILE.role} · clique nos ícones para explorar</motion.p>
+    <div className="infra-wallpaper-solid absolute inset-0" aria-hidden="true"/>
+    <div className="noc-grid absolute inset-0 opacity-35" aria-hidden="true"/>
+    <div className="infra-map-central-host"><MapaInfraestrutura onSelect={open} /></div>
+    <h1 className="sr-only">Portfólio de infraestrutura e sistemas</h1>
+    <div className="infra-wallpaper-caption absolute bottom-7 left-6 hidden md:block">
+      <p className="font-mono text-[11px] uppercase tracking-[0.17em] text-slate-400">
+        <span className="text-emerald-400">&gt;</span> {PROFILE.role} · selecione um módulo para explorar
+      </p>
     </div>
     <motion.section
       data-testid="mobile-intro"
@@ -58,13 +49,13 @@ export const Wallpaper = ({ ready }) => {
         <a href={`https://${PROFILE.github}`} target="_blank" rel="noopener noreferrer" className="text-emerald-300 hover:text-white">GitHub ↗</a>
         <span className="text-slate-400">Três Corações, MG</span>
       </div>
-      <div data-testid="mobile-globe-shortcuts" className="mt-4 border-t border-noc-line pt-3">
+      <div data-testid="mobile-infra-shortcuts" className="mt-4 border-t border-noc-line pt-3">
         <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-emerald-300">Explorar por área</p>
         <div className="flex flex-wrap gap-2">
-          {GLOBE_NODES.map(node => (
+          {MAP_NODES.map(node => (
             <button
               key={node.id}
-              data-testid={`mobile-globe-node-${node.id}`}
+              data-testid={`mobile-infra-node-${node.id}`}
               type="button"
               onClick={() => open(node.app)}
               className="min-h-10 border border-noc-line2 bg-noc-bg/90 px-2 py-2 font-mono text-[10px] uppercase text-slate-200 focus-visible:border-emerald-400 focus-visible:outline-2 focus-visible:outline-emerald-400"
