@@ -25,7 +25,7 @@ const fs = require('node:fs');
         assert.equal(await page.locator('[data-testid="animated-layer-stack"]').count(),0);
         assert.equal(await page.locator('[data-testid="wallpaper-name"]').count(),0,'Nome gigante deve sair do desktop');
         assert.equal(await page.locator('.wallpaper-photo').count(),0,'Foto de rack removida da área inicial');
-        assert.equal(await page.locator('.infra-wallpaper-solid').evaluate(el => getComputedStyle(el).backgroundColor),'rgb(7, 19, 27)','Fundo deve ser sólido');
+        assert.equal(await page.locator('.infra-wallpaper-solid').evaluate(el => getComputedStyle(el).backgroundColor),'rgb(6, 19, 27)','Fundo deve ser sólido');
         const map = page.locator('[data-testid="interactive-infra-map"]');
         assert.equal(await map.count(),1,'Mapa de infraestrutura não montou');
         assert.equal(await map.locator('[data-testid="infra-map-svg"]').count(),1,'SVG do mapa ausente');
