@@ -1,16 +1,25 @@
 import { motion } from "framer-motion";
-import { MapaInfraestrutura, MAP_NODES } from "../noc/MapaInfraestrutura";
+import { LayerStack } from "../noc/LayerStack";
 import { PROFILE } from "../../content";
 import { useDesktop } from "../../lib/desktop";
 
+// A V7 mantém os seis atalhos móveis, independentemente do mapa removido.
+const INFRA_AREAS = [
+  { id: "infraestrutura", label: "INFRAESTRUTURA", app: "metricas" },
+  { id: "linux", label: "LINUX", app: "tecnicos" },
+  { id: "monitoramento", label: "MONITORAMENTO", app: "metricas" },
+  { id: "automacao", label: "AUTOMAÇÃO", app: "tecnicos" },
+  { id: "sistemas", label: "SISTEMAS", app: "servicos" },
+  { id: "usuarios", label: "USUÁRIOS", app: "sobre" },
+];
 export const Wallpaper = ({ ready }) => {
   const { open } = useDesktop();
   return <div data-testid="wallpaper" className="fixed inset-x-0 bottom-12 top-8 overflow-hidden">
-    <div className="infra-wallpaper-solid absolute inset-0" aria-hidden="true"/>
+    <div className="portfolio-wallpaper-solid absolute inset-0" aria-hidden="true"/>
     <div className="noc-grid absolute inset-0 opacity-35" aria-hidden="true"/>
-    <div className="infra-map-central-host"><MapaInfraestrutura onSelect={open} /></div>
+    <div className="topology-central-host" aria-hidden="true"><LayerStack /></div>
     <h1 className="sr-only">Portfólio de infraestrutura e sistemas</h1>
-    <div className="infra-wallpaper-caption absolute bottom-7 left-6 hidden md:block">
+    <div className="topology-wallpaper-caption absolute bottom-7 left-6 hidden md:block">
       <p className="font-mono text-[11px] uppercase tracking-[0.17em] text-slate-400">
         <span className="text-emerald-400">&gt;</span> {PROFILE.role} · selecione um módulo para explorar
       </p>
@@ -52,7 +61,7 @@ export const Wallpaper = ({ ready }) => {
       <div data-testid="mobile-infra-shortcuts" className="mt-4 border-t border-noc-line pt-3">
         <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-emerald-300">Explorar por área</p>
         <div className="flex flex-wrap gap-2">
-          {MAP_NODES.map(node => (
+          {INFRA_AREAS.map(node => (
             <button
               key={node.id}
               data-testid={`mobile-infra-node-${node.id}`}

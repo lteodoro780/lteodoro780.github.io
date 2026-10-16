@@ -7,7 +7,7 @@ const ITEMS = [PROFILE.role, ...MARQUEE];
 const Track = ({ hidden = false }) => (
   <div aria-hidden={hidden} className="flex shrink-0 items-center">
     {ITEMS.map((t) => (
-      <span key={t} className="flex items-center gap-6 pr-6 font-mono text-xs uppercase tracking-[0.25em] text-slate-300">
+      <span key={t} className="flex items-center gap-8 pr-10 font-mono text-xs uppercase tracking-[0.25em] text-slate-300 whitespace-nowrap">
         {t}
         <span className="h-1.5 w-1.5 rotate-45 bg-noc-ok" />
       </span>
