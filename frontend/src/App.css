@@ -404,6 +404,7 @@
     pointer-events: none;
   }
   .infra-map-node, .infra-map-legend { display: none; }
+  .infra-map-link__flow { animation: none !important; }
 }
 @media (prefers-reduced-motion: reduce) {
   .infra-map-link__flow { animation: none !important; }
