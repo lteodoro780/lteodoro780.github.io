@@ -33,6 +33,16 @@ const fs = require('node:fs');
         const mapNodes = map.locator('[data-testid^="infra-map-node-"]');
         assert.equal(await mapNodes.count(),6,'Mapa precisa de seis áreas interativas');
         assert.equal(await map.locator('.infra-map-link').count(),6,'Seis conexões SVG devem aparecer');
+        assert.equal(await map.locator('[data-testid="infra-map-core"]').count(),1,'Núcleo central de servidores ausente');
+        assert.equal(await map.locator('[data-testid="infra-map-open-panels"]').count(),1,'Mapa aberto de três painéis ausente');
+        assert.equal(await map.locator('[data-testid="infra-map-devices"]').count(),1,'Equipamentos ao redor do núcleo ausentes');
+        assert.equal(await map.locator('.infra-map-core ellipse').count(),3,'Anéis do núcleo incompletos');
+        const corePulse = map.locator('.infra-map-core ellipse').nth(1);
+        assert.equal(await corePulse.evaluate(el => getComputedStyle(el).animationName),
+          label==='mobile'?'none':'infra-core-breathe','Pulso central inadequado para dispositivo');
+        await page.emulateMedia({reducedMotion:'reduce'});
+        assert.equal(await corePulse.evaluate(el => getComputedStyle(el).animationName),'none','Pulso central não respeita movimento reduzido');
+        await page.emulateMedia({reducedMotion:'no-preference'});
         assert.equal(await page.locator('[data-testid="mobile-infra-shortcuts"] button').count(),6,'Atalhos mobile ausentes');
         const activeLine = map.locator('.infra-map-link[data-link="infraestrutura"] .infra-map-link__flow');
         assert.equal(await activeLine.evaluate(el => getComputedStyle(el).animationName),label==='mobile'?'none':'infra-data-flow','Conexão principal não foi encontrada');
@@ -83,6 +93,15 @@ const fs = require('node:fs');
             await page.locator('[data-testid="window-sobre"]').waitFor({state:'hidden',timeout:10000});
           }
           assert.equal(await mapNodes.first().isVisible(),true,'Módulos de desktop devem ser visíveis');
+          const cardRects = await mapNodes.evaluateAll(items => items.map(el => {
+            const r = el.getBoundingClientRect(); return { x:r.x, y:r.y, right:r.right, bottom:r.bottom };
+          }));
+          for(let i=0; i<cardRects.length; i++) for(let j=i+1; j<cardRects.length; j++){
+            const a=cardRects[i], b=cardRects[j];
+            const intersection = Math.max(0, Math.min(a.right,b.right)-Math.max(a.x,b.x))
+              * Math.max(0, Math.min(a.bottom,b.bottom)-Math.max(a.y,b.y));
+            assert.equal(intersection,0,'Dois cartões do mapa ficaram sobrepostos');
+          }
           const linuxNode = map.locator('[data-testid="infra-map-node-linux"]');
           await linuxNode.hover();
           assert.equal(await map.getAttribute('data-map-selected'),'linux','Hover deve destacar Linux');
