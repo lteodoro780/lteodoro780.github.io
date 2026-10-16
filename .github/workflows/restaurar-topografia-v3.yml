@@ -1,0 +1,74 @@
+name: "L0 NOC - restaurar topografia V3 na V7"
+on:
+  push:
+    branches: [fix/restaurar-topografia-v3-v7-20261015]
+    paths: ['frontend/**', '.github/workflows/restaurar-topografia-v3.yml']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: l0noc-restaurar-v3-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validar-e-preparar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: yarn
+          cache-dependency-path: frontend/yarn.lock
+      - name: Validar e compilar
+        working-directory: frontend
+        env:
+          CI: 'true'
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare yarn@1.22.22 --activate
+          python3 scripts/validate-static.py
+          yarn install --frozen-lockfile --non-interactive
+          yarn build
+          node scripts/validate-build.mjs
+      - name: Navegacao e geometria visual desktop e celular
+        working-directory: frontend
+        run: |
+          set -euo pipefail
+          npm install --prefix ../.qa --no-save --no-package-lock playwright@1.55.0
+          ../.qa/node_modules/.bin/playwright install --with-deps chromium
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory build > /tmp/l0noc-v3.log 2>&1 &
+          NODE_PATH="$GITHUB_WORKSPACE/.qa/node_modules" node tests/react-build-smoke.cjs
+      - name: Capturas para revisao
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: topografia-v3-v7-desktop-mobile
+          path: frontend/artifacts/
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Preparar GitHub Pages somente na branch de revisao
+        if: github.event_name == 'push'
+        run: |
+          set -euo pipefail
+          test -f frontend/build/index.html
+          test -f frontend/build/curriculo.html
+          test -f frontend/build/bastidores.html
+          rm -rf static
+          cp -a frontend/build/. .
+          BUNDLE="$(find static/js -maxdepth 1 -type f -name 'main.*.js' | head -1)"
+          test -n "$BUNDLE"
+          node --check "$BUNDLE"
+          test "$(find img/registro -maxdepth 1 -name '*.webp' | wc -l)" -eq 20
+          rm -rf .qa frontend/artifacts
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          if ! git diff --cached --quiet; then
+            git commit -m "build(portfolio): V7 topografia V3 validada"
+            git push origin HEAD:refs/heads/fix/restaurar-topografia-v3-v7-20261015
+          fi

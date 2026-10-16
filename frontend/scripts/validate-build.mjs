@@ -19,10 +19,12 @@ const bundles = fs.readdirSync(jsDir).filter(f=>f.endsWith('.js'));
 assert.ok(bundles.length>0, 'Sem JavaScript compilado');
 const chunks = bundles.map(f=>fs.readFileSync(path.join(jsDir,f),'utf8')).join('\n');
 // Verificar marcador estavel no bundle em vez de string acentuada: o minificador converte letras para Unicode escapado.
-for (const text of ['SENTINELA','SISTEMA DE SELOS','SALA VANGUARDEIRA','Contato profissional direto','gallery-active-photo','mobile-cta-projects','app-projetos-tecnicos','technical-project-','HERMES Security Portable','TLuizLabs','Infra TI Labs','cyber-window','interactive-infra-map','infra-map-node-','infra-map-svg','infra-map-core','infra-map-open-panels','mobile-infra-shortcuts','ticker-v3-track']) {
+for (const text of ['SENTINELA','SISTEMA DE SELOS','SALA VANGUARDEIRA','Contato profissional direto','gallery-active-photo','mobile-cta-projects','app-projetos-tecnicos','technical-project-','HERMES Security Portable','TLuizLabs','Infra TI Labs','cyber-window','hero-layer-stack','topology-plate','animated-layer-stack','mobile-infra-shortcuts','ticker-v3-track']) {
   assert.ok(chunks.includes(text), `Texto da V3 não encontrado no JS: ${text}`);
 }
-assert.ok(!chunks.includes('topology-square'), 'Topologia antiga ainda no bundle');
+assert.ok(!chunks.includes('interactive-infra-map') && !chunks.includes('infra-map-svg'), 'Mapa premium ainda presente');
+assert.ok(!chunks.includes('interactive-globe') && !chunks.includes('globe-svg'), 'Globo ainda presente');
+assert.ok(!chunks.includes('topology-square'), 'Quadrados antigos ainda presentes');
 assert.ok(!chunks.includes('v7-cyber-atmosphere'), 'Canvas ASCII continua presente no bundle');
 assert.ok(!chunks.includes('TELEMETRIA SIMULADA'), 'Texto antigo de telemetria sintética ainda no bundle');
 assert.ok(!chunks.includes('telemetry-stat-arm'), 'Telemetria antiga ainda incluída no bundle');
