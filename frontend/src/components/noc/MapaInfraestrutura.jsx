@@ -21,109 +21,158 @@ const ICONS = {
 };
 
 const LINKS = [
-  { id: "infraestrutura", d: "M248 143 H321 L367 235 H418" , end: [418,235] },
-  { id: "linux", d: "M708 142 H663 L616 235 H573", end: [573,235] },
-  { id: "monitoramento", d: "M804 314 H700 L640 336 H585", end: [585,336] },
-  { id: "automacao", d: "M758 474 H700 L631 404 H591", end: [591,404] },
-  { id: "sistemas", d: "M215 450 H270 L360 390 H421", end: [421,390] },
-  { id: "usuarios", d: "M486 508 V460 L488 426", end: [488,426] },
+  { id: "infraestrutura", d: "M222 125H271L317 250", end: [317, 250] },
+  { id: "linux", d: "M733 125H691L653 251", end: [653, 251] },
+  { id: "monitoramento", d: "M764 323H748L704 353", end: [704, 353] },
+  { id: "automacao", d: "M754 483H738L705 432", end: [705, 432] },
+  { id: "sistemas", d: "M213 481H261L304 407", end: [304, 407] },
+  { id: "usuarios", d: "M488 549V490L488 462", end: [488, 462] },
 ];
 
+const IconServer = ({ x, y, scale = 1 }) => (
+  <g transform={"translate(" + x + " " + y + ") scale(" + scale + ")"} fill="none" stroke="#43d6d0" strokeWidth="1.5" strokeLinejoin="round">
+    <rect x="-26" y="-34" width="52" height="68" rx="3" fill="#08232a" />
+    {[-20, 1, 21].map((oy, i) => (
+      <g key={oy}>
+        <rect x="-19" y={oy} width="38" height="14" rx="1.5" fill="#06171f" />
+        <path d={"M-12 " + (oy+5) + "H4"} opacity=".6"/>
+        <circle cx="12" cy={oy+7} r="2.2" fill={i===1?"#67e8f9":"#10b981"} stroke="none"/>
+      </g>
+    ))}
+  </g>
+);
+
 const MapArt = memo(({ active }) => (
-  <svg
-    data-testid="infra-map-svg"
-    className="infra-map-art"
-    viewBox="0 0 960 610"
-    role="img"
-    aria-label="Mapa aberto ilustrativo de uma infraestrutura interconectada"
-    focusable="false"
-  >
+  <svg data-testid="infra-map-svg" className="infra-map-art" viewBox="0 0 960 610"
+    role="img" focusable="false"
+    aria-label="Mapa conceitual aberto com núcleo central de servidores, firewall, Linux, monitoramento, automação, projetos e usuários">
     <defs>
-      <linearGradient id="infra-map-surface" x1="0" x2="1" y1="0" y2="1">
-        <stop offset="0" stopColor="#082a30" stopOpacity=".7"/>
-        <stop offset="1" stopColor="#061019" stopOpacity=".94"/>
+      <linearGradient id="infra-panel-gradient" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#07313a" stopOpacity=".66"/>
+        <stop offset="1" stopColor="#04151d" stopOpacity=".96"/>
       </linearGradient>
-      <pattern id="infra-map-dot-grid" width="9" height="9" patternUnits="userSpaceOnUse">
-        <circle cx="4.5" cy="4.5" r="1" fill="#2dd4bf" opacity=".55"/>
+      <radialGradient id="infra-hub-ambient">
+        <stop offset="0" stopColor="#10b981" stopOpacity=".26"/>
+        <stop offset=".65" stopColor="#0a555e" stopOpacity=".08"/>
+        <stop offset="1" stopColor="#0a555e" stopOpacity="0"/>
+      </radialGradient>
+      <pattern id="infra-dot-field" width="8" height="8" patternUnits="userSpaceOnUse">
+        <circle cx="3" cy="3" r="1.1" fill="#22d3ee" opacity=".64"/>
       </pattern>
-      <pattern id="infra-map-grid" width="24" height="24" patternUnits="userSpaceOnUse">
-        <path d="M24 0H0V24" fill="none" stroke="#0e6a68" strokeOpacity=".3" strokeWidth=".6"/>
+      <pattern id="infra-fine-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+        <path d="M24 0H0V24" fill="none" stroke="#10b981" strokeWidth=".55" opacity=".23"/>
       </pattern>
-      <clipPath id="infra-map-fold-mask">
-        <path d="M90 155 L348 175 L482 162 L613 176 L873 154 V464 L612 482 L481 461 L349 484 L90 467 Z"/>
+      <clipPath id="infra-map-inside">
+        <path d="M130 171 L372 194 L480 169 L598 194 L850 171 V489 L598 467 L480 492 L373 468 L130 488Z"/>
       </clipPath>
     </defs>
 
-    {/* Três folhas abertas em perspectiva discreta, sem WebGL ou Canvas. */}
-    <g className="infra-map-fold">
-      <path d="M90 155L348 175 349 484 90 467Z" fill="url(#infra-map-surface)" stroke="#0b9e99" strokeWidth="1.2"/>
-      <path d="M348 175L482 162 613 176 612 482 481 461 349 484Z" fill="#071b24" stroke="#14b8a6" strokeWidth="1.3"/>
-      <path d="M613 176L873 154V464L612 482Z" fill="url(#infra-map-surface)" stroke="#0b9e99" strokeWidth="1.2"/>
-      <path d="M348 175L349 484 M613 176L612 482" stroke="#6ee7b7" strokeOpacity=".43" strokeWidth=".9" strokeDasharray="3 7"/>
-      <g clipPath="url(#infra-map-fold-mask)">
-        <rect x="85" y="145" width="800" height="350" fill="url(#infra-map-grid)"/>
-        <g fill="url(#infra-map-dot-grid)" opacity=".4">
-          <path d="M195 240L226 216 270 212 307 232 313 261 295 287 279 302 256 294 235 326 212 309 209 278 189 262Z"/>
-          <path d="M278 312L311 325 331 346 325 375 304 396 305 428 291 453 274 431 270 394 256 366Z"/>
-          <path d="M387 265L413 248 448 258 464 294 445 311 426 306 408 334 392 317Z"/>
-          <path d="M442 328L473 331 493 361 485 394 473 416 460 399 451 371Z"/>
-          <path d="M511 247L560 218 615 228 653 258 693 246 735 277 729 312 697 321 687 353 654 342 642 372 614 358 581 329 540 313 515 289Z"/>
-          <path d="M671 377L724 379 746 400 729 420 694 425 674 411Z"/>
+    <ellipse cx="485" cy="337" rx="270" ry="210" fill="url(#infra-hub-ambient)" opacity=".8"/>
+    <g data-testid="infra-map-open-panels" className="infra-map-fold">
+      <path d="M130 171L372 194 373 468 130 488Z" fill="url(#infra-panel-gradient)" stroke="#1bc6be" strokeWidth="1.4"/>
+      <path d="M372 194L480 169 598 194 598 467 480 492 373 468Z" fill="#061e27" stroke="#40d9d0" strokeWidth="1.5"/>
+      <path d="M598 194L850 171V489L598 467Z" fill="url(#infra-panel-gradient)" stroke="#1bc6be" strokeWidth="1.4"/>
+      <g clipPath="url(#infra-map-inside)">
+        <rect x="130" y="169" width="720" height="324" fill="url(#infra-fine-grid)" opacity=".9"/>
+        <g fill="url(#infra-dot-field)" stroke="none" opacity=".44">
+          <path d="M187 276L216 254 249 244 275 251 299 275 294 294 269 301 256 325 238 322 212 348 197 327 198 303 183 293Z"/>
+          <path d="M266 339L286 345 310 367 307 399 287 421 291 452 277 463 265 432 256 399Z"/>
+          <path d="M359 242L392 227 413 237 425 262 405 276 390 263 378 283 360 266Z"/>
+          <path d="M401 278L434 293 446 320 440 354 425 389 405 370 400 337Z"/>
+          <path d="M515 239L559 224 612 235 641 259 680 259 720 286 706 311 678 313 664 333 638 327 622 350 590 332 563 305 521 286Z"/>
+          <path d="M664 373L707 371 739 394 721 418 676 414 657 396Z"/>
         </g>
-        <g fill="none" stroke="#0f766e" strokeOpacity=".26">
-          <path d="M98 230Q480 260 861 224 M98 340Q480 306 861 341 M95 438Q480 403 869 428"/>
-          <path d="M210 150Q186 322 210 471 M470 166Q446 321 476 467 M744 154Q768 322 744 470"/>
+        <g stroke="#30c6c6" opacity=".17" fill="none" strokeWidth=".75">
+          <path d="M130 265Q480 288 850 249 M130 365Q480 335 850 365 M130 446Q480 417 850 443"/>
+          <path d="M259 179Q247 336 259 477 M475 178V488 M724 178Q738 333 724 474"/>
         </g>
       </g>
-      <g fill="none" stroke="#2dd4bf" strokeOpacity=".22" strokeWidth="1">
-        <path d="M117 181H166 M117 181V211 M847 185H802 M847 185V216"/>
-        <path d="M117 443H158 M117 443V416 M847 442H804 M847 442V420"/>
+      <path d="M372 194L373 468 M598 194V467" stroke="#5eead4" strokeWidth="1" strokeOpacity=".45" strokeDasharray="3 7"/>
+      <g stroke="#22d3ee" strokeWidth="1" fill="none" opacity=".65">
+        <path d="M147 188H181 M147 188V216 M829 188H798 M829 188V213"/>
+        <path d="M147 472H177 M147 472V449 M829 475H798 M829 475V452"/>
       </g>
     </g>
 
-    {/* Nós e links revelam visualmente a área focada, sem representar tráfego real. */}
-    {LINKS.map(link => (
-      <g key={link.id} className="infra-map-link" data-link={link.id} data-active={active === link.id ? "true" : "false"}>
-        <path className="infra-map-link__base" d={link.d} fill="none" strokeWidth="1.4"/>
-        <path className="infra-map-link__flow" d={link.d} fill="none" strokeWidth="1.8" strokeDasharray="3 11"/>
-        <circle cx={link.end[0]} cy={link.end[1]} r="4.2" className="infra-map-link__endpoint"/>
+    <g data-testid="infra-map-core" className="infra-map-core" strokeLinecap="round" strokeLinejoin="round">
+      {/* Core hub e anéis sob o servidor central */}
+      <ellipse cx="486" cy="384" rx="121" ry="46" fill="none" stroke="#0e777d" strokeWidth="1.5"/>
+      <ellipse cx="486" cy="384" rx="102" ry="36" fill="none" stroke="#22d3ee" strokeWidth="1.8" strokeOpacity=".75"/>
+      <ellipse cx="486" cy="384" rx="72" ry="23" fill="#06404a" fillOpacity=".24" stroke="#10b981" strokeOpacity=".6"/>
+      <path d="M365 384H346 M607 384H627 M486 336V320 M486 434V449" stroke="#2dd4bf" strokeWidth="1.3" opacity=".67"/>
+      {[[365,384],[607,384],[486,426]].map(([x,y],i)=><circle key={i} cx={x} cy={y} r="3" fill="#22d3ee"/>)}
+      {/* Empilhamento isométrico, totalmente vetorial */}
+      <g transform="translate(450 273)">
+        <path d="M0 12L39 0 77 11 38 24Z" fill="#0b4450" stroke="#6ee7b7" strokeWidth="1.5"/>
+        <path d="M0 12L38 24V125L0 111Z" fill="#092b34" stroke="#22d3ee" strokeWidth="1.5"/>
+        <path d="M38 24L77 11V110L38 125Z" fill="#041820" stroke="#34d399" strokeWidth="1.3"/>
+        {[35,60,85].map((n,i)=>(
+          <g key={n}>
+            <path d={"M7 "+n+"L30 "+(n+7)+"V"+(n+22)+"L7 "+(n+15)+"Z"} fill="#06171f" stroke="#5eead4" strokeWidth="1.1"/>
+            <path d={"M44 "+(n+5)+"L69 "+(n-2)} fill="none" stroke="#1d7c80" strokeWidth="1"/>
+            <circle cx="24" cy={n+14} r="1.6" fill={i===1?"#67e8f9":"#10b981"}/>
+          </g>
+        ))}
+      </g>
+      <text x="485" y="253" textAnchor="middle" fontSize="10" fontFamily="monospace" letterSpacing="2" fill="#5eead4">CORE / SERVIÇOS</text>
+    </g>
+
+    {/* Ícones operacionais, ligados ao núcleo e aos módulos de navegação. */}
+    <g className="infra-map-devices" data-testid="infra-map-devices" fill="none" stroke="#32d7d1" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round">
+      <g transform="translate(319 267)">
+        <IconServer x={0} y={0} scale={.73}/>
+        <path d="M-43 21L-28 -1 -20 21Z" fill="#07323a" stroke="#10b981"/>
+        <path d="M-33 9L-28 15 -22 7" stroke="#67e8f9"/>
+      </g>
+      <g transform="translate(649 268)">
+        <IconServer x={0} y={0} scale={.9}/>
+        <path d="M42 -13Q54 -27 66 -12 Q80 -10 77 2 H40 Q30 -5 42 -13Z" fill="#06282e" stroke="#22d3ee"/>
+      </g>
+      <g transform="translate(705 352)">
+        <rect x="-33" y="-24" width="66" height="48" rx="2" fill="#061922"/>
+        <path d="M-22 10L-11 1 -3 7 9 -13 23 -3 M-14 29H14 M0 23V29" stroke="#67e8f9" strokeWidth="1.5"/>
+        <path d="M-26 -15H-15" opacity=".55"/>
+      </g>
+      <g transform="translate(704 431)">
+        <circle r="15" fill="#06242b"/>
+        <circle r="6"/>
+        <path d="M0 -23V-16 M0 16V23 M-23 0H-16 M16 0H23 M-16 -16L-11 -11 M11 11L16 16 M-16 16L-11 11 M11 -11L16 -16"/>
+      </g>
+      <g transform="translate(302 401)">
+        <rect x="-35" y="-24" width="64" height="46" rx="2" fill="#061923"/>
+        <path d="M-23 -8L-12 5 -1 -9 M-21 28H19 M-2 22V28"/>
+      </g>
+      <g transform="translate(486 464)">
+        <circle cy="-12" r="9" fill="#06232d"/>
+        <path d="M-18 12Q-18 -1 0 -1 Q18 -1 18 12" />
+        <path d="M-29 5L-37 13 M29 5L37 13" opacity=".5"/>
+      </g>
+      {/* Conexões sutis sempre presentes entre os equipamentos */}
+      <g stroke="#2dd4bf" strokeOpacity=".46" strokeWidth="1" strokeDasharray="3 5">
+        <path d="M341 291L405 341 M630 291L558 345 M668 352H614 M672 418L604 397 M336 403L383 392 M485 442V434"/>
+      </g>
+    </g>
+
+    {LINKS.map(link=>(
+      <g key={link.id} className="infra-map-link" data-link={link.id} data-active={active===link.id?"true":"false"}>
+        <path className="infra-map-link__base" d={link.d} fill="none" strokeWidth="1.3"/>
+        <path className="infra-map-link__flow" d={link.d} fill="none" strokeWidth="1.5" strokeDasharray="3 11"/>
+        <circle cx={link.end[0]} cy={link.end[1]} r="3.9" className="infra-map-link__endpoint"/>
       </g>
     ))}
 
-    <g className="infra-map-devices" fill="none" stroke="#2dd4bf" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <g transform="translate(463 270)">
-        <rect x="-44" y="-30" width="88" height="76" rx="3" fill="#071721" stroke="#14b8a6"/>
-        <rect x="-28" y="-16" width="56" height="16" rx="2"/>
-        <rect x="-28" y="10" width="56" height="16" rx="2"/>
-        <circle cx="19" cy="-8" r="2" fill="#10b981" stroke="none"/>
-        <circle cx="19" cy="18" r="2" fill="#10b981" stroke="none"/>
-        <path d="M-18 37H18 M0 46V54"/>
-      </g>
-      <g transform="translate(230 278)">
-        <rect x="-17" y="-21" width="34" height="52" rx="2"/>
-        <path d="M-9 -10H9 M-9 2H9 M-9 14H9"/>
-        <circle cx="9" cy="23" r="2" fill="#10b981" stroke="none"/>
-      </g>
-      <g transform="translate(726 273)">
-        <rect x="-21" y="-19" width="42" height="40" rx="2"/>
-        <path d="M-14 10L-4 0 4 4 14 -10 M-13 15H15"/>
-      </g>
-      <g transform="translate(259 380)">
-        <rect x="-22" y="-16" width="44" height="32" rx="2"/>
-        <path d="M-11 -4L-3 4 8 -8 M-13 20H13"/>
-      </g>
-      <g transform="translate(724 397)">
-        <circle r="15"/><circle r="6"/>
-        <path d="M0 -22V-15 M0 15V22 M-22 0H-15 M15 0H22 M-16 -16L-11 -11 M11 11L16 16 M-16 16L-11 11 M11 -11L16 -16"/>
-      </g>
-      <g transform="translate(482 422)">
-        <circle cy="-6" r="8"/><path d="M-16 15Q-15 2 0 2 15 2 16 15"/>
-      </g>
+    {/* Símbolo de internet acima do mapa aberto: totalmente ilustrativo. */}
+    <g transform="translate(486 146)" fill="none" stroke="#5eead4" strokeWidth="2" strokeLinejoin="round">
+      <path d="M-32 8Q-36 -10 -18 -15Q-13 -41 10 -35Q30 -33 33 -11Q51 -9 50 10Q47 24 30 24H-26Q-43 22 -42 7Q-41 -2 -32 8Z" fill="#08303a" />
+      <path d="M-7 -4V15 M-13 2L-7 -4L-1 2 M9 15V-4 M3 10L9 16L15 10" strokeWidth="1.5"/>
+      <path d="M0 27V59" stroke="#10b981" strokeDasharray="4 7" strokeWidth="1"/>
+      <circle cx="0" cy="59" r="3" fill="#10b981" stroke="none"/>
+      <text x="0" y="41" fontFamily="monospace" textAnchor="middle" fontSize="8" stroke="none" fill="#b6f6eb" letterSpacing="1">INTERNET</text>
     </g>
 
-    <g fontFamily="monospace" fontSize="10" letterSpacing="1.3">
-      <text x="105" y="177" fill="#5eead4">L0 / MAPA ABERTO</text>
-      <text x="704" y="454" fill="#64748b">PORTFÓLIO / TI</text>
+    <g fontFamily="monospace" fontSize="9" letterSpacing="1.5" fill="#6ee7b7" opacity=".7">
+      <text x="146" y="192">L0 / INFRASTRUCTURE</text>
+      <text x="708" y="474">PORTFÓLIO / TI</text>
     </g>
   </svg>
 ));

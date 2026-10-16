@@ -19,7 +19,7 @@ const bundles = fs.readdirSync(jsDir).filter(f=>f.endsWith('.js'));
 assert.ok(bundles.length>0, 'Sem JavaScript compilado');
 const chunks = bundles.map(f=>fs.readFileSync(path.join(jsDir,f),'utf8')).join('\n');
 // Verificar marcador estavel no bundle em vez de string acentuada: o minificador converte letras para Unicode escapado.
-for (const text of ['SENTINELA','SISTEMA DE SELOS','SALA VANGUARDEIRA','Contato profissional direto','gallery-active-photo','mobile-cta-projects','app-projetos-tecnicos','technical-project-','HERMES Security Portable','TLuizLabs','Infra TI Labs','cyber-window','interactive-infra-map','infra-map-node-','infra-map-svg','mobile-infra-shortcuts','ticker-v3-track']) {
+for (const text of ['SENTINELA','SISTEMA DE SELOS','SALA VANGUARDEIRA','Contato profissional direto','gallery-active-photo','mobile-cta-projects','app-projetos-tecnicos','technical-project-','HERMES Security Portable','TLuizLabs','Infra TI Labs','cyber-window','interactive-infra-map','infra-map-node-','infra-map-svg','infra-map-core','infra-map-open-panels','mobile-infra-shortcuts','ticker-v3-track']) {
   assert.ok(chunks.includes(text), `Texto da V3 não encontrado no JS: ${text}`);
 }
 assert.ok(!chunks.includes('topology-square'), 'Topologia antiga ainda no bundle');
