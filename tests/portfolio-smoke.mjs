@@ -57,6 +57,7 @@ try {
         await mobileOverflow(page);
         for(const [slug,label] of [
           ['sistema-de-selos','Sistema'],
+          ['migracao-kubuntu','Kubuntu'],
           ['sala-vanguardeira','Vanguardeira'],
           ['sentinela-ai','Sentinela'],
         ]){
