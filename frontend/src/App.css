@@ -293,27 +293,101 @@
 }
 .topology-wallpaper-caption { z-index: 1; pointer-events: none; }
 
-/* Legenda das placas: só em telas largas, ao lado esquerdo da janela Sobre. */
-.layer-legend {
-  display: none;
+/* Rótulos das placas: camada plana por cima da pilha 3D.
+   .layer-corner marca o canto esquerdo de cada placa (vazio, sem transform);
+   o JS copia essa posição para .layer-tag-pos a cada quadro.
+   O rótulo fica todo à esquerda do vértice, onde nenhuma placa passa por cima. */
+.layer-corner { position: absolute; left: 0; top: 0; width: 1px; height: 1px; pointer-events: none; }
+.layer-tags { display: none; position: absolute; inset: 0; pointer-events: none; }
+@media (min-width: 1360px) and (min-height: 640px) { .layer-tags { display: block; } }
+.layer-tag-pos { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform; }
+.layer-tag {
   position: absolute;
-  z-index: 2;
-  left: 204px;
-  bottom: 60px;
-  width: min(560px, calc(100vw - 772px));
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  right: 20px;
+  top: -14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid #1e293b;
+  background: rgba(10, 13, 20, .92);
+  color: #cbd5e1;
+  font: 500 11px/1.3 "JetBrains Mono", monospace;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  pointer-events: auto;
+  outline: none;
+  transition: border-color .18s ease, color .18s ease;
 }
-@media (min-width: 1200px) { .layer-legend { display: grid; } }
+.layer-tag::before {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 13px;
+  width: 20px;
+  height: 1px;
+  background: #334155;
+}
+.layer-tag::after {
+  content: "";
+  position: absolute;
+  left: calc(100% + 17px);
+  top: 11px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #475569;
+}
+.layer-tag-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: #e2e8f0;
+}
+.layer-tag-status { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.layer-tag-detail {
+  display: none;
+  width: 248px;
+  white-space: normal;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+.layer-tag-state { display: block; margin-bottom: 3px; font-size: 10px; text-transform: uppercase; letter-spacing: .12em; }
+.layer-tag-open { display: block; margin-top: 5px; color: #6ee7b7; }
+.layer-tag:hover,
+.layer-tag:focus-visible,
+.layer-tag[data-active="true"] { border-color: #10b981; color: #f8fafc; background: #0a0d14; z-index: 3; }
+.layer-tag-pos:has(.layer-tag[data-active="true"]) { z-index: 3; }
+/* Notebooks (1360–1599px): rótulo e detalhe mais compactos para não encostar nos ícones. */
+@media (max-width: 1599px) {
+  .layer-tag { font-size: 10px; padding: 5px 8px; right: 16px; top: -12px; gap: 5px; }
+  .layer-tag::before { top: 11px; width: 16px; }
+  .layer-tag::after { top: 9px; left: calc(100% + 13px); }
+  .layer-tag-head { letter-spacing: .08em; gap: 6px; }
+  .layer-tag-detail { width: 214px; }
+}
+.layer-tag:focus-visible { box-shadow: 0 0 0 2px #6ee7b7; }
+.layer-tag:hover::before,
+.layer-tag:focus-visible::before,
+.layer-tag[data-active="true"]::before { background: #10b981; }
+.layer-tag:hover::after,
+.layer-tag:focus-visible::after,
+.layer-tag[data-active="true"]::after { background: #34d399; }
+.layer-tag:hover .layer-tag-detail,
+.layer-tag:focus-visible .layer-tag-detail,
+.layer-tag[data-active="true"] .layer-tag-detail { display: block; }
 .v3-layer-stack .layer-plate { transition: border-color .2s ease, box-shadow .2s ease; }
 .v3-layer-stack .layer-plate[data-active="true"] {
   border-color: #6ee7b7 !important;
   background: rgba(22, 32, 48, .95);
   box-shadow: 0 0 28px rgba(52, 211, 153, .38);
 }
-.v3-layer-stack .layer-plate[data-active="true"] .layer-label { color: #f8fafc !important; }
 @media (prefers-reduced-motion: reduce) {
-  .v3-layer-stack .layer-plate { transition: none; }
+  .v3-layer-stack .layer-plate, .layer-tag { transition: none; }
 }
 .v3-layer-stack {
   width: clamp(220px, 26vw, 350px);
