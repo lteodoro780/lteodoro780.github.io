@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { LayerStack } from "../noc/LayerStack";
+import { LayerLegend } from "../noc/LayerLegend";
 import { PROFILE } from "../../content";
 import { useDesktop } from "../../lib/desktop";
 
@@ -14,10 +16,12 @@ const INFRA_AREAS = [
 ];
 export const Wallpaper = ({ ready }) => {
   const { open } = useDesktop();
+  const [activeLayer, setActiveLayer] = useState(null);
   return <div data-testid="wallpaper" className="fixed inset-x-0 bottom-12 top-8 overflow-hidden">
     <div className="portfolio-wallpaper-solid absolute inset-0" aria-hidden="true"/>
     <div className="noc-grid absolute inset-0 opacity-35" aria-hidden="true"/>
-    <div className="topology-central-host" aria-hidden="true"><LayerStack /></div>
+    <div className="topology-central-host" aria-hidden="true"><LayerStack active={activeLayer} /></div>
+    <LayerLegend onActive={setActiveLayer} />
     <h1 className="sr-only">Portfólio de infraestrutura e sistemas</h1>
     <div className="topology-wallpaper-caption absolute bottom-7 left-6 hidden md:block">
       <p className="font-mono text-[11px] uppercase tracking-[0.17em] text-slate-400">
