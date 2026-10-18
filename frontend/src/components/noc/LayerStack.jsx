@@ -1,10 +1,10 @@
 // Componente derivado da V3 histórica: d7366f9a74888151ad46485b58d1d8347266a992.
 // Apenas quatro placas e profundidade maior; sem tilt por mouse ou animação JS.
 const LAYERS = [
-  { label: "obs · métricas", tone: "#334155" },
-  { label: "data · storage", tone: "#334155" },
-  { label: "app · cluster", tone: "#06B6D4" },
-  { label: "edge · cdn", tone: "#10B981" },
+  { label: "suporte · redes", tone: "#334155" },
+  { label: "windows server · ad", tone: "#334155" },
+  { label: "linux · monitoramento", tone: "#06B6D4" },
+  { label: "automação · ia local", tone: "#10B981" },
 ];
 
 const Plate = ({ layer, index }) => (

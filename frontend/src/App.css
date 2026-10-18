@@ -114,6 +114,25 @@
   background: linear-gradient(to top, rgba(10,13,20,.48), transparent 58%), linear-gradient(to right,rgba(10,13,20,.12),transparent 50%);
   box-shadow: inset 0 0 0 1px rgba(16,185,129,.2);
 }
+/* Foto compacta ao lado do nome na janela Sobre. */
+.about-photo-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: 96px;
+  height: 128px;
+  overflow: hidden;
+  border: 1px solid #334155;
+  background: #0a0d14;
+  box-shadow: inset 0 0 0 1px rgba(16,185,129,.2);
+}
+.about-photo-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: saturate(.9) contrast(1.04);
+}
 /* Quatro capas no conteúdo real dos serviços. */
 .project-cover {
   display: block;
