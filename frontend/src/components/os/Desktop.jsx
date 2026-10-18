@@ -27,6 +27,18 @@ export const Desktop = () => {
     return undefined;
   }, [booted]);
 
+  // Esc fecha o menu iniciar, se aberto; senão, a janela em foco.
+  useEffect(() => {
+    if (!booted) return undefined;
+    const onKey = (e) => {
+      if (e.key !== "Escape" || e.defaultPrevented) return;
+      if (startOpen) { setStartOpen(false); return; }
+      if (d.top) d.close(d.top);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [booted, startOpen, d.top]);
+
   const reboot = () => {
     sessionStorage.removeItem("l0-boot");
     setBooted(false);

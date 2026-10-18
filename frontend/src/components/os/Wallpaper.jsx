@@ -1,17 +1,11 @@
 import { motion } from "framer-motion";
-import { LayerStack } from "../noc/LayerStack";
+import { LayerStack, LAYERS, LAYER_STATUS } from "../noc/LayerStack";
 import { PROFILE } from "../../content";
 import { useDesktop } from "../../lib/desktop";
 
-// A V7 mantém os seis atalhos móveis, independentemente do mapa removido.
-const INFRA_AREAS = [
-  { id: "infraestrutura", label: "INFRAESTRUTURA", app: "metricas" },
-  { id: "linux", label: "LINUX", app: "tecnicos" },
-  { id: "monitoramento", label: "MONITORAMENTO", app: "metricas" },
-  { id: "automacao", label: "AUTOMAÇÃO", app: "tecnicos" },
-  { id: "sistemas", label: "SISTEMAS", app: "servicos" },
-  { id: "usuarios", label: "USUÁRIOS", app: "sobre" },
-];
+// No celular, as mesmas quatro áreas das placas (L0–L3), com o mesmo destino.
+const MOBILE_IDS = ["suporte", "windows", "linux", "automacao"];
+const INFRA_AREAS = LAYERS.map((layer, i) => ({ ...layer, id: MOBILE_IDS[i], level: `L${i}` }));
 export const Wallpaper = ({ ready }) => {
   const { open } = useDesktop();
   return <div data-testid="wallpaper" className="fixed inset-x-0 bottom-12 top-8 overflow-hidden">
@@ -60,16 +54,18 @@ export const Wallpaper = ({ ready }) => {
       </div>
       <div data-testid="mobile-infra-shortcuts" className="mt-4 border-t border-noc-line pt-3">
         <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-emerald-300">Explorar por área</p>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {INFRA_AREAS.map(node => (
             <button
               key={node.id}
               data-testid={`mobile-infra-node-${node.id}`}
               type="button"
               onClick={() => open(node.app)}
-              className="min-h-10 border border-noc-line2 bg-noc-bg/90 px-2 py-2 font-mono text-[10px] uppercase text-slate-200 focus-visible:border-emerald-400 focus-visible:outline-2 focus-visible:outline-emerald-400"
+              aria-label={`${node.level} · ${node.label}, ${LAYER_STATUS[node.status].label}`}
+              className="flex min-h-10 items-center gap-2 border border-noc-line2 bg-noc-bg/90 px-2 py-2 text-left font-mono text-[10px] uppercase leading-tight text-slate-200 focus-visible:border-emerald-400 focus-visible:outline-2 focus-visible:outline-emerald-400"
             >
-              {node.label} ↗
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: LAYER_STATUS[node.status].color }} aria-hidden="true" />
+              <span><span className="text-emerald-300">{node.level}</span> · {node.label}</span>
             </button>
           ))}
         </div>

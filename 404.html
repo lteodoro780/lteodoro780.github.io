@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0d14">
+  <meta name="robots" content="noindex">
+  <title>Página não encontrada · L0·NOC</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <style>
+    :root{color-scheme:dark;--bg:#06131b;--panel:#0a0d14;--line:#263244;--muted:#a6b4c7;--text:#f1f5f9;--green:#10b981;--mint:#6ee7b7}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100svh;display:grid;place-items:center;padding:24px 16px;background:var(--bg);color:var(--text);font:15px/1.7 ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.15;background-image:linear-gradient(#284156 1px,transparent 1px),linear-gradient(90deg,#284156 1px,transparent 1px);background-size:48px 48px}
+    main{position:relative;width:100%;max-width:560px;border:1px solid var(--line);background:var(--panel);padding:28px}
+    .bar{display:flex;justify-content:space-between;gap:12px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:22px}
+    .bar b{color:#f59e0b;font-weight:600}
+    h1{margin:0 0 8px;font-size:clamp(40px,10vw,64px);line-height:1;letter-spacing:-.01em}
+    h1 span{color:var(--green)}
+    pre{margin:18px 0;padding:14px;border:1px solid var(--line);background:#080b10;color:#b9f4d9;font:13px/1.6 inherit;white-space:pre-wrap;overflow-wrap:anywhere}
+    p{margin:0 0 14px;color:#d3dce8}
+    nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+    a{display:inline-flex;align-items:center;min-height:42px;padding:8px 14px;border:1px solid var(--line);color:var(--text);text-decoration:none;font-size:12px;font-weight:600}
+    a:hover{border-color:var(--green);color:var(--mint)}
+    a.primary{background:var(--green);border-color:var(--green);color:#08120f}
+    a.primary:hover{background:var(--mint);color:#08120f}
+    a:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+  </style>
+</head>
+<body>
+  <main>
+    <div class="bar"><span>L0·NOC</span><b>● 404 · rota não encontrada</b></div>
+    <h1>Página não<br>encontrada<span>.</span></h1>
+    <pre id="rota">$ curl -I <span id="caminho">/</span>
+HTTP/1.1 404 Not Found</pre>
+    <p>O endereço pode ter mudado ou estar digitado errado. O portfólio e os estudos de caso continuam nos links abaixo.</p>
+    <nav aria-label="Para onde ir">
+      <a class="primary" href="/">Voltar ao portfólio</a>
+      <a href="/projetos.html">Projetos</a>
+      <a href="/curriculo.html">Currículo</a>
+    </nav>
+  </main>
+  <script>
+    try { document.getElementById("caminho").textContent = decodeURIComponent(location.pathname); } catch (e) {}
+  </script>
+</body>
+</html>

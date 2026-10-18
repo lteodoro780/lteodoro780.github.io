@@ -27,6 +27,8 @@ const TaskButton = ({ id }) => {
     <button
       data-testid={`taskbar-app-${id}`}
       onClick={click}
+      aria-label={`${meta.label}${st.min ? " (minimizada)" : on ? " (em foco)" : ""}`}
+      title={meta.label}
       className={`relative flex h-9 shrink-0 items-center gap-2 border px-2.5 font-mono text-xs transition-colors ${on ? "border-noc-line2 bg-noc-panel text-slate-50" : "border-transparent text-slate-300 hover:bg-noc-panel/60"}`}
     >
       <I size={15} className={on ? "text-emerald-400" : ""} />
@@ -43,16 +45,19 @@ export const Taskbar = ({ onStart, startOpen }) => {
       <button
         data-testid="start-button"
         onClick={onStart}
+        aria-label="Menu L0·NOC"
+        aria-expanded={startOpen}
+        aria-haspopup="menu"
         className={`flex h-9 shrink-0 items-center gap-2 border px-2 transition-colors ${startOpen ? "border-noc-ok bg-noc-ok/10" : "border-noc-line hover:border-noc-line2"}`}
       >
         <Logo size={22} />
         <span className="hidden font-display text-lg font-bold tracking-wide text-slate-50 sm:inline">L0·NOC</span>
       </button>
-      <div className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto">
+      {/* No desktop, os atalhos Projetos/Currículo/E-mail ficam dentro desta barra (ver .recruiter-links). */}
+      <div className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto md:mr-[300px]">
         {Object.keys(d.wins).map((id) => <TaskButton key={id} id={id} />)}
       </div>
       <div className="flex shrink-0 items-center gap-3 pr-1">
-        <span className="hidden font-mono text-xs tracking-wider text-emerald-400 lg:inline">PORTFÓLIO PROFISSIONAL</span>
         <Clock />
       </div>
     </footer>
