@@ -79,8 +79,8 @@
 .about-photo-banner {
   position: relative;
   width: 100%;
-  height: 238px;
-  margin: 0 0 22px;
+  height: 168px;
+  margin: 0 0 16px;
   overflow: hidden;
   border: 1px solid #334155;
   background: #0a0d14;
@@ -144,7 +144,7 @@
 [data-testid^="project-repo-"]:not([href]),
 [data-testid^="project-demo-"]:not([href]) { display: none !important; }
 @media (max-width: 767px) {
-  .about-photo-banner {height: 210px;}
+  .about-photo-banner {height: 180px;}
   .project-cover-inner {height: 170px;}
 }
 @media (prefers-reduced-motion: reduce) {
@@ -173,10 +173,10 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  min-height: 35px;
-  padding: 7px 12px;
+  min-height: 42px;
+  padding: 8px 16px;
   white-space: nowrap;
-  font: 600 11px/1.25 "JetBrains Mono", monospace;
+  font: 600 12px/1.25 "JetBrains Mono", monospace;
   text-decoration: none;
   color: #e2e8f0;
   border: 1px solid #334155;

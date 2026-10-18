@@ -22,7 +22,7 @@ export const SobreApp = () => {
       <span className="flex items-center gap-2 text-emerald-400"><Dot /> perfil profissional</span>
       <span>{PROFILE.location}</span>
     </div>
-    <h2 data-testid="hero-name" className="mt-5 font-display text-5xl font-extrabold uppercase leading-[0.9] tracking-tight text-slate-50 sm:text-7xl">
+    <h2 data-testid="hero-name" className="mt-4 font-display text-5xl font-extrabold uppercase leading-[0.9] tracking-tight text-slate-50 sm:text-6xl">
       <Line delay={0.1}>{PROFILE.first}</Line><Line delay={0.2}><span className="text-outline">{PROFILE.last}</span><span className="text-noc-ok">.</span></Line>
     </h2>
     <p data-testid="hero-role" className="mt-5 font-mono text-sm uppercase tracking-[0.12em] text-emerald-400">&gt; {PROFILE.role}</p>
