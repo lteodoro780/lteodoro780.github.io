@@ -100,13 +100,13 @@ const fs = require('node:fs');
         assert.ok(overflow<3,`Home com overflow horizontal: ${overflow}px`);
         await page.locator('nav.recruiter-links a[href$="projetos.html"]').click();
         await page.waitForURL('**/projetos.html');
-        assert.equal(await page.locator('article.project').count(),3);
+        assert.equal(await page.locator('article.project').count(),4);
         for(const img of await page.locator('article.project img').all()){
           await img.scrollIntoViewIfNeeded();
           await img.evaluate(el=>el.decode());
         }
         await page.screenshot({path:`artifacts/projetos-${label}.png`,fullPage:true});
-        for(const slug of ['sistema-de-selos','sala-vanguardeira','sentinela-ai']) {
+        for(const slug of ['sistema-de-selos','sala-vanguardeira','sentinela-ai','migracao-kubuntu']) {
           const r=await page.goto(base+`/casos/${slug}.html`);
           assert.equal(r.status(),200);
           assert.ok((await page.locator('h1').innerText()).length>0);

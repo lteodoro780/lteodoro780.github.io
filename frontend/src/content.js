@@ -13,6 +13,21 @@ export const PROFILE = {
 };
 export const SERVICES = [
   {
+    "id": "05",
+    "name": "MIGRAÇÃO KUBUNTU",
+    "cover": "./img/kubuntu.webp",
+    "status": "operational",
+    "desc": "Migração de mais de 300 estações para Kubuntu integrado ao Active Directory: implantação por imagem clonada, GPO no Linux e automação de hostname, antivírus, atualizações e impressoras.",
+    "stack": [
+      "Kubuntu",
+      "Active Directory",
+      "Bash"
+    ],
+    "sla": null,
+    "repo": "https://github.com/lteodoro780/tluizlabs/blob/main/kubuntu-enterprise/deployment-300-estacoes.md",
+    "demo": "./casos/migracao-kubuntu.html"
+  },
+  {
     "id": "01",
     "name": "SENTINELA",
     "cover": "./img/sentinela.webp",
