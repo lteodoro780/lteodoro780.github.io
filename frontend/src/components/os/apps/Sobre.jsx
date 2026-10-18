@@ -31,12 +31,7 @@ export const SobreApp = () => {
       </div>
     </div>
     <p className="mt-5 font-mono text-sm leading-relaxed text-slate-300">{PROFILE.bio}</p>
-    <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-3">
-      <Evidence label="Experiência" value="Desde 2021" detail="Infraestrutura e suporte" />
-      <Evidence label="Formação" value="ADS" detail="Concluída em 2026" />
-      <Evidence label="Atuação" value="Linux / AD" detail="Redes e automação" />
-    </div>
-    <div className="mt-6 flex flex-wrap gap-2">
+    <div className="mt-5 flex flex-wrap gap-2">
       <a data-testid="hero-cta-resume" href={`${process.env.PUBLIC_URL}/curriculo.html`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-noc-ok px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wider text-noc-bg hover:bg-emerald-400"><FileText size={14}/> Currículo <ArrowUpRight size={14}/></a>
       <button data-testid="hero-cta-services" onClick={() => open("servicos")} className="group inline-flex items-center gap-2 border border-noc-line2 px-4 py-3 font-mono text-xs uppercase tracking-wider text-slate-200 hover:border-noc-ok hover:text-emerald-400">Ver estudos de caso <ArrowUpRight size={14}/></button>
       <button data-testid="hero-cta-ticket" onClick={() => open("ticket")} className="inline-flex items-center gap-2 border border-noc-line2 px-4 py-3 font-mono text-xs uppercase tracking-wider text-slate-200 hover:border-noc-ok hover:text-emerald-400"><Terminal size={14}/> Contato direto</button>
@@ -44,6 +39,11 @@ export const SobreApp = () => {
     <div className="mt-4 flex flex-wrap gap-4 font-mono text-xs">
       <a href={`https://${PROFILE.linkedin}`} target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300">LinkedIn ↗</a>
       <a href={`https://${PROFILE.github}`} target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300">GitHub ↗</a>
+    </div>
+    <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-3">
+      <Evidence label="Experiência" value="Desde 2021" detail="Infraestrutura e suporte" />
+      <Evidence label="Formação" value="ADS" detail="Concluída em 2026" />
+      <Evidence label="Atuação" value="Linux / AD" detail="Redes e automação" />
     </div>
   </div>;
 };
