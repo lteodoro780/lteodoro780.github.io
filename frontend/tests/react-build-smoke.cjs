@@ -40,7 +40,7 @@ const fs = require('node:fs');
         await page.emulateMedia({reducedMotion:'reduce'});
         assert.equal(await plates.first().evaluate(el=>getComputedStyle(el).animationName),'none','prefers-reduced-motion nas placas');
         await page.emulateMedia({reducedMotion:'no-preference'});
-        assert.equal(await page.locator('[data-testid="mobile-infra-shortcuts"] button').count(),6,'Manter seis atalhos mobile');
+        assert.equal(await page.locator('[data-testid="mobile-infra-shortcuts"] button').count(),4,'Quatro atalhos mobile, iguais às placas L0–L3');
         assert.equal(await page.locator('div.grain').count(),0,'Textura de ruído SVG deve estar ausente');
         assert.equal(await page.locator('[data-testid="v7-background-hud"]').count(),0,'HUD extra da V7 deve sair para manter visual V3');
         assert.equal(await page.locator('.cyber-scan-overlay').count(),0,'Sobreposição neon da V7 deve sair');

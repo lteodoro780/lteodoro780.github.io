@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { motion, useDragControls, useMotionValue } from "framer-motion";
 import { Copy, Minus, Square, X } from "lucide-react";
 import { useDesktop } from "../../lib/desktop";
@@ -22,6 +22,18 @@ export const Window = ({ id, meta, st, isTop, mobile, areaRef, children }) => {
   const my = useMotionValue(0);
   const full = mobile || st.max;
   const Icon = meta.icon;
+  const ref = useRef(null);
+
+  // Foco: ao abrir por um controle (ícone, botão, teclado), o foco entra na janela;
+  // ao fechar, volta para quem a abriu. A abertura automática do início não rouba o foco.
+  useEffect(() => {
+    const opener = document.activeElement;
+    const userOpened = opener && opener !== document.body && !ref.current?.contains(opener);
+    if (userOpened) ref.current?.focus({ preventScroll: true });
+    return () => {
+      if (userOpened && opener.isConnected && typeof opener.focus === "function") opener.focus({ preventScroll: true });
+    };
+  }, []);
   useEffect(() => {
     if (!full) return undefined;
     const t = setTimeout(() => { mx.set(0); my.set(0); }, 50);
@@ -36,6 +48,8 @@ export const Window = ({ id, meta, st, isTop, mobile, areaRef, children }) => {
 
   return (
     <motion.section
+      ref={ref}
+      tabIndex={-1}
       data-testid={`window-${id}`}
       role="dialog"
       aria-label={meta.label}
@@ -52,7 +66,7 @@ export const Window = ({ id, meta, st, isTop, mobile, areaRef, children }) => {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.94, transition: { duration: 0.18 } }}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      className={`cyber-window pointer-events-auto absolute flex flex-col overflow-hidden border bg-noc-bg shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)] transition-[border-color] duration-300 ${isTop ? "border-noc-line2" : "border-noc-line"}`}
+      className={`cyber-window pointer-events-auto absolute flex flex-col overflow-hidden border bg-noc-bg outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)] transition-[border-color] duration-300 ${isTop ? "border-noc-line2" : "border-noc-line"}`}
     >
       <header
         onPointerDown={(e) => { if (!full) controls.start(e); }}
@@ -76,7 +90,8 @@ export const Window = ({ id, meta, st, isTop, mobile, areaRef, children }) => {
         </div>
       </header>
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-        <div className="p-4 sm:p-6">{children}</div>
+        {/* No celular, folga no fim para os atalhos flutuantes não cobrirem o conteúdo. */}
+        <div className="p-4 pb-20 sm:p-6 sm:pb-20 md:pb-6">{children}</div>
       </div>
     </motion.section>
   );
