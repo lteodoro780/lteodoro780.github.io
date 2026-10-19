@@ -17,7 +17,7 @@ export const SERVICES = [
     "name": "MIGRAÇÃO KUBUNTU",
     "cover": "./img/kubuntu.webp",
     "status": "operational",
-    "desc": "Migração de mais de 300 estações para Kubuntu integrado ao Active Directory: implantação por imagem clonada, GPO no Linux e automação de hostname, antivírus, atualizações e impressoras.",
+    "desc": "Liderança da migração de mais de 300 estações para Kubuntu integrado ao Active Directory: implantação por imagem clonada, GPO no Linux e automação de hostname, antivírus, atualizações e impressoras.",
     "stack": [
       "Kubuntu",
       "Active Directory",
