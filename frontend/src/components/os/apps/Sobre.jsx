@@ -43,7 +43,7 @@ export const SobreApp = () => {
     <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-3">
       <Evidence label="Experiência" value="Desde 2021" detail="Infraestrutura e suporte" />
       <Evidence label="Formação" value="ADS" detail="Concluída em 2026" />
-      <Evidence label="Atuação" value="Linux / AD" detail="Redes e automação" />
+      <Evidence label="Destaque" value="300+" detail="Estações migradas para Kubuntu + AD, com liderança" />
     </div>
   </div>;
 };
