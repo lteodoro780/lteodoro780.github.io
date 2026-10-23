@@ -1,22 +1,6 @@
 // Projetos públicos do GitHub. Sem URLs de sistemas internos ou métricas institucionais.
 export const TECHNICAL_PROJECTS = [
   {
-    id: "hermes",
-    name: "HERMES Security Portable",
-    category: "IA local",
-    status: "Projeto aberto",
-    kicker: "IA LOCAL / SUPORTE DEFENSIVO",
-    description: "Assistente portátil para diagnóstico defensivo de infraestrutura, uso offline e consulta a uma base local de conhecimento. Possui monitoramento da própria máquina e não executa correções automáticas.",
-    stack: ["Python", "llama.cpp", "SQLite", "Offline-first"],
-    repo: "https://github.com/lteodoro780/hermes-security-portable",
-    documentation: "https://github.com/lteodoro780/hermes-security-portable#readme",
-    evidence: [
-      "Chat local com modelo GGUF opcional",
-      "Diagnóstico de rede e hardware",
-      "Histórico, alertas e backup local",
-    ],
-  },
-  {
     id: "tluizlabs",
     name: "TLuizLabs",
     category: "Infraestrutura",
@@ -46,6 +30,22 @@ export const TECHNICAL_PROJECTS = [
       "Anotações de configuração e troubleshooting",
       "Integração de ferramentas de suporte e inventário",
       "Exemplos e práticas de sanitização",
+    ],
+  },
+  {
+    id: "hermes",
+    name: "HERMES Security Portable",
+    category: "IA local",
+    status: "Projeto aberto",
+    kicker: "IA LOCAL / SUPORTE DEFENSIVO",
+    description: "Assistente portátil para diagnóstico defensivo de infraestrutura, uso offline e consulta a uma base local de conhecimento. Possui monitoramento da própria máquina e não executa correções automáticas.",
+    stack: ["Python", "llama.cpp", "SQLite", "Offline-first"],
+    repo: "https://github.com/lteodoro780/hermes-security-portable",
+    documentation: "https://github.com/lteodoro780/hermes-security-portable#readme",
+    evidence: [
+      "Chat local com modelo GGUF opcional",
+      "Diagnóstico de rede e hardware",
+      "Histórico, alertas e backup local",
     ],
   },
 ];

@@ -12,7 +12,7 @@ export const Wallpaper = ({ ready }) => {
     <div className="portfolio-wallpaper-solid absolute inset-0" aria-hidden="true"/>
     <div className="noc-grid absolute inset-0 opacity-35" aria-hidden="true"/>
     <div className="topology-central-host"><LayerStack /></div>
-    <h1 className="sr-only">Portfólio de infraestrutura e sistemas</h1>
+    <h1 className="sr-only">Luis O. Florencio — Analista de Infraestrutura de TI</h1>
     <div className="topology-wallpaper-caption absolute bottom-7 left-6 hidden md:block">
       <p className="font-mono text-[11px] uppercase tracking-[0.17em] text-slate-400">
         <span className="text-emerald-400">&gt;</span> {PROFILE.role} · selecione um módulo para explorar
@@ -32,12 +32,12 @@ export const Wallpaper = ({ ready }) => {
       <div className="mt-4 flex items-center gap-3">
         <img src={`${process.env.PUBLIC_URL}/img/luis-florencio.webp`} alt="Luis O. Florencio" className="h-[72px] w-[66px] shrink-0 border border-noc-line2 bg-noc-panel object-cover object-top" />
         <div className="min-w-0">
-          <h1 className="font-display text-[clamp(32px,10vw,44px)] font-extrabold uppercase leading-[0.93] tracking-tight text-slate-50">Luis O.<br/><span className="text-emerald-400">Florencio.</span></h1>
+          <p aria-hidden="true" className="font-display text-[clamp(32px,10vw,44px)] font-extrabold uppercase leading-[0.93] tracking-tight text-slate-50">Luis O.<br/><span className="text-emerald-400">Florencio.</span></p>
           <p className="mt-2 font-mono text-[11px] leading-snug text-emerald-300">{PROFILE.role}</p>
         </div>
       </div>
       <p className="mt-4 font-mono text-[12px] leading-relaxed text-slate-200">
-        Formado em ADS. Atuação em Linux, Windows Server, redes, AD/GPO e automação com Python, Bash e PowerShell.
+        Formado em ADS. Liderou a migração de 300+ estações para Kubuntu + AD. Atua com Linux, Windows Server, redes, AD/GPO e automação com Python, Bash e PowerShell.
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
         <button data-testid="mobile-cta-projects" type="button" onClick={() => open("servicos")} className="min-h-10 bg-noc-ok px-3 py-2 font-mono text-[11px] font-bold uppercase text-noc-bg hover:bg-emerald-300">

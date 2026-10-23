@@ -10,7 +10,7 @@ const STATUS = {
 const Banner = () => (
   <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.15 }} className="mb-4">
     <motion.div variants={{ hidden: { clipPath: "inset(0 45% 0 45%)" }, show: { clipPath: "inset(0 0% 0 0%)", transition: { duration: 1.2, ease: EASE } } }} className="relative h-40 overflow-hidden border border-noc-line sm:h-48">
-      <img src={`${process.env.PUBLIC_URL}/img/cables.jpg`} alt="Racks de servidores com cabeamento" className="absolute inset-0 h-full w-full object-cover" />
+      <img src={`${process.env.PUBLIC_URL}/img/cables.webp`} alt="Racks de servidores com cabeamento" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-t from-noc-bg via-noc-bg/20 to-transparent" />
       <div className="absolute bottom-3 left-4 right-4 flex flex-wrap items-end justify-between gap-2 font-mono text-xs uppercase tracking-[0.2em] text-slate-200">
         <span>PORTFÓLIO // PROJETOS</span><span className="flex items-center gap-2 text-emerald-400"><Dot /> {SERVICES.length} projetos</span>
